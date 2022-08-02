@@ -1,4 +1,3 @@
-# syntax=docker/dockerfile:1
 FROM python:3.10.5-buster
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
@@ -9,4 +8,3 @@ COPY . /backend/
 RUN ls -la
 ENTRYPOINT ["/backend/docker-entrypoint.sh"]
 RUN ["chmod", "+x", "/backend/docker-entrypoint.sh"]
-

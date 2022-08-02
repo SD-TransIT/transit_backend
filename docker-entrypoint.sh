@@ -26,6 +26,6 @@ case "$1" in
     ./manage.py test "${@:2}"
   ;;
   * )
-    show_help
+    help
   ;;
 esac

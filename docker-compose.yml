@@ -24,4 +24,5 @@ services:
       - DB_PORT=${DB_PORT:-5432}
       - PORT=${DB_PORT:-8000}
     depends_on:
-      - db
+      db:
+        condition: service_started
