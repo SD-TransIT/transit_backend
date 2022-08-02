@@ -1,0 +1,27 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres
+    volumes:
+      - ./docker_data/db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=${DB_NAME:-TransIT}
+      - POSTGRES_USER=${DB_USER:-postgres}
+      - POSTGRES_PASSWORD=${DB_PASSWORD:-postgres}
+  web:
+    build: .
+    command: start
+    volumes:
+      - ./:/backend
+    ports:
+      - "8000:8000"
+    environment:
+      - DB_NAME=${DB_NAME:-TransIT}
+      - DB_USER=${DB_USER:-postgres}
+      - DB_PASSWORD=${DB_PASSWORD:-postgres}
+      - DB_HOST=${DB_PASSWORD:-db} # By default, it's pointing to db container
+      - DB_PORT=${DB_PORT:-5432}
+      - PORT=${DB_PORT:-8000}
+    depends_on:
+      - db

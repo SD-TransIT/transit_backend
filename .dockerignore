@@ -1,0 +1,2 @@
+# Exclude database volume
+**/docker_data
