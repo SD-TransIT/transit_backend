@@ -9,6 +9,15 @@ on:
     types: [opened, synchronize, reopened]
 jobs:
   sonarcloud:
+    services:
+      db:
+        image: postgres
+        env:
+          POSTGRES_DB: TransIT
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
     strategy:
       matrix:
         python: [ "3.10" ]
