@@ -11,3 +11,8 @@ class MockTestCase(TestCase):
     def test_functionality_coverage(self):
         from transit.urls import urlpatterns
         self.assertGreater(len(urlpatterns), 1)
+
+    def test_functionality_coverage_2(self):
+        from transit.rest_api import swagger_urls
+        self.assertTrue(swagger_urls.schema_view is not None)
+
