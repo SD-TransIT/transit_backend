@@ -35,6 +35,8 @@ jobs:
         run: pip install tox
       - name: Run tox [unit tests + coverage report]
         run: tox
+      - name: Lint with flake8
+        run: flake8 --exit-zero --output-file=flake_lint.txt .
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
