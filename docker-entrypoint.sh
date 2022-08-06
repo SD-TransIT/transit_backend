@@ -9,6 +9,7 @@ help() {
   start            : start django
   test             : run unit tests
   manage           : run django manage.py
+  flake8           : Run flake8 style check
   """
 }
 
@@ -21,6 +22,9 @@ case "$1" in
   ;;
   "manage" )
     ./manage.py "${@:2}"
+  ;;
+  "flake8" )
+    ./flake8 "${@:2}" .
   ;;
   "test" )
     ./manage.py test "${@:2}"
