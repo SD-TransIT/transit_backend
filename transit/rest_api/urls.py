@@ -1,11 +1,10 @@
 from django.contrib.auth.models import User
-from django.urls import include, re_path, path
+from django.urls import include, path
 from rest_framework import routers, serializers, viewsets
 
 
 # Serializers define the API representation.
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenRefreshView, TokenVerifyView, TokenObtainPairView
 
 
