@@ -27,7 +27,7 @@ case "$1" in
     ./flake8 "${@:2}" .
   ;;
   "test" )
-    ./manage.py test "${@:2}"
+    tox -e docker_test
   ;;
   * )
     help
