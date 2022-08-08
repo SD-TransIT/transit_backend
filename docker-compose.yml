@@ -14,15 +14,17 @@ services:
     command: start
     volumes:
       - ./:/backend
+      - ${PWD}/tox.ini:/backend/tox.ini
+      - ${PWD}/server.py:/backend/server.py
     ports:
       - "8000:8000"
     environment:
       - DB_NAME=${DB_NAME:-TransIT}
       - DB_USER=${DB_USER:-postgres}
       - DB_PASSWORD=${DB_PASSWORD:-postgres}
-      - DB_HOST=${DB_PASSWORD:-db} # By default, it's pointing to db container
+      - DB_HOST=${DB_HOST:-db} # By default, it's pointing to db container
       - DB_PORT=${DB_PORT:-5432}
-      - PORT=${DB_PORT:-8000}
+      - PORT=${PORT:-8000}
     depends_on:
       db:
         condition: service_started
