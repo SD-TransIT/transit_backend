@@ -17,8 +17,9 @@ case "$1" in
   "start" )
     echo "Running migrations..."
     python manage.py migrate
-    echo "Django start..."
-    python manage.py runserver 0.0.0.0:${PORT:-8000}
+    echo "Django waitress server start..."
+    python server.py
+    #python manage.py runserver 0.0.0.0:${PORT:-8000}
   ;;
   "manage" )
     ./manage.py "${@:2}"
