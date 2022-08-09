@@ -34,7 +34,8 @@ DEBUG=True # Determine if app should run in debug mode.
 SECRET_KEY # Secret key used by django app, by default value from transit.settings is used
 PORT=8000 # Django application port, if changed ports in docker-compose also have to be changed. 
 DJANGO_SERVER=django_wsgi # WSGI Server, environments other than local one should use `waitress` server instead
-ALLOWED_HOSTS=* # Passed to ALLOWED_HOSTS in djagno.settings, default * (all hosts) should not be used in production 
+ALLOWED_HOSTS=* # Passed to ALLOWED_HOSTS in djagno.settings, default * (all hosts) should not be used in production, 
+# If more than one host is allowed, hosts should be separated with comma, e.g.: host1,host2,host3
 ```
 
 #### 2. Build docker instance 
