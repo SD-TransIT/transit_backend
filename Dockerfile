@@ -6,6 +6,5 @@ COPY requirements.txt /backend/
 RUN pip install -r requirements.txt
 RUN pip install tox
 COPY . /backend/
-RUN ls -la
 ENTRYPOINT ["/backend/docker-entrypoint.sh"]
 RUN ["chmod", "+x", "/backend/docker-entrypoint.sh"]
