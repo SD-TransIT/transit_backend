@@ -12,6 +12,7 @@ DB_PASSWORD=postgres
 DB_HOST=db # By default, it's pointing to db container run from docker-compose.
 DB_PORT=5432
 PORT=8000
+DJANGO_SERVER=django_wsgi
 ```
 Custom configuration can be added through 
 `.env` file. Following parameters are handled:
@@ -31,6 +32,7 @@ DB_HOST='127.0.0.1' # Database URL, dockerized instance uses 'db' service by def
 DEBUG=True # Determine if app should run in debug mode. 
 SECRET_KEY # Secret key used by django app, by default value from transit.settings is used
 PORT=8000 # Django application port, if changed ports in docker-compose also have to be changed. 
+DJANGO_SERVER=django_wsgi # WSGI Server, environments other than local one should use `waitress` server instead
 ```
 
 #### 2. Build docker instance 

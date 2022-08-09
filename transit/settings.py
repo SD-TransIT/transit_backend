@@ -138,6 +138,10 @@ REST_FRAMEWORK = {
 }
 
 SWAGGER_SETTINGS = {
+    'USE_SESSION_AUTH': DEBUG,  # Swagger doesn't need authenticated user in debug mode
+    # Outside debug - only admin has access to swagger definition
+    'LOGIN_URL': '/admin/login/',
+    'LOGOUT_URL': '/admin/logout/',
     'SECURITY_DEFINITIONS': {
         'Bearer': {
             'type': 'apiKey',
