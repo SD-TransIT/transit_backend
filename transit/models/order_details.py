@@ -27,8 +27,8 @@ class OrderLineDetails(BaseModel):
     order_details = models.ForeignKey(OrderDetails, models.DO_NOTHING, db_column='OrderDetailsID')
 
     # TODO - product (item) and item details could be fixed, we could keep one of them only
-    product = models.ForeignKey(Item, models.DO_NOTHING, db_column='ProductId')
-    item_details = models.ForeignKey(ItemDetails, models.DO_NOTHING, db_column='ItemDetailsId')
+    product = models.ForeignKey(Item, models.DO_NOTHING, db_column='ProductID')
+    item_details = models.ForeignKey(ItemDetails, models.DO_NOTHING, db_column='ItemDetailsID')
     quantity = models.DecimalField(
         db_column='Quantity', blank=True, null=True, max_digits=18, decimal_places=2
     )
