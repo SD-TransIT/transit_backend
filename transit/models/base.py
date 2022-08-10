@@ -1,10 +1,10 @@
-from datetime import datetime as py_datetime
+from datetime import datetime
 from django.db import models
 
 
 class BaseModel(models.Model):
     last_modified_date = models.DateTimeField(
-        db_column='LastModifiedDate', default=py_datetime.now
+        db_column='LastModifiedDate', default=datetime.now
     )
     last_modified_by = models.CharField(
         db_column='LastModifiedBy', max_length=255
