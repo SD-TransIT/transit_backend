@@ -27,7 +27,8 @@ SECRET_KEY = os.getenv('SECRET_KEY', DEFAULT_SECRET_KEY)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-ALLOWED_HOSTS = []
+env_hosts = os.getenv('ALLOWED_HOSTS', '').split(',')
+ALLOWED_HOSTS = [host for host in env_hosts if host != '']
 
 
 # Application definition
@@ -138,6 +139,10 @@ REST_FRAMEWORK = {
 }
 
 SWAGGER_SETTINGS = {
+    'USE_SESSION_AUTH': DEBUG,  # Swagger doesn't need authenticated user in debug mode
+    # Outside debug - only admin has access to swagger definition
+    'LOGIN_URL': '/admin/login/',
+    'LOGOUT_URL': '/admin/logout/',
     'SECURITY_DEFINITIONS': {
         'Bearer': {
             'type': 'apiKey',

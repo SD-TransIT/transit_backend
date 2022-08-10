@@ -25,6 +25,8 @@ services:
       - DB_HOST=${DB_HOST:-db} # By default, it's pointing to db container
       - DB_PORT=${DB_PORT:-5432}
       - PORT=${PORT:-8000}
+      - DJANGO_SERVER=${DJANGO_SERVER:-django_wsgi} # By default, use development server, actual server should use 'waitress'
+      - ALLOWED_HOSTS=${ALLOWED_HOSTS:-*} # Warning: '*' should not be used in production
     depends_on:
       db:
         condition: service_started
