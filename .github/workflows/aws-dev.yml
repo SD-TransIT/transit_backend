@@ -4,19 +4,18 @@ name: Deploy to Amazon ECS
 on:
   push:
     branches:
-      - staging
       - develop
       - dev-deploy-test
 
 env:
-  AWS_REGION: us-east-1                             # set this to your preferred AWS region, e.g. us-west-1
-  ECR_REPOSITORY: transit/backend                   # set this to your Amazon ECR repository name
-  ECS_SERVICE: transit-dev-service                  # set this to your Amazon ECS service name
-  ECS_CLUSTER: transit-cluster                      # set this to your Amazon ECS cluster name
-  ECS_TASK_DEFINITION: .aws/task-definition.json    # set this to the path to your Amazon ECS task definition
-                                                    # file, e.g. .aws/task-definition.json
-  CONTAINER_NAME: transit-backend                   # set this to the name of the container in the
-                                                    # containerDefinitions section of your task definition
+  AWS_REGION: us-east-1                                 # set this to your preferred AWS region, e.g. us-west-1
+  ECR_REPOSITORY: transit/backend                       # set this to your Amazon ECR repository name
+  ECS_SERVICE: transit-dev-service                      # set this to your Amazon ECS service name
+  ECS_CLUSTER: transit-cluster                          # set this to your Amazon ECS cluster name
+  ECS_TASK_DEFINITION: .aws/task-definition-dev.json    # set this to the path to your Amazon ECS task definition
+                                                        # file, e.g. .aws/task-definition.json
+  CONTAINER_NAME: transit-backend                       # set this to the name of the container in the
+                                                        # containerDefinitions section of your task definition
 
 permissions:
   contents: read
@@ -46,7 +45,7 @@ jobs:
       id: build-image
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        IMAGE_TAG: ${{ github.sha }}
+        IMAGE_TAG: latest
       run: |
         # Build a docker container and
         # push it to ECR so that it can
