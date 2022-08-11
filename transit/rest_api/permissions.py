@@ -8,7 +8,7 @@ from transit.models.user_proxy import (
 
 class IsUserManager(BasePermission):
     """
-       Allows user to manage users
+       Permission allowing access for users that have been assigned the 'can_manage_users' permission
     """
 
     def has_permission(self, request, view):
