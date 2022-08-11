@@ -5,6 +5,8 @@ from transit.tests.api_test import ApiTest
 
 
 class ApiLoginTest(ApiTest):
+    _URL = '/token/'
+
     def setUp(self):
         super(ApiLoginTest, self).setUp()
         self.payload = None
@@ -14,14 +16,14 @@ class ApiLoginTest(ApiTest):
 
     def test_post_token_success(self):
         self.payload = {'username': self._TEST_USERNAME, 'password': self._TEST_PASSWORD}
-        response = self.make_post_request('/token/', self.payload)
+        response = self.make_post_request(self._URL, self.payload)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_post_token_bad_request_error(self):
-        response = self.make_post_request('/token/', self.payload)
+        response = self.make_post_request(self._URL, self.payload)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_post_token_unauthorized_error(self):
         self.payload = {'username': f'{self._TEST_USERNAME}sss', 'password': self._TEST_PASSWORD}
-        response = self.make_post_request('/token/', self.payload)
+        response = self.make_post_request(self._URL, self.payload)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
