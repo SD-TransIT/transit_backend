@@ -22,9 +22,10 @@ permissions:
 
 jobs:
   deploy:
-    name: Deploy
+    name: Deploy Dev
     runs-on: ubuntu-latest
-    environment: production
+    environment: dev
+    timeout-minutes: 10
 
     steps:
     - name: Checkout

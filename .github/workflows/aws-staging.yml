@@ -21,9 +21,10 @@ permissions:
 
 jobs:
   deploy:
-    name: Deploy
+    name: Deploy Staging
     runs-on: ubuntu-latest
-    environment: production
+    timeout-minutes: 10
+    environment: staging
 
     steps:
     - name: Checkout
