@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework import status
 
+from transit.models.user_proxy import MANAGE_USER_PERMS
 from transit.rest_api.urls import UserViewSet
 from transit.tests.api_test import ApiTest
 
@@ -32,7 +33,7 @@ class ApiLoginTest(ApiTest):
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_post_create_user_with_proper_user_perms(self):
-        self.add_permissions_to_manage_users()
+        self.add_user_permission(MANAGE_USER_PERMS)
         self.header = self.get_authorize_header(self.auth_payload)
         response = self.make_post_request(self._URL, self.payload, self._POST_ACTION)
         new_user = User.objects.filter(username=self._TEST_NEW_USER_USERNAME).first()
@@ -51,7 +52,7 @@ class ApiLoginTest(ApiTest):
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_get_users_with_proper_user_perms(self):
-        self.add_permissions_to_manage_users()
+        self.add_user_permission(MANAGE_USER_PERMS)
         self.header = self.get_authorize_header(self.auth_payload)
         response = self.make_get_request(self._URL, self.payload, self._GET_ACTION)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -66,7 +67,7 @@ class ApiLoginTest(ApiTest):
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_update_user_with_proper_user_perms(self):
-        self.add_permissions_to_manage_users()
+        self.add_user_permission(MANAGE_USER_PERMS)
         self.header = self.get_authorize_header(self.auth_payload)
         self.payload.pop('is_staff'), self.payload.pop('password')
         response = self.make_put_request(f'{self._URL}{self.user.pk}/', self.payload, self.user.pk, self._PUT_ACTION)
@@ -86,7 +87,7 @@ class ApiLoginTest(ApiTest):
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_delete_user_with_proper_user_perms(self):
-        self.add_permissions_to_manage_users()
+        self.add_user_permission(MANAGE_USER_PERMS)
         self.header = self.get_authorize_header(self.auth_payload)
         response = self.make_delete_request(f'{self._URL}{self.user.pk}/', self.user.pk, self._DELETE_ACTION)
         updated_user = User.objects.filter(username=self._TEST_USERNAME).first()

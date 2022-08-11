@@ -1,10 +1,11 @@
 from django.test import TestCase, RequestFactory
 
 from transit.rest_api.authentication.jwt_views import DecoratedTokenObtainPairView
-from transit.tests.api_test.mixin import UserMixin
+from transit.tests.api_test.helpers import UserTestHelper
 
 
-class ApiTest(TestCase, UserMixin):
+class ApiTest(TestCase, UserTestHelper):
+    _URL_TOKEN = '/token/'
     _GET_ACTION = {'get': 'list'}
     _POST_ACTION = {'post': 'create'}
     _PUT_ACTION = {'put': 'update'}
@@ -20,7 +21,7 @@ class ApiTest(TestCase, UserMixin):
         raise NotImplementedError()
 
     def get_authorize_header(self, payload):
-        request = self.factory.post('/token/', payload, **self.header)
+        request = self.factory.post(self._URL_TOKEN, payload, **self.header)
         response = DecoratedTokenObtainPairView.as_view()(request)
         response_json = response.data
         return {
