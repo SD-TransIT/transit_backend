@@ -1,24 +1,15 @@
-from django.contrib.auth.models import User
-from django.urls import include, path
-from rest_framework import routers, serializers, viewsets
+from django.urls import (
+    include,
+    path
+)
+from rest_framework import routers
+from rest_framework_simplejwt.views import (
+    TokenRefreshView,
+    TokenVerifyView,
+    TokenObtainPairView
+)
 
-
-# Serializers define the API representation.
-from rest_framework.permissions import IsAuthenticated
-from rest_framework_simplejwt.views import TokenRefreshView, TokenVerifyView, TokenObtainPairView
-
-
-class UserSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = User
-        fields = ['url', 'username', 'email', 'is_staff']
-
-
-# ViewSets define the view behavior.
-class UserViewSet(viewsets.ModelViewSet):
-    permission_classes = (IsAuthenticated,)
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+from transit.rest_api.users import UserViewSet
 
 
 # Routers provide an easy way of automatically determining the URL conf.

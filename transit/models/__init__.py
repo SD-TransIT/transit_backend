@@ -29,3 +29,4 @@ from transit.models.transporter import (
     Transporter,
     TransporterDetails
 )
+from transit.models.user_proxy import UserManager
