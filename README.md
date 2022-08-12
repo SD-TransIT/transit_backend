@@ -37,7 +37,8 @@ DJANGO_SERVER=django_wsgi # WSGI Server, environments other than local one shoul
 ALLOWED_HOSTS=* # Passed to ALLOWED_HOSTS in django.settings, default * (all hosts) should not be used in production, 
 # If more than one host is allowed, hosts should be separated with comma, e.g.: host1,host2,host3
 CORS_ORIGIN_WHITELIST=http://127.0.0.1:3000,http://localhost:3000 # The list of origins authorized to make requests 
-# therefore this option allow frontend part of application to send request to backend side. Please be careful in production instances.
+# therefore this option allow frontend part of application to send request to backend side. 
+# If no such env defined CORS_ALLOW_ALL_ORIGINS = True will be setup. Please be careful in production instances.
 ```
 
 #### 2. Build docker instance 

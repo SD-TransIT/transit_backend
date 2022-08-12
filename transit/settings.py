@@ -156,5 +156,8 @@ SWAGGER_SETTINGS = {
     }
 }
 
-cors_hosts = os.getenv('CORS_ORIGIN_WHITELIST', 'http://localhost:3000,http://127.0.0.1:3000').split(',')
-CORS_ORIGIN_WHITELIST = [host for host in cors_hosts if host != '']
+if "CORS_ORIGIN_WHITELIST" in os.environ:
+    cors_hosts = os.getenv('CORS_ORIGIN_WHITELIST', '').split(',')
+    CORS_ORIGIN_WHITELIST = [host for host in cors_hosts if host != '']
+else:
+    CORS_ALLOW_ALL_ORIGINS = True
