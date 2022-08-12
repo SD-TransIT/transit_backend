@@ -8,6 +8,7 @@ coreschema==0.0.4
 coverage==6.4.2
 distlib==0.3.5
 Django==4.0.6
+django-cors-headers==3.13.0
 django-filter==22.1
 djangorestframework==3.13.1
 djangorestframework-simplejwt==5.2.0
