@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'drf_yasg',
-    'transit'
+    'corsheaders',
+    'transit',
 ]
 
 MIDDLEWARE = [
@@ -54,6 +55,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'transit.urls'
@@ -153,3 +155,9 @@ SWAGGER_SETTINGS = {
         }
     }
 }
+
+if "CORS_ORIGIN_WHITELIST" in os.environ:
+    cors_hosts = os.getenv('CORS_ORIGIN_WHITELIST', '').split(',')
+    CORS_ORIGIN_WHITELIST = [host for host in cors_hosts if host != '']
+else:
+    CORS_ALLOW_ALL_ORIGINS = True
