@@ -1,11 +1,9 @@
 import django_filters
 from django.utils.translation import gettext_lazy as _
-from rest_framework import viewsets, serializers
-from rest_framework.permissions import IsAuthenticated
+from rest_framework import serializers
 
 from transit.models import OrderDetails, OrderLineDetails
 from transit.rest_api.abstract import BaseFormViewSet
-from transit.rest_api.permissions import IsFormsClerk
 
 
 class OrderLineDetailsFilter(django_filters.FilterSet):

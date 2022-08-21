@@ -1,9 +1,8 @@
 import django_filters
-from rest_framework import viewsets, serializers
-from rest_framework.permissions import IsAuthenticated
+from rest_framework import serializers
+
 from transit.models import Driver
 from transit.rest_api.abstract import BaseFormViewSet
-from transit.rest_api.permissions import IsFormsClerk
 
 
 class DriverSerializer(serializers.ModelSerializer):

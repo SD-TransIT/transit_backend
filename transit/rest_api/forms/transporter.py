@@ -1,11 +1,9 @@
 import django_filters
-from rest_framework import viewsets, serializers
-from rest_framework.permissions import IsAuthenticated
+from rest_framework import serializers
 
 from transit.models import Transporter
 from transit.rest_api.abstract import BaseFormViewSet
 from transit.rest_api.forms.fields import FormsDataFields
-from transit.rest_api.permissions import IsFormsClerk
 
 
 class TransporterSerializer(serializers.ModelSerializer):
