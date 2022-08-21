@@ -3,7 +3,7 @@ from typing import Dict, Any
 from django.test import TestCase
 
 from transit.models import ModeOfTransport
-from transit.rest_api.manual_uploads.mode_of_transport_master import ModeOfTransportViewSet
+from transit.rest_api.forms.mode_of_transport_master import ModeOfTransportViewSet
 from transit.tests.api_test.helpers.api_manual_form_test_case import ManualFormTestCaseMixin
 from transit.tests.api_test.helpers.test_objects_factory import ModeOfTransportFactory
 

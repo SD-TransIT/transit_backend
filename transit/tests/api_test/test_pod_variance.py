@@ -3,7 +3,7 @@ from typing import Dict, Any
 from django.test import TestCase
 
 from transit.models import PODVariance
-from transit.rest_api.manual_uploads.pod_variance import PODVarianceViewSet
+from transit.rest_api.forms.pod_variance import PODVarianceViewSet
 from transit.tests.api_test.helpers.api_manual_form_test_case import ManualFormTestCaseMixin
 from transit.tests.api_test.helpers.test_objects_factory import PODVarianceFactory
 

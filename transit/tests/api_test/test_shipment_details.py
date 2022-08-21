@@ -3,7 +3,7 @@ from typing import Dict, Any
 from django.test import TestCase
 
 from transit.models import ShipmentDetails
-from transit.rest_api.manual_uploads.shipment import ShipmentDetailsViewSet
+from transit.rest_api.forms.shipment import ShipmentDetailsViewSet
 from transit.tests.api_test.helpers.api_manual_form_test_case import ManualFormTestCaseMixin
 from transit.tests.api_test.helpers.test_objects_factory import ShipmentDetailsFactory, DriverFactory, \
     TransporterDetailsFactory, SupplierFactory, DeliveryStatusFactory

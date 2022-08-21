@@ -3,7 +3,7 @@ from typing import Dict, Any
 from django.test import TestCase
 
 from transit.models import CustomerType
-from transit.rest_api.manual_uploads.customer_type_master import CustomerTypeViewSet
+from transit.rest_api.forms.customer_type_master import CustomerTypeViewSet
 from transit.tests.api_test.helpers.api_manual_form_test_case import ManualFormTestCaseMixin
 
 

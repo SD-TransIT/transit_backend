@@ -3,6 +3,7 @@ from rest_framework import viewsets, serializers
 from rest_framework.permissions import IsAuthenticated
 
 from transit.models import PODVariance
+from transit.rest_api.abstract import BaseFormViewSet
 from transit.rest_api.permissions import IsFormsClerk
 
 
@@ -22,9 +23,8 @@ class PODVarianceFilter(django_filters.FilterSet):
         }
 
 
-class PODVarianceViewSet(viewsets.ModelViewSet):
+class PODVarianceViewSet(BaseFormViewSet):
     filterset_class = PODVarianceFilter
-    permission_classes = (IsAuthenticated, IsFormsClerk)
     queryset = PODVariance.objects.all().order_by('-id')
 
     def get_serializer_class(self):

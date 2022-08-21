@@ -3,7 +3,8 @@ from rest_framework import viewsets, serializers
 from rest_framework.permissions import IsAuthenticated
 
 from transit.models import Customer
-from transit.rest_api.manual_uploads.fields import FormsDataFields
+from transit.rest_api.abstract import BaseFormViewSet
+from transit.rest_api.forms.fields import FormsDataFields
 from transit.rest_api.permissions import IsFormsClerk
 
 
@@ -29,9 +30,8 @@ class CustomerFilter(django_filters.FilterSet):
         }
 
 
-class CustomerViewSet(viewsets.ModelViewSet):
+class CustomerViewSet(BaseFormViewSet):
     filterset_class = CustomerFilter
-    permission_classes = (IsAuthenticated, IsFormsClerk)
     queryset = Customer.objects.all().order_by('-id')
 
     def get_serializer_class(self):

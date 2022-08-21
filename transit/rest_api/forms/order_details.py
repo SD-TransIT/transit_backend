@@ -4,6 +4,7 @@ from rest_framework import viewsets, serializers
 from rest_framework.permissions import IsAuthenticated
 
 from transit.models import OrderDetails, OrderLineDetails
+from transit.rest_api.abstract import BaseFormViewSet
 from transit.rest_api.permissions import IsFormsClerk
 
 
@@ -60,23 +61,21 @@ class OrderDetailsSerializer(serializers.ModelSerializer):
         return validated
 
 
-class OrderDetailsViewSet(viewsets.ModelViewSet):
+class OrderDetailsViewSet(BaseFormViewSet):
     filterset_class = OrderDetailsFilter
     lookup_url_kwarg = 'pk'
     lookup_field = 'pk'
-    permission_classes = (IsAuthenticated, IsFormsClerk)
     queryset = OrderDetails.objects.all().order_by('-order_received_date')
 
     def get_serializer_class(self):
         return OrderDetailsSerializer
 
 
-class OrderLineDetailsViewSet(viewsets.ModelViewSet):
+class OrderLineDetailsViewSet(BaseFormViewSet):
     filterset_class = OrderLineDetailsFilter
     # Optional ID required by creating through OrderDetails
     id = serializers.IntegerField(required=False)
     lookup_url_kwarg = 'pk'
-    permission_classes = (IsAuthenticated, IsFormsClerk)
     queryset = OrderLineDetails.objects.all()
 
     def get_serializer_class(self):

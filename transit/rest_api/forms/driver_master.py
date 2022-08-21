@@ -2,6 +2,7 @@ import django_filters
 from rest_framework import viewsets, serializers
 from rest_framework.permissions import IsAuthenticated
 from transit.models import Driver
+from transit.rest_api.abstract import BaseFormViewSet
 from transit.rest_api.permissions import IsFormsClerk
 
 
@@ -25,9 +26,8 @@ class DriverFilter(django_filters.FilterSet):
         }
 
 
-class DriverViewSet(viewsets.ModelViewSet):
+class DriverViewSet(BaseFormViewSet):
     filterset_class = DriverFilter
-    permission_classes = (IsAuthenticated, IsFormsClerk)
     queryset = Driver.objects.all().order_by('-id')
 
     def get_serializer_class(self):

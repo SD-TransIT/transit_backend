@@ -3,6 +3,7 @@ from rest_framework import viewsets, serializers
 from rest_framework.permissions import IsAuthenticated
 
 from transit.models import Item
+from transit.rest_api.abstract import BaseFormViewSet
 from transit.rest_api.permissions import IsFormsClerk
 
 
@@ -25,9 +26,8 @@ class ItemFilter(django_filters.FilterSet):
         ordering = ['-id']
 
 
-class ItemViewSet(viewsets.ModelViewSet):
+class ItemViewSet(BaseFormViewSet):
     filterset_class = ItemFilter
-    permission_classes = (IsAuthenticated, IsFormsClerk)
     queryset = Item.objects.all().order_by('-id')
 
     def get_serializer_class(self):

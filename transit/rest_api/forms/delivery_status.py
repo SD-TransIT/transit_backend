@@ -3,6 +3,7 @@ from rest_framework import viewsets, serializers
 from rest_framework.permissions import IsAuthenticated
 
 from transit.models import DeliveryStatus
+from transit.rest_api.abstract import BaseFormViewSet
 from transit.rest_api.permissions import IsUserManager
 
 
@@ -21,9 +22,8 @@ class DeliveryStatusFilter(django_filters.FilterSet):
         ordering = ['-id']
 
 
-class DeliveryStatusViewSet(viewsets.ModelViewSet):
+class DeliveryStatusViewSet(BaseFormViewSet):
     filterset_class = DeliveryStatusFilter
-    permission_classes = (IsAuthenticated, IsUserManager)
     queryset = DeliveryStatus.objects.all().order_by('delivery_status')
 
     def get_serializer_class(self):

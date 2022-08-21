@@ -9,19 +9,19 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView
 )
 
-from transit.rest_api.manual_uploads.customer import CustomerViewSet
-from transit.rest_api.manual_uploads.customer_type_master import CustomerTypeViewSet
-from transit.rest_api.manual_uploads.delivery_status import DeliveryStatusViewSet
-from transit.rest_api.manual_uploads.driver_master import DriverViewSet
-from transit.rest_api.manual_uploads.item_details import ItemDetailsViewSet
-from transit.rest_api.manual_uploads.item_master import ItemViewSet
-from transit.rest_api.manual_uploads.mode_of_transport_master import ModeOfTransportViewSet
-from transit.rest_api.manual_uploads.order_details import OrderDetailsViewSet, OrderLineDetailsViewSet
-from transit.rest_api.manual_uploads.pod_variance import PODVarianceViewSet
-from transit.rest_api.manual_uploads.shipment import ShipmentDetailsViewSet
-from transit.rest_api.manual_uploads.supplier_master import SupplierViewSet
-from transit.rest_api.manual_uploads.transporter import TransporterViewSet
-from transit.rest_api.manual_uploads.transporter_details import TransporterDetailsViewSet
+from transit.rest_api.forms.customer import CustomerViewSet
+from transit.rest_api.forms.customer_type_master import CustomerTypeViewSet
+from transit.rest_api.forms.delivery_status import DeliveryStatusViewSet
+from transit.rest_api.forms.driver_master import DriverViewSet
+from transit.rest_api.forms.item_details import ItemDetailsViewSet
+from transit.rest_api.forms.item_master import ItemViewSet
+from transit.rest_api.forms.mode_of_transport_master import ModeOfTransportViewSet
+from transit.rest_api.forms.order_details import OrderDetailsViewSet, OrderLineDetailsViewSet
+from transit.rest_api.forms.pod_variance import PODVarianceViewSet
+from transit.rest_api.forms.shipment import ShipmentDetailsViewSet
+from transit.rest_api.forms.supplier_master import SupplierViewSet
+from transit.rest_api.forms.transporter import TransporterViewSet
+from transit.rest_api.forms.transporter_details import TransporterDetailsViewSet
 from transit.rest_api.users import UserViewSet
 
 
