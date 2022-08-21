@@ -10,7 +10,8 @@ from transit.models.item import (
 
 class OrderDetails(BaseModel):
     order_details_id = models.CharField(
-        max_length=50, primary_key=True, unique=True, db_column='OrderDetailsID'
+        max_length=64, primary_key=True, unique=True,
+        db_column='OrderDetailsID', blank=False, null=False
     )
 
     customer = models.ForeignKey(Customer, models.DO_NOTHING, db_column='CustomerID')
@@ -24,16 +25,16 @@ class OrderDetails(BaseModel):
 
 
 class OrderLineDetails(BaseModel):
-    order_details = models.ForeignKey(OrderDetails, models.DO_NOTHING, db_column='OrderDetailsID')
+    order_details = models.ForeignKey(
+        OrderDetails, on_delete=models.CASCADE, db_column='OrderDetailsID', related_name='line_items')
 
     # TODO - product (item) and item details could be fixed, we could keep one of them only
+    #  Only details should be stored. Product is redundant.
     product = models.ForeignKey(Item, models.DO_NOTHING, db_column='ProductID')
     item_details = models.ForeignKey(ItemDetails, models.DO_NOTHING, db_column='ItemDetailsID')
-    quantity = models.DecimalField(
-        db_column='Quantity', blank=True, null=True, max_digits=18, decimal_places=2
-    )
+    quantity = models.DecimalField(db_column='Quantity', max_digits=18, decimal_places=2)
     old_quantity = models.DecimalField(
-        db_column='OldQuantity', blank=True, null=True, max_digits=18, decimal_places=2
+        db_column='OldQuantity', max_digits=18, decimal_places=2, null=True
     )
 
     class Meta:

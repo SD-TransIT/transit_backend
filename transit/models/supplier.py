@@ -7,6 +7,7 @@ from transit.models.base import (
 
 
 class Supplier(BaseModel, GeographicalModel):
+    name = models.CharField(db_column='Name', max_length=255, null=False, blank=False)
     phone = models.CharField(db_column='Phone', max_length=255, blank=True, null=True)
     email = models.CharField(db_column='Email', max_length=255, blank=True, null=True)
 

@@ -30,6 +30,10 @@ SECRET_KEY = os.getenv('SECRET_KEY', DEFAULT_SECRET_KEY)
 env_hosts = os.getenv('ALLOWED_HOSTS', '').split(',')
 ALLOWED_HOSTS = [host for host in env_hosts if host != '']
 
+# Timzeone info
+USE_TZ = True
+TIME_ZONE = os.getenv('TIMZEONE', 'UTC')
+
 
 # Application definition
 
@@ -40,12 +44,19 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_filters',
     'rest_framework',
     'rest_framework_simplejwt',
     'drf_yasg',
     'corsheaders',
     'transit',
 ]
+
+SPECTACULAR_SETTINGS = {
+    'SWAGGER_UI_DIST': 'SIDECAR',
+    'SWAGGER_UI_FAVICON_HREF': 'SIDECAR',
+    'REDOC_DIST': 'SIDECAR',
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -139,11 +150,15 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
-    'TEST_REQUEST_DEFAULT_FORMAT': 'json'
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json',
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 20
 }
 
 SWAGGER_SETTINGS = {
-    'USE_SESSION_AUTH': DEBUG,  # Swagger doesn't need authenticated user in debug mode
+    'USE_SESSION_AUTH': DEBUG,  # Swagger doesn't need authenticated user_helper in debug mode
     # Outside debug - only admin has access to swagger definition
     'LOGIN_URL': '/admin/login/',
     'LOGOUT_URL': '/admin/logout/',
@@ -151,7 +166,7 @@ SWAGGER_SETTINGS = {
         'Bearer': {
             'type': 'apiKey',
             'name': 'Authorization',
-            'in': 'header'
+            'in': 'base_header'
         }
     }
 }

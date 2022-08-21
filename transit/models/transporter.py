@@ -17,7 +17,7 @@ class ModeOfTransport(BaseModel):
 
 class Transporter(BaseModel, GeographicalModel):
     # ModeOfTransport is no more need here in that part according to the demo (in legacy code there is field)
-    transporter_name = models.CharField(db_column='TransporterName', max_length=255)
+    name = models.CharField(db_column='TransporterName', max_length=255)
     phone = models.CharField(db_column="Phone", max_length=255, blank=True, null=True)
 
     class Meta:
@@ -29,10 +29,6 @@ class TransporterDetails(BaseModel):
     transporter = models.ForeignKey(
         Transporter, models.DO_NOTHING, db_column='TransporterID'
     )
-    mode_of_transport = models.ForeignKey(
-        ModeOfTransport, models.DO_NOTHING,
-        db_column='ModeOfTransportID'
-    )
 
     vehicle_number = models.CharField(
         db_column='VehicleNumber', max_length=255, blank=True, null=True
@@ -42,6 +38,11 @@ class TransporterDetails(BaseModel):
     )
     vehicle_capacity_weight = models.CharField(
         db_column="VehicleCapacityWeight", max_length=255, blank=True, null=True
+    )
+
+    mode_of_transport = models.ForeignKey(
+        ModeOfTransport, models.DO_NOTHING,
+        db_column='ModeOfTransportID'
     )
 
     class Meta:
