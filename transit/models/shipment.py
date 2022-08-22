@@ -1,4 +1,5 @@
-from django.db import models
+from django.db import models, transaction
+from django.utils.translation import gettext_lazy as _
 
 from transit.models.base import BaseModel
 from transit.models.delivery_status import DeliveryStatus
@@ -8,6 +9,33 @@ from transit.models.supplier import Supplier
 from transit.models.transporter import TransporterDetails
 
 
+class ShipmentDetailsManager(models.Manager):
+    # Simplifies M:N with ShipmentOrderMapping
+    @transaction.atomic
+    def create(self, *args, **kwargs):
+        orders = kwargs.get('orders')
+        shipment_orders = self._orders_to_order_objects(orders) if orders else []
+        shipment = super(ShipmentDetailsManager, self).create(*args, **kwargs)
+        for order in shipment_orders:
+            # TODO: M:N relation should be created automatically through django, this should be obsolete
+            ShipmentOrderMapping.objects.create(shipment_details=shipment, order_details=order)
+        return shipment
+
+    def _orders_to_order_objects(self, orders):
+        order_details = []
+        for order in orders:
+            if isinstance(order, OrderDetails):
+                order_details.append(order)
+            elif OrderDetails.objects.filter(pk=order).exists():
+                order_details.append(OrderDetails.objects.get(order))
+            else:
+                raise ValueError(
+                    _("Cannot bind order detail with code %s to OrderDetail object."
+                      "Passed orders should be either OrderDetail object or OrderDetails pk.") % repr(order)
+                )
+        return order_details
+
+
 class ShipmentDetails(BaseModel):
     transporter_details = models.ForeignKey(
         TransporterDetails, models.DO_NOTHING, db_column='TransporterDetailsID'
@@ -15,26 +43,26 @@ class ShipmentDetails(BaseModel):
     driver = models.ForeignKey(Driver, models.DO_NOTHING, db_column='DriverID')
     supplier = models.ForeignKey(Supplier, models.DO_NOTHING, db_column='SupplierID')
 
-    ship_date = models.DateTimeField(db_column='ShipDate', blank=True, null=True)
-    expected_delivery_date = models.DateTimeField(db_column='ExpectedDeliveryDate', blank=True, null=True)
-    delivery_date = models.DateTimeField(db_column='DeliveryDate', blank=True, null=True)
-    timestamp = models.DateTimeField(db_column='Timestamp', blank=True, null=True)
+    ship_date = models.DateTimeField(db_column='ShipDate', null=True)
+    expected_delivery_date = models.DateTimeField(db_column='ExpectedDeliveryDate', null=True)
+    delivery_date = models.DateTimeField(db_column='DeliveryDate', null=True)
+    timestamp = models.DateTimeField(db_column='Timestamp', null=True)
 
-    pod = models.BooleanField(db_column="POD", blank=True, null=True)
+    pod = models.BooleanField(db_column="POD", null=True)
     delay_justified = models.BooleanField(db_column="DelayJustified", blank=True, null=True)
 
     transporter_base_cost = models.DecimalField(
-        db_column='TransporterBaseCost', blank=True, null=True, max_digits=18, decimal_places=2
+        db_column='TransporterBaseCost', null=True, max_digits=18, decimal_places=2
     )
     number_of_kilometers = models.DecimalField(
-        db_column='NumberOfKilometers', blank=True, null=True, max_digits=18, decimal_places=2
+        db_column='NumberOfKilometers', null=True, max_digits=18, decimal_places=2
     )
     transporter_per_diem = models.DecimalField(
-        db_column='TransporterPerDiem', blank=True, null=True, max_digits=18, decimal_places=2
+        db_column='TransporterPerDiem', null=True, max_digits=18, decimal_places=2
     )
 
     transporter_additional_cost = models.DecimalField(
-        db_column='TransporterAdditionalCost', blank=True, null=True, max_digits=18, decimal_places=2
+        db_column='TransporterAdditionalCost', null=True, max_digits=18, decimal_places=2
     )
 
     shipment_status = models.IntegerField(db_column='ShipmentStatus', blank=True, null=True)

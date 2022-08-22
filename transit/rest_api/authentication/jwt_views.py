@@ -1,5 +1,6 @@
 # Wrappers required by OpenAPI schema, see
 # https://django-rest-framework-simplejwt.readthedocs.io/en/latest/drf_yasg_integration.html
+# Do not use them in code, those are only for swagger to detect token endpoint. Use derived Serializer / Views instead.
 
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import serializers, status

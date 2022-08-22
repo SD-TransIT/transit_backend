@@ -84,3 +84,34 @@ From main directory run
 ./scripts/install-hooks.bash 
 ```
 to run `tox -e local_test` automatically each time before code is pushed to remote. 
+
+### Troubleshooting
+#### ModuleNotFound exception after pulling changes from remote 
+This is most likely due to new requirements added on remote that are not installed locally. 
+New packages will appear after rebuilding container.
+#### Issues with tox
+In case of `ERROR: InvocationError for command <command>` during tox check it might
+be necessary to run command `tox recreate`.
+
+
+### Improvement ideas: 
+- Models: 
+  * Driver password shouldn't be kept in plain text 
+  * Address should be separate object instead of a bunch of fields reoccurring in multiple models  
+  * Contact information should be in other model 
+  * Remove old_quantity from OrderLineDetails and add simple history models
+  * OrderDetails rename to Order
+  * order_received_date should be in Date format
+  * Change order details primary key to integer, 
+  * Customer Photos? - current legacy code expects images to be 
+  stored in cloud, will it be the case also for new app? What about 
+  new instances without cloud deployment? We should create customizable 
+ CustomerPhoto adapter that can be configured for different sources.
+  * M:N ShipmentOrderMapping should be removed and replaced by django builtin.
+  * ShipmentDetails should most likely reference transporter instead of transporter_details
+  * In ShipmentDetails should it be checked if driver is related to transported_details? 
+If so one of the fields is redundant since Driver:Transporter is N:1 relation and not M:N relation
+  * Should ShipmentDetails.POD and ShipmentDetails.delay_justified nullable? Or default value True/False.
+  * Show ShipmentDetails.ShipmentStatus id determined? Do we need it?
+  * NOTE: In DRF PUT is not method eligible for updating single fields, only whole objects. 
+  If we want to update fields we should use PATCH instead. 

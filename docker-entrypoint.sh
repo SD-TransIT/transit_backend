@@ -13,6 +13,7 @@ help() {
   test             : run unit tests
   manage           : run django manage.py
   flake8           : Run flake8 style check
+  shell            : Run shell command
   """
 }
 
@@ -39,6 +40,7 @@ case "$1" in
     fi
   ;;
   "manage" )
+    pip freeze
     ./manage.py "${@:2}"
   ;;
   "flake8" )
@@ -46,6 +48,9 @@ case "$1" in
   ;;
   "test" )
     tox -e docker_test
+  ;;
+  "shell" )
+    exec "${@:2}"
   ;;
   * )
     help

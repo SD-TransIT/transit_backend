@@ -1,1 +1,1 @@
-from transit.tests.api_test.helpers.user_helper import UserTestHelper
+from transit.tests.api_test.helpers.api_user_helper import UserTestHelper
