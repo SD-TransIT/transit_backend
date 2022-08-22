@@ -28,7 +28,7 @@ class ModelViewsetRequestTestBase:
     _USER_PERMISSIONS: List[str] = [MANAGE_USER_PERM, MANAGE_FORM_PERM]
     _API_HELPER_TYPE: Type[ApiTestClient] = ApiTestClient
 
-    _URL: str = None
+    _URL: str = ''
     _VIEW_SET: ModelViewSet = None
     _MODEL_TYPE: django.db.models.Model = None
 
