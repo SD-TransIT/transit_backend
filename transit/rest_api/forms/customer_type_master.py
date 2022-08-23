@@ -8,7 +8,8 @@ from transit.rest_api.abstract import BaseFormViewSet
 class CustomerTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomerType
-        fields = ['customer_type_name']
+        fields = ['id', 'customer_type_name']
+        read_only_fields = ['id']
         ordering = ['-id']
 
 

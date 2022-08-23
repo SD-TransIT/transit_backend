@@ -17,6 +17,7 @@ class TestOrderDetailsViewSet(ManualFormTestCaseMixin, TestCase):
     _TEST_SUBJECT_DATA = OrderDetailsFactory.default_values.copy()
     _POST_REQUEST_PAYLOAD = {
         **OrderDetailsFactory.default_values.copy(), 'order_received_date': '2022-08-18',
+        'order_details_id': 'UniqueNewCharDetailID'
     }
     _PATCH_REQUEST_PAYLOAD = {
         'order_received_date': '2022-08-18'

@@ -8,7 +8,8 @@ from transit.rest_api.abstract import BaseFormViewSet
 class ItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Item
-        fields = ['name', 'volume', 'cost', 'weight', 'category', 'sub_category', 'conditions']
+        fields = ['id', 'name', 'volume', 'cost', 'weight', 'category', 'sub_category', 'conditions']
+        read_only_fields = ['id']
 
 
 class ItemFilter(django_filters.FilterSet):

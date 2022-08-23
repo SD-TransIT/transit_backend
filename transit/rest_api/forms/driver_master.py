@@ -9,10 +9,10 @@ class DriverSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Driver
-        fields = ['name', 'username', 'password', 'transporter']
+        fields = ['id', 'name', 'username', 'password', 'transporter']
+        read_only_fields = ['id']
         extra_kwargs = {
-            'password': {'write_only': True},
-            'username': {'write_only': True},
+            'password': {'write_only': True}
         }
 
 

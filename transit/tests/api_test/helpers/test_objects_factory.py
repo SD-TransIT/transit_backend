@@ -8,7 +8,8 @@ import django.db.models
 from django.db import transaction
 
 from transit.models import Supplier, CustomerType, ModeOfTransport, Item, ItemDetails, Driver, Transporter, \
-    TransporterDetails, Customer, OrderDetails, OrderLineDetails, ShipmentDetails, DeliveryStatus, PODVariance
+    TransporterDetails, Customer, OrderDetails, OrderLineDetails, ShipmentDetails, DeliveryStatus, PODVariance, \
+    PODVarianceDetails
 
 
 @dataclass
@@ -185,7 +186,7 @@ class OrderLineDetailsFactory(_FormModelFactory):
         'product': ItemFactory,  # In future product should be removed
         'item_details': ItemDetailsFactory
     }
-    related_models_default_props = {'order_details': {'name': 'ForOrderLineDetails'},
+    related_models_default_props = {'order_details': {'order_details_id': 'ForOrderLineDetails'},
                                     'item': {'name': 'ItemForOrderLineTest1'}}
     default_values: ClassVar[Dict] = {'quantity': '10'}
 
@@ -234,3 +235,14 @@ class PODVarianceFactory(_FormModelFactory):
     related_models_default_props = {'shipment__order_details': {'name': 'ForPODDetailsTest'},
                                     'shipment__item': {'name': 'ForPODItemTest'}}
     default_values: ClassVar[Dict] = {'dso_type': 'TestDSOforPOD'}
+
+
+class PODVarianceDetailsFactory(_FormModelFactory):
+    model: ClassVar[Type[django.db.models.Model]] = PODVarianceDetails
+    related_models_factories = {
+        'pod_variance': PODVarianceFactory,
+        'order_line_details': OrderLineDetailsFactory,
+    }
+    related_models_default_props = {'order_line_details': {'quantity': '20'},
+                                    'pod_variance': {'dso_type': 'Broken'}}
+    default_values: ClassVar[Dict] = {'quantity': '15'}

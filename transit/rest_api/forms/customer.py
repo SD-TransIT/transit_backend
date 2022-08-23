@@ -7,14 +7,13 @@ from transit.rest_api.forms.fields import FormsDataFields
 
 
 class CustomerSerializer(serializers.ModelSerializer):
-    filterset_fields = ['name', 'first_name', 'last_name', 'phone', 'email', 'customer_type']
-
     class Meta:
         model = Customer
         fields = [
-            *FormsDataFields.GEOGRAPHICAL_MODEL_FIELDS,
+            'id', *FormsDataFields.GEOGRAPHICAL_MODEL_FIELDS,
             'name', 'first_name', 'last_name', 'phone', 'email', 'customer_type'
         ]
+        read_only_fields = ['id']
         ordering = ['-id']
 
 

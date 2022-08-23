@@ -8,7 +8,8 @@ from transit.rest_api.abstract import BaseFormViewSet
 class ModeOfTransportSerializer(serializers.ModelSerializer):
     class Meta:
         model = ModeOfTransport
-        fields = ['class_mode', 'vehicle_type']
+        fields = ['id', 'class_mode', 'vehicle_type']
+        read_only_fields = ['id']
 
 
 class ModeOfTransportFilter(django_filters.FilterSet):

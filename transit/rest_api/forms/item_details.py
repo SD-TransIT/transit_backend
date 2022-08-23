@@ -10,9 +10,10 @@ class ItemDetailsSerializer(serializers.ModelSerializer):
     class Meta:
         model = ItemDetails
         fields = [
-            'item', 'expiry_date', 'manufacturing_date',
+            'id', 'item', 'expiry_date', 'manufacturing_date',
             'received_date', 'gtin', 'batch_number', 'lot_number', 'serial_number', 'funding_source'
         ]
+        read_only_fields = ['id']
 
 
 class ItemDetailsFilter(django_filters.FilterSet):
