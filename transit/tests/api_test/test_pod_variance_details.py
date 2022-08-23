@@ -26,7 +26,8 @@ class TestPODVarianceDetailsViewSet(ManualFormTestCaseMixin, TestCase):
     def setUp(self):
         super(TestPODVarianceDetailsViewSet, self).setUp()
         self._additional_order_line_details = OrderLineDetailsFactory(
-            custom_props={'order_details__customer__customer_type__customer_type_name': 'NewCustomer'}).create_object(True)
+            custom_props={'order_details__customer__customer_type__customer_type_name': 'NewCustomer'}
+        ).create_object(True)
         self._additional_pod_variance = PODVarianceFactory().create_object(True)
 
         self._POST_REQUEST_PAYLOAD['pod_variance'] = self._additional_pod_variance.pk
