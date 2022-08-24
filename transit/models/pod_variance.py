@@ -17,7 +17,7 @@ class PODVariance(BaseModel):
 
 
 class PODVarianceDetails(BaseModel):
-    pod_variance = models.ForeignKey(PODVariance, models.DO_NOTHING, db_column='PODVarianceID')
+    pod_variance = models.ForeignKey(PODVariance, models.DO_NOTHING, db_column='PODVarianceID', related_name='details')
     order_line_details = models.ForeignKey(OrderLineDetails, models.DO_NOTHING, db_column='OrderLineDetailsID')
 
     quantity = models.DecimalField(db_column='Quantity', max_digits=18, decimal_places=2)

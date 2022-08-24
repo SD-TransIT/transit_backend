@@ -9,7 +9,6 @@ class UserSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'password': {'write_only': True},
         }
-        ordering = ['-id']
 
     def create(self, validated_data):
         user = User(**validated_data)
@@ -23,4 +22,3 @@ class UserUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['username', 'email', 'is_staff']
-        order = ['-id']

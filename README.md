@@ -115,3 +115,5 @@ If so one of the fields is redundant since Driver:Transporter is N:1 relation an
   * Show ShipmentDetails.ShipmentStatus id determined? Do we need it?
   * NOTE: In DRF PUT is not method eligible for updating single fields, only whole objects. 
   If we want to update fields we should use PATCH instead. 
+  * Change Shipment boolean PODVariance to property being set when there's existing 
+  PODVariance in database.

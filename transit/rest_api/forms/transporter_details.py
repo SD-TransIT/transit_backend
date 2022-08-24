@@ -9,7 +9,7 @@ class TransporterDetailsSerializer(serializers.ModelSerializer):
     class Meta:
         model = TransporterDetails
         fields = [
-            'transporter', 'mode_of_transport', 'vehicle_number',
+            'id', 'transporter', 'mode_of_transport', 'vehicle_number',
             'vehicle_capacity_volume', 'vehicle_capacity_weight'
         ]
         ordering = ['-id']

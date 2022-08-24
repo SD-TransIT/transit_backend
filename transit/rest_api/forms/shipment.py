@@ -17,6 +17,7 @@ class ShipmentDetailsSerializer(serializers.ModelSerializer):
     class Meta:
         model = ShipmentDetails
         fields = "__all__"
+        read_only_fields = ['id']
         ordering = ['-id']
 
     def create(self, validated_data):

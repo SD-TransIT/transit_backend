@@ -9,7 +9,8 @@ from transit.rest_api.forms.fields import FormsDataFields
 class TransporterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Transporter
-        fields = [*FormsDataFields.GEOGRAPHICAL_MODEL_FIELDS, 'name', 'phone']
+        fields = ['id', *FormsDataFields.GEOGRAPHICAL_MODEL_FIELDS, 'name', 'phone']
+        read_only_fields = ['id']
         ordering = ['-id']
 
 

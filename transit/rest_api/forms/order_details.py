@@ -26,17 +26,17 @@ class OrderDetailsFilter(django_filters.FilterSet):
 class OrderLineDetailsSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderLineDetails
-        fields = ['product', 'item_details', 'quantity', 'old_quantity']
+        fields = ['id', 'product', 'item_details', 'quantity', 'old_quantity']
+        read_only_fields = ['id']
         ordering = ['-id']
 
 
 class OrderDetailsSerializer(serializers.ModelSerializer):
-    filterset_class = OrderDetailsFilter
     line_items = OrderLineDetailsSerializer(many=True, required=False)
 
     class Meta:
         model = OrderDetails
-        fields = ['line_items', 'customer', 'order_received_date']
+        fields = ['order_details_id', 'line_items', 'customer', 'order_received_date']
         ordering = ['-id']
 
     def create(self, validated_data):
