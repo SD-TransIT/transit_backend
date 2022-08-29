@@ -40,7 +40,14 @@ CORS_ORIGIN_WHITELIST=http://127.0.0.1:3000,http://localhost:3000 # The list of 
 # therefore this option allow frontend part of application to send request to backend side. 
 # If no such env defined CORS_ALLOW_ALL_ORIGINS = True will be setup. Please be careful in production instances.
 ```
-
+<b>Django superuser config</b>
+```shell
+# Used in dockerfile to create superuser during build
+SUPERUSER_LOGIN # Username of new superuser
+SUPERUSER_PASSWORD # Password user by superuser
+SUPERUSER_EMAIL # (optional) Email user by superuser
+```
+For more details see Point 3. Create django superuser.
 #### 2. Build docker instance 
 Both database and application can be deployed in docker container
 by running 
@@ -50,12 +57,21 @@ docker-compose up
 
 #### 3. Create django superuser 
 Superuser is admin that have privileges to every part of application.
-To create superuser run following command in folder where `docker-compose.yml` is
+To create superuser manually run following command in folder where `docker-compose.yml` is
 ```shell
 docker-compose run web manage createsuperuser --username admin
 ```
+You'll be asked for email and password for given user.
 
-You'll be asked for email and password for given user. 
+Superuser can be also created automatically during docker build. 
+If following environmental variables are provided, they will be used during 
+setup to create new superuser. 
+- `SUPERUSER_PASSWORD`
+- `SUPERUSER_EMAIL`
+- `SUPERUSER_LOGIN `
+
+If superuser with given login already exists no action 
+will be taken. Password will not be overwritten, email will not be updated. 
 
 #### 4. Confirm setup 
 Open `http://localhost:8000/api/swagger/` to confirm that

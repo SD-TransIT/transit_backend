@@ -27,6 +27,9 @@ services:
       - PORT=${PORT:-8000}
       - DJANGO_SERVER=${DJANGO_SERVER:-django_wsgi} # By default, use development server, actual server should use 'waitress'
       - ALLOWED_HOSTS=${ALLOWED_HOSTS:-*} # Warning: '*' should not be used in production
+      - SUPERUSER_LOGIN=${SUPERUSER_LOGIN}
+      - SUPERUSER_PASSWORD=${SUPERUSER_PASSWORD}
+      - SUPERUSER_EMAIL=${SUPERUSER_EMAIL}
     depends_on:
       db:
         condition: service_started
