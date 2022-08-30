@@ -16,11 +16,16 @@ Including another URLconf
     1. Import the include() function: from django.urls.py import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls.py'))
 """
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
+
+from transit import settings
 from transit.rest_api.urls import urlpatterns as rest_api_url_patterns
 from transit.rest_api.swagger_urls import urlpatterns as swagger_url_patterns
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-] + rest_api_url_patterns + swagger_url_patterns
+] + rest_api_url_patterns \
+  + swagger_url_patterns \
+  + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

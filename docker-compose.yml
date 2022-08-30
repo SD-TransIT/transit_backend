@@ -16,6 +16,7 @@ services:
       - ./:/backend
       - ${PWD}/tox.ini:/backend/tox.ini
       - ${PWD}/server.py:/backend/server.py
+      - ./docker_data/media/${MEDIA_ROOT}:/backend/${MEDIA_ROOT}
     ports:
       - "8000:8000"
     environment:
@@ -30,6 +31,11 @@ services:
       - SUPERUSER_LOGIN=${SUPERUSER_LOGIN}
       - SUPERUSER_PASSWORD=${SUPERUSER_PASSWORD}
       - SUPERUSER_EMAIL=${SUPERUSER_EMAIL}
+      - MEDIA_ROOT=${MEDIA_ROOT}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_BUCKET=${AWS_BUCKET}
+      - FILE_STORAGE=${FILE_STORAGE}
     depends_on:
       db:
         condition: service_started

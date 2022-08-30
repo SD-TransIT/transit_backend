@@ -18,33 +18,33 @@ class ApiTestClient:
         self.factory = APIClient()
         self.view = view
 
-    def make_get_request(self, identifier=None, auth_token=None):
+    def make_get_request(self, identifier=None, auth_token=None, query=None, **extra):
+        if query is None:
+            query = {}
         self._auth(auth_token)
         url = self._get_request_url('get', id_=identifier)
-        return self.__make_request(self.factory.get, path=url)
+        return self.__make_request(self.factory.get, path=url, data=query, **extra)
 
-    def make_post_request(self, payload, auth_token=None):
+    def make_post_request(self, payload, auth_token=None, **extra):
         self._auth(auth_token)
         url = self._get_request_url('post')
-        return self.__make_request(self.factory.post, path=url, data=payload)
+        return self.__make_request(self.factory.post, path=url, data=payload, **extra)
 
-    def make_patch_request(self, payload, identifier, auth_token=None):
+    def make_patch_request(self, payload, identifier, auth_token=None, **extra):
         self._auth(auth_token)
         url = self._get_request_url('patch', id_=identifier)
-        return self.__make_request(self.factory.patch, path=url, data=payload)
+        return self.__make_request(self.factory.patch, path=url, data=payload, **extra)
 
-    def make_delete_request(self, identifier, auth_token=None):
+    def make_delete_request(self, identifier, auth_token=None, **extra):
         url = self._get_request_url('delete', id_=identifier)
         self._auth(auth_token)
-        return self.__make_request(self.factory.delete, path=url, data={'pk': identifier})
+        return self.__make_request(self.factory.delete, path=url, data={'pk': identifier}, **extra)
 
     def _get_request_url(self, method, **params):
         return self._REVERSE_URL_BUILDER[method](self._URL, **params)
 
-    def __make_request(self, method, **data):
-        if 'format' not in data.keys():
-            data['format'] = 'json'
-        return method(**data)
+    def __make_request(self, method, path, data, **extra): # noqa:  WPS122
+        return method(path=path, data=data, **extra)
 
     def _auth(self, auth_token):
         if auth_token:

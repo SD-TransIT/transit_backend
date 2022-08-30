@@ -18,7 +18,7 @@ from transit.rest_api.forms.item_master import ItemViewSet
 from transit.rest_api.forms.mode_of_transport_master import ModeOfTransportViewSet
 from transit.rest_api.forms.order_details import OrderDetailsViewSet, OrderLineDetailsViewSet
 from transit.rest_api.forms.pod_variance import PODVarianceViewSet, PODVarianceDetailsViewSet
-from transit.rest_api.forms.shipment import ShipmentDetailsViewSet
+from transit.rest_api.forms.shipment import ShipmentDetailsViewSet, ShipmentDetailFilesViewSet
 from transit.rest_api.forms.supplier_master import SupplierViewSet
 from transit.rest_api.forms.transporter import TransporterViewSet
 from transit.rest_api.forms.transporter_details import TransporterDetailsViewSet
@@ -46,6 +46,7 @@ forms_router.register(r'order_line_details', OrderLineDetailsViewSet, basename='
 forms_router.register(r'shipment_details', ShipmentDetailsViewSet, basename='shipment_details')
 forms_router.register(r'pod_variance', PODVarianceViewSet, basename='pod_variance')
 forms_router.register(r'pod_variance_details', PODVarianceDetailsViewSet, basename='pod_variance_details')
+forms_router.register(r'shipment_details_files', ShipmentDetailFilesViewSet, basename='shipment_details_files')
 
 main_router.registry.extend(forms_router.registry)
 

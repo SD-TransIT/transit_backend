@@ -23,6 +23,7 @@ case "$1" in
   "start" )
     echo "Running migrations..."
     python manage.py migrate
+    python manage.py collectstatic --noinput
 
     if [[ -z "${DJANGO_SERVER}" ]]; then
       # By default use waitress instance
