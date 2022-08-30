@@ -74,7 +74,6 @@ class TestShipmentDetailsViewSet(ManualFormTestCaseMixin, TestCase):
                 identifier=response.data['id'],
                 auth_token=self.USER_HELPER.get_access_token())
             file_url, shipment = response.data['file'], response.data['shipment']
-            print(file_url, shipment)
             self.assertEqual(response.status_code, status.HTTP_200_OK)
             self.assertIsNotNone(file_url)
             self.assertEqual(shipment, self.test_subject.pk)
