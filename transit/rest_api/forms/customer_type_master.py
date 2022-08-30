@@ -25,7 +25,7 @@ class CustomerTypeViewSet(BaseFormViewSet):
     filterset_class = CustomerFilter
     queryset = CustomerType.objects.all().order_by('-id')
     filter_backends = [filters.SearchFilter]
-    search_fields = ['customer_type_name']
+    search_fields = ['id', 'customer_type_name']
 
     def get_serializer_class(self):
         return CustomerTypeSerializer
