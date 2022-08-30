@@ -1,3 +1,4 @@
+import tempfile
 from typing import Dict, Any
 from django.test.client import encode_multipart
 
@@ -54,7 +55,6 @@ class TestShipmentDetailsViewSet(ManualFormTestCaseMixin, TestCase):
         }
 
     def test_photo_upload(self):
-        import tempfile
         with tempfile.NamedTemporaryFile() as tmp:
             tmp.write(b'some file text')
             tmp.seek(0)

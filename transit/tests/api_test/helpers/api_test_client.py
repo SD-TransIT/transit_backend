@@ -43,7 +43,7 @@ class ApiTestClient:
     def _get_request_url(self, method, **params):
         return self._REVERSE_URL_BUILDER[method](self._URL, **params)
 
-    def __make_request(self, method, path, data, **extra):
+    def __make_request(self, method, path, data, **extra): # noqa:  WPS122
         return method(path=path, data=data, **extra)
 
     def _auth(self, auth_token):
