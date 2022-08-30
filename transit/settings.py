@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 import os
+import sys
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -40,13 +41,17 @@ MEDIA_ROOT = os.getenv('MEDIA_ROOT', 'files')
 STATIC_ROOT = '/statics/'
 
 f_storage = os.getenv('FILE_STORAGE', '')
-if f_storage.upper() == 'AWS':
-    DEFAULT_FILE_STORAGE = 'transit.custom_storage.AWSMediaStorage'
-else:
-    DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
+
+
+# Custom file storage is not available in unit tests
+if 'test' not in sys.argv:
+    if f_storage.upper() == 'AWS':
+        DEFAULT_FILE_STORAGE = 'transit.custom_storage.AWSMediaStorage'
+    else:
+        DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
+
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',

@@ -1,10 +1,13 @@
 from typing import Dict, Any
+from django.test.client import encode_multipart
 
 from django.test import TestCase
+from rest_framework import status
 
 from transit.models import ShipmentDetails
-from transit.rest_api.forms.shipment import ShipmentDetailsViewSet
+from transit.rest_api.forms.shipment import ShipmentDetailsViewSet, ShipmentDetailFilesViewSet
 from transit.tests.api_test.helpers.api_manual_form_test_case import ManualFormTestCaseMixin
+from transit.tests.api_test.helpers.api_test_client import ApiTestClient
 from transit.tests.api_test.helpers.test_objects_factory import ShipmentDetailsFactory, DriverFactory, \
     TransporterDetailsFactory, SupplierFactory, DeliveryStatusFactory
 
@@ -49,3 +52,29 @@ class TestShipmentDetailsViewSet(ManualFormTestCaseMixin, TestCase):
         return {
             field: test_value for field, test_value in self._TEST_SUBJECT_DATA.items() if isinstance(test_value, str)
         }
+
+    def test_photo_upload(self):
+        import tempfile
+        with tempfile.NamedTemporaryFile() as tmp:
+            tmp.write(b'some file text')
+            tmp.seek(0)
+            client = ApiTestClient('shipment_details_files', ShipmentDetailFilesViewSet)
+            payload = {
+                'file': tmp,
+                'shipment': self.test_subject.pk,
+            }
+            response = client.make_post_request(
+                encode_multipart('BoUnDaRyStRiNg', payload),
+                auth_token=self.USER_HELPER.get_access_token(),
+                content_type='multipart/form-data; boundary=BoUnDaRyStRiNg'
+            )
+
+            self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+            response = client.make_get_request(
+                identifier=response.data['id'],
+                auth_token=self.USER_HELPER.get_access_token())
+            file_url, shipment = response.data['file'], response.data['shipment']
+            print(file_url, shipment)
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertIsNotNone(file_url)
+            self.assertEqual(shipment, self.test_subject.pk)
