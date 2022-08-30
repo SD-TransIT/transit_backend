@@ -40,14 +40,22 @@ CORS_ORIGIN_WHITELIST=http://127.0.0.1:3000,http://localhost:3000 # The list of 
 # therefore this option allow frontend part of application to send request to backend side. 
 # If no such env defined CORS_ALLOW_ALL_ORIGINS = True will be setup. Please be careful in production instances.
 ```
-<b>Django superuser config</b>
+<b>Django Superuser config</b>
 ```shell
 # Used in dockerfile to create superuser during build
 SUPERUSER_LOGIN # Username of new superuser
 SUPERUSER_PASSWORD # Password user by superuser
 SUPERUSER_EMAIL # (optional) Email user by superuser
 ```
-For more details see Point 3. Create django superuser.
+<b>File Storage config </b>
+```shell
+# Used in dockerfile to determine where files are stored
+FILE_STORAGE # File storage adaptor, can be set to 'AWS' if S3 storage is used. 
+MEDIA_ROOT # Sets MEDIA_ROOT in settings.py
+```
+`Note: in docker-compose MEDIA_ROOT has volume for files under docker_data/media/{MEDIA_ROOT}`
+
+For more details regarding S3 file storage check [S3 File storage setup](#1.-S3-File-storage)
 #### 2. Build docker instance 
 Both database and application can be deployed in docker container
 by running 
@@ -77,6 +85,16 @@ will be taken. Password will not be overwritten, email will not be updated.
 Open `http://localhost:8000/api/swagger/` to confirm that
 backend is running. Swagger should be visible.
 
+### Additional setup 
+#### 1. S3 File storage
+To use S3 storage instead of standard file storage following env variables 
+have to be set:
+```shell
+FILE_STORAGE=AWS
+AWS_ACCESS_KEY_ID=<access_key> # AWS access key 
+AWS_SECRET_ACCESS_KEY=<secret_access_key> # AWS secret access key
+AWS_BUCKET=<bucket> # Bucket under which files will be stored (media root is included)
+```
 ## Code quality analysis  
 <b> Application uses Sonar Cloud to ensure code quality,
 following rules have to be followed before PR with changes can be merged:

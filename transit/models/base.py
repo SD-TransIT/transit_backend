@@ -1,12 +1,10 @@
-from datetime import datetime
-
 from django.db import models
-from django.utils.timezone import get_current_timezone
+from django.utils import timezone
 
 
 class BaseModel(models.Model):
     last_modified_date = models.DateTimeField(
-        db_column='LastModifiedDate', default=lambda: datetime.now(tz=get_current_timezone())
+        db_column='LastModifiedDate', default=timezone.now
     )
     last_modified_by = models.CharField(
         db_column='LastModifiedBy', max_length=255

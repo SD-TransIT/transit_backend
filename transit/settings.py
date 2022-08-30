@@ -30,10 +30,20 @@ SECRET_KEY = os.getenv('SECRET_KEY', DEFAULT_SECRET_KEY)
 env_hosts = os.getenv('ALLOWED_HOSTS', '').split(',')
 ALLOWED_HOSTS = [host for host in env_hosts if host != '']
 
-# Timzeone info
+# Timezone info
 USE_TZ = True
 TIME_ZONE = os.getenv('TIMZEONE', 'UTC')
 
+# File storages
+MEDIA_URL = 'files/'
+MEDIA_ROOT = os.getenv('MEDIA_ROOT', 'files')
+STATIC_ROOT = '/statics/'
+
+f_storage = os.getenv('FILE_STORAGE', '')
+if f_storage.upper() == 'AWS':
+    DEFAULT_FILE_STORAGE = 'transit.custom_storage.AWSMediaStorage'
+else:
+    DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 
 # Application definition
 
@@ -49,6 +59,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'drf_yasg',
     'corsheaders',
+    'storages',
     'transit',
 ]
 
@@ -162,7 +173,7 @@ REST_FRAMEWORK = {
 }
 
 SWAGGER_SETTINGS = {
-    'USE_SESSION_AUTH': DEBUG,  # Swagger doesn't need authenticated user_helper in debug mode
+    'USE_SESSION_AUTH': not DEBUG,  # Swagger doesn't need authenticated user_helper in debug mode
     # Outside debug - only admin has access to swagger definition
     'LOGIN_URL': '/admin/login/',
     'LOGOUT_URL': '/admin/logout/',

@@ -91,3 +91,17 @@ class ShipmentOrderMapping(BaseModel):
     class Meta:
         managed = True
         db_table = 'ShipmentOrderMapping'
+
+
+# Impossible to put this function inside of class due to lambda serialization exception
+def content_file_name(instance, filename):
+    return '/'.join(['shipment', str(instance.shipment.id), filename])
+
+
+class ShipmentDetailFiles(models.Model):
+    shipment = models.ForeignKey(ShipmentDetails, models.CASCADE, db_column='ShipmentDetailsID')
+    file = models.FileField(upload_to=content_file_name)
+
+    class Meta:
+        managed = True
+        db_table = 'ShipmentDetailFiles'
