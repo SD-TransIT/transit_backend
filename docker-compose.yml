@@ -16,7 +16,7 @@ services:
       - ./:/backend
       - ${PWD}/tox.ini:/backend/tox.ini
       - ${PWD}/server.py:/backend/server.py
-      - ./docker_data/media/${MEDIA_ROOT}:/backend/${MEDIA_ROOT}
+      - ./docker_data/media/${MEDIA_ROOT:-files}:/backend/${MEDIA_ROOT:-files}
     ports:
       - "8000:8000"
     environment:
