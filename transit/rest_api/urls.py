@@ -9,7 +9,7 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView
 )
 
-from transit.rest_api.avaialble_froms_meta import FormsInfoViewset
+from transit.rest_api.avaialble_froms_meta import FormsInfoViewSet
 from transit.rest_api.forms_router import forms_router
 from transit.rest_api.users import UserViewSet
 
@@ -18,7 +18,7 @@ from transit.rest_api.users import UserViewSet
 
 main_router = routers.DefaultRouter()
 main_router.register(r'users', UserViewSet, basename='users')
-main_router.register(r'available_forms', FormsInfoViewset, basename='forms_info')
+main_router.register(r'available_forms', FormsInfoViewSet, basename='available_forms')
 main_router.registry.extend(forms_router.registry)
 
 # Wire up our API using automatic URL routing.

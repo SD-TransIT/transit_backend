@@ -1,5 +1,6 @@
 import logging
 
+from django.http import Http404
 from django.utils.translation import gettext_lazy as _
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
@@ -70,7 +71,7 @@ forms_info_schema = {
 }
 
 
-class FormsInfoViewset(viewsets.ViewSet):
+class FormsInfoViewSet(viewsets.ViewSet):
     """
     A simple ViewSet for listing forms. If permissions for specific forms will be added we
     should include it in here.

@@ -2,15 +2,20 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 from rest_framework import status
 
+from transit.rest_api.avaialble_froms_meta import FormsInfoViewSet
 from transit.rest_api.urls import UserViewSet
-from transit.tests.api_test.helpers.api_crud_test_case import ModelViewsetRequestTestBase
+from transit.tests.api_test.helpers.api_crud_test_case import ModelViewsetRequestTestBase, ViewSetRequestTestBase
 from transit.rest_api.forms_router import manual_forms
 
 
-class TestUserViewSet(ModelViewsetRequestTestBase, TestCase):
-    _URL = 'users'
-    _VIEW_SET = UserViewSet
-    _MODEL_TYPE = User
+class TestUserViewSet(ViewSetRequestTestBase, TestCase):
+    _URL = 'available_forms'
+    _VIEW_SET = FormsInfoViewSet
+    _USERNAME = 'FormsApiUser'
+
+    def setUp(self):
+        super(TestUserViewSet, self).setUp()
+        self.setup_helper()
 
     def test_get_list(self):
         response = self.get_request_result()
