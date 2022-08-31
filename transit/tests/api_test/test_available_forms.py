@@ -1,0 +1,20 @@
+from django.contrib.auth.models import User
+from django.test import TestCase
+from rest_framework import status
+
+from transit.rest_api.urls import UserViewSet
+from transit.tests.api_test.helpers.api_crud_test_case import ModelViewsetRequestTestBase
+from transit.rest_api.forms_router import manual_forms
+
+
+class TestUserViewSet(ModelViewsetRequestTestBase, TestCase):
+    _URL = 'users'
+    _VIEW_SET = UserViewSet
+    _MODEL_TYPE = User
+
+    def test_get_list(self):
+        response = self.get_request_result()
+        available_forms = [form[2] for form in manual_forms().registry]
+        self.assertEqual(response.status_code, status.HTTP_200_OK, F"Response detail: {response.data}")
+        labels = [form_data['label'] for form_data in response.data]
+        self.assertListEqual(labels, available_forms, 'Listed forms don\'t match manual forms urls')

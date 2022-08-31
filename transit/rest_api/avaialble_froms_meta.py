@@ -33,7 +33,8 @@ class FormsInfo(serializers.Serializer):
             label = form[2]  # form registry is tuple (url, viewset, basename)
             name = self.form_names.get(label)
             if not name:
-                logging.warning(F'Registered form %s without FormsInfo name provided, using label.')
+                logging.warning(
+                    'Registered form %s without FormsInfo name provided, using label.', label)
                 name = label
             available_forms.append({
                 'label': label, 'name': name
@@ -44,10 +45,10 @@ class FormsInfo(serializers.Serializer):
 forms_info_schema = {
     "200": openapi.Response(
         description="List of available forms.",
-        schema=openapi.Schema(**{
-            "type": openapi.TYPE_OBJECT,
-            "title": "Email",
-            "properties": {
+        schema=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            title="Email",
+            properties={
                 "label": openapi.Schema(
                     title="Form label",
                     type=openapi.TYPE_STRING,
@@ -57,8 +58,8 @@ forms_info_schema = {
                     type=openapi.TYPE_STRING,
                 ),
             },
-            "required": ["label", "name"],
-         }),
+            required=["label", "name"],
+        ),
         examples={
             "application/json": {
                 "label": "customer_type",
