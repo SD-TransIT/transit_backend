@@ -1,11 +1,9 @@
-from django.contrib.auth.models import User
 from django.test import TestCase
 from rest_framework import status
 
 from transit.rest_api.avaialble_froms_meta import FormsInfoViewSet
-from transit.rest_api.urls import UserViewSet
-from transit.tests.api_test.helpers.api_crud_test_case import ModelViewsetRequestTestBase, ViewSetRequestTestBase
 from transit.rest_api.forms_router import manual_forms
+from transit.tests.api_test.helpers.api_crud_test_case import ViewSetRequestTestBase
 
 
 class TestUserViewSet(ViewSetRequestTestBase, TestCase):
