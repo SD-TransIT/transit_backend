@@ -10,6 +10,11 @@ from transit.rest_api.abstract import BaseFormViewSet
 
 class ShipmentDetailsSerializer(serializers.ModelSerializer):
     last_modified_by = serializers.HiddenField(default=None)
+    driver_name = serializers.CharField(source='driver.name', read_only=True)
+    transporter_name = serializers.CharField(source='transporter_details.name', read_only=True)
+    vehicle_number = serializers.CharField(source='transporter_details.vehicle_number', read_only=True)
+    customer_name = serializers.CharField(source='customer.name', read_only=True)
+    order_names = serializers.ListField(source='order_mapping.customer.name', read_only=True)
 
     orders = serializers.ListField(
         child=serializers.ModelField(model_field=OrderDetails()._meta.pk),
@@ -18,8 +23,7 @@ class ShipmentDetailsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ShipmentDetails
-        fields = "__all__"
-        read_only_fields = ['id']
+        fields = '__all__'
         ordering = ['-id']
 
     def create(self, validated_data):
@@ -70,6 +74,10 @@ class ShipmentDetailsFilter(django_filters.FilterSet):
 class ShipmentDetailsViewSet(BaseFormViewSet):
     filterset_class = ShipmentDetailsFilter
     queryset = ShipmentDetails.objects.all().order_by('-id')
+    search_fields = [
+        'id', 'transporter_details__name', 'driver__name', 'transporter_details__vehicle_number',
+        'ship_date', 'expected_delivery_date', 'custom_route_number', 'delay_justified', 'delivery_date',
+        'delivery_status', 'pod_status', 'pod', 'customer__name', 'order_mapping__customer__name']
 
     def get_serializer_class(self):
         return ShipmentDetailsSerializer

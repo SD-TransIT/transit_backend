@@ -24,19 +24,23 @@ class OrderDetailsFilter(django_filters.FilterSet):
 
 
 class OrderLineDetailsSerializer(serializers.ModelSerializer):
+    product_name = serializers.CharField(source='product.name', read_only=True)
+    batch_number = serializers.CharField(source='item_details.batch_number', read_only=True)
+
     class Meta:
         model = OrderLineDetails
-        fields = ['id', 'product', 'item_details', 'quantity', 'old_quantity']
+        fields = ['id', 'product', 'item_details', 'quantity', 'old_quantity', 'product_name', 'batch_number']
         read_only_fields = ['id']
         ordering = ['-id']
 
 
 class OrderDetailsSerializer(serializers.ModelSerializer):
+    customer_name = serializers.CharField(source='customer.name', read_only=True)
     line_items = OrderLineDetailsSerializer(many=True, required=False)
 
     class Meta:
         model = OrderDetails
-        fields = ['order_details_id', 'line_items', 'customer', 'order_received_date']
+        fields = ['order_details_id', 'line_items', 'customer', 'order_received_date', 'customer_name']
         ordering = ['-id']
 
     def create(self, validated_data):
@@ -64,6 +68,7 @@ class OrderDetailsViewSet(BaseFormViewSet):
     lookup_url_kwarg = 'pk'
     lookup_field = 'pk'
     queryset = OrderDetails.objects.all().order_by('-order_received_date')
+    search_fields = ['order_details_id', 'customer__name', 'order_received_date']
 
     def get_serializer_class(self):
         return OrderDetailsSerializer

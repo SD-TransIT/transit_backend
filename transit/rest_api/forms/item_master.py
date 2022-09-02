@@ -28,6 +28,7 @@ class ItemFilter(django_filters.FilterSet):
 class ItemViewSet(BaseFormViewSet):
     filterset_class = ItemFilter
     queryset = Item.objects.all().order_by('-id')
+    search_fields = ['id', 'name', 'volume', 'cost', 'weight', 'category', 'sub_category', 'conditions']
 
     def get_serializer_class(self):
         return ItemSerializer

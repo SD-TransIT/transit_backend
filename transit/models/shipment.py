@@ -85,8 +85,10 @@ class ShipmentDetails(BaseModel):
 
 
 class ShipmentOrderMapping(BaseModel):
-    shipment_details = models.ForeignKey(ShipmentDetails, models.DO_NOTHING, db_column='ShipmentDetailsID')
-    order_details = models.ForeignKey(OrderDetails, models.DO_NOTHING, db_column='OrderDetailsID')
+    shipment_details = models.ForeignKey(ShipmentDetails, models.DO_NOTHING, db_column='ShipmentDetailsID',
+                                         related_name='order_mapping')
+    order_details = models.ForeignKey(OrderDetails, models.DO_NOTHING, db_column='OrderDetailsID',
+                                      related_name='shipment_mapping')
 
     class Meta:
         managed = True
