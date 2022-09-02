@@ -1,5 +1,5 @@
 import django_filters
-from rest_framework import serializers, filters
+from rest_framework import serializers
 
 from transit.models import CustomerType
 from transit.rest_api.abstract import BaseFormViewSet
