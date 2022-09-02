@@ -23,6 +23,7 @@ class DeliveryStatusFilter(django_filters.FilterSet):
 class DeliveryStatusViewSet(BaseFormViewSet):
     filterset_class = DeliveryStatusFilter
     queryset = DeliveryStatus.objects.all().order_by('delivery_status')
+    search_fields = ['delivery_status_key', 'delivery_status']
 
     def get_serializer_class(self):
         return DeliveryStatusSerializer

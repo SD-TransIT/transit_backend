@@ -25,6 +25,7 @@ class ModeOfTransportFilter(django_filters.FilterSet):
 class ModeOfTransportViewSet(BaseFormViewSet):
     filterset_class = ModeOfTransportFilter
     queryset = ModeOfTransport.objects.all().order_by('-id')
+    search_fields = ['id', 'class_mode', 'vehicle_type']
 
     def get_serializer_class(self):
         return ModeOfTransportSerializer
