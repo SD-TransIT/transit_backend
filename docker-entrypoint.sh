@@ -1,7 +1,6 @@
 #!/bin/bash
 set -e
 
-./scripts/create_superuser.bash
 
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
@@ -24,6 +23,8 @@ case "$1" in
     echo "Running migrations..."
     python manage.py migrate
     python manage.py collectstatic --noinput
+    
+    ./scripts/create_superuser.bash
 
     if [[ -z "${DJANGO_SERVER}" ]]; then
       # By default use waitress instance
