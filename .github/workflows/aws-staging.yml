@@ -24,7 +24,7 @@ jobs:
     name: Deploy Staging
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    environment: staging
+    environment: staging-2
 
     steps:
     - name: Checkout
