@@ -5,7 +5,6 @@ on:
   push:
     branches:
       - staging
-      - staging-aws-migration
 
 env:
   AWS_REGION: us-east-1                                     # set this to your preferred AWS region, e.g. us-west-1
@@ -25,7 +24,7 @@ jobs:
     name: Deploy Staging
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    environment: staging-2
+    environment: staging
 
     steps:
     - name: Checkout
