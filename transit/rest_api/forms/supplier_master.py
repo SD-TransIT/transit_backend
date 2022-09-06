@@ -26,6 +26,7 @@ class SupplierFilter(django_filters.FilterSet):
 class SupplierViewSet(BaseFormViewSet):
     filterset_class = SupplierFilter
     queryset = Supplier.objects.all().order_by('-id')
+    search_fields = ['id', 'name', 'phone', 'email', *FormsDataFields.GEOGRAPHICAL_MODEL_FIELDS]
 
     def get_serializer_class(self):
         return SupplierSerializer
