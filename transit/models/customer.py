@@ -32,7 +32,7 @@ class Customer(BaseModel, GeographicalModel):
         db_table = 'Customer'
 
 
-class CustomerWeekDays(models.Model):
+class CustomerWeekDays(BaseModel):
     customer = models.ForeignKey(
         Customer, models.DO_NOTHING, db_column='CustomerID'
     )
