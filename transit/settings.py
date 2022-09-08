@@ -65,6 +65,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'corsheaders',
     'storages',
+    'simple_history',
     'transit',
 ]
 
@@ -83,6 +84,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    'simple_history.middleware.HistoryRequestMiddleware',
 ]
 
 ROOT_URLCONF = 'transit.urls'

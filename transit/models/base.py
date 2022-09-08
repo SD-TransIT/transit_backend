@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from simple_history.models import HistoricalRecords
 
 
 class BaseModel(models.Model):
@@ -9,6 +10,7 @@ class BaseModel(models.Model):
     last_modified_by = models.CharField(
         db_column='LastModifiedBy', max_length=255
     )
+    history = HistoricalRecords(inherit=True)
 
     class Meta:
         abstract = True
