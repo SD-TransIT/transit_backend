@@ -9,7 +9,7 @@ from django.db import transaction
 
 from transit.models import Supplier, CustomerType, ModeOfTransport, Item, ItemDetails, Driver, Transporter, \
     TransporterDetails, Customer, OrderDetails, OrderLineDetails, ShipmentDetails, DeliveryStatus, PODVariance, \
-    PODVarianceDetails
+    PODVarianceDetails, CustomerWeekDays
 
 
 @dataclass
@@ -99,6 +99,15 @@ class CustomerFactory(_FormModelFactory):
     default_values: ClassVar[Dict] = {
         'name': 'CustomerName', 'first_name': 'FirstCustomerName',
         'last_name': 'SecondTestName', 'phone': '123456789', 'email': 'e@mail.test'
+    }
+
+
+class CustomerWeekDaysFactory(_FormModelFactory):
+    model: ClassVar[Type[django.db.models.Model]] = CustomerWeekDays
+    related_models_factories = {'customer': CustomerFactory}
+    related_models_default_props = {'customer__customer_type': {'customer_type_name': 'TypeForDaysCheck'}}
+    default_values: ClassVar[Dict] = {
+        'day': 1, 'opening_time': '10', 'closing_time': '18'
     }
 
 

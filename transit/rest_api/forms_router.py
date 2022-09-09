@@ -1,6 +1,6 @@
 from rest_framework import routers
 
-from transit.rest_api.forms.customer import CustomerViewSet
+from transit.rest_api.forms.customer import CustomerViewSet, CustomerWeekDaysViewSet
 from transit.rest_api.forms.customer_type_master import CustomerTypeViewSet
 from transit.rest_api.forms.delivery_status import DeliveryStatusViewSet
 from transit.rest_api.forms.driver_master import DriverViewSet
@@ -39,6 +39,7 @@ def manual_forms_extra():
     router.register(r'order_line_details', OrderLineDetailsViewSet, basename='order_line_details')
     router.register(r'pod_variance_details', PODVarianceDetailsViewSet, basename='pod_variance_details')
     router.register(r'shipment_details_files', ShipmentDetailFilesViewSet, basename='shipment_details_files')
+    router.register(r'customer_week_days', CustomerWeekDaysViewSet, basename='customer_week_days')
     return router
 
 

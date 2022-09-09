@@ -44,7 +44,6 @@ case "$1" in
     fi
   ;;
   "manage" )
-    pip freeze
     ./manage.py "${@:2}"
   ;;
   "flake8" )
