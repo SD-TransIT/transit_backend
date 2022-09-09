@@ -6,7 +6,8 @@ from transit.models.shipment import ShipmentDetails
 
 
 class PODVariance(BaseModel):
-    shipment = models.ForeignKey(ShipmentDetails, models.DO_NOTHING, db_column='ShipmentID')
+    shipment = models.ForeignKey(ShipmentDetails, models.DO_NOTHING, db_column='ShipmentID',
+                                 related_name='pod_variances')
     dso_type = models.CharField(
         db_column='DSOType', max_length=255, blank=True, null=True
     )

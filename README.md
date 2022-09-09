@@ -151,3 +151,5 @@ If so one of the fields is redundant since Driver:Transporter is N:1 relation an
   If we want to update fields we should use PATCH instead. 
   * Change Shipment boolean PODVariance to property being set when there's existing 
   PODVariance in database.
+  * Old quality and new quality seems to actually be 'declared' and 'actual' quantities, should 
+  it be renamed?

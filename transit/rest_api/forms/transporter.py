@@ -26,6 +26,7 @@ class TransporterFilter(django_filters.FilterSet):
 class TransporterViewSet(BaseFormViewSet):
     filterset_class = TransporterFilter
     queryset = Transporter.objects.all().order_by('-id')
+    search_fields = ['id', *FormsDataFields.GEOGRAPHICAL_MODEL_FIELDS, 'name', 'phone']
 
     def get_serializer_class(self):
         return TransporterSerializer
