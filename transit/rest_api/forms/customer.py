@@ -7,21 +7,21 @@ from transit.rest_api.abstract import BaseFormViewSet
 from transit.rest_api.forms.fields import FormsDataFields
 
 
-class CustomerWeekDaysSerializer(serializers.ModelSerializer):
-
+class CustomerWeekDaysSerializerWrapper(serializers.ModelSerializer):
+    # Instance of serializer that allows creating week days directly from customer
     class Meta:
         model = CustomerWeekDays
         fields = [
-            'id', 'customer', 'day', 'opening_time', 'closing_time', 'closed',
+            'id', 'day', 'opening_time', 'closing_time', 'closed',
             'meridiem_indicator_opening_time', 'meridiem_indicator_closing_time'
-            ]
+        ]
         read_only_fields = ['id']
         ordering = ['-id']
 
 
 class CustomerSerializer(serializers.ModelSerializer):
     customer_type_name = serializers.CharField(source='customer_type.customer_type_name', read_only=True)
-    week_days = CustomerWeekDaysSerializer(many=True, required=False)
+    week_days = CustomerWeekDaysSerializerWrapper(many=True, required=False)
 
     class Meta:
         model = Customer
@@ -38,8 +38,8 @@ class CustomerSerializer(serializers.ModelSerializer):
         customer = Customer.objects.create(**validated_data)
         for item_dict in week_days:
             item_dict['customer'] = customer
-            CustomerWeekDaysSerializer(**item_dict).save()
-        return customer
+            CustomerWeekDays(**item_dict).save()
+        return customer  # noqa: R504
 
     def validate(self, data): # noqa: WPS-122
         """
@@ -73,24 +73,3 @@ class CustomerViewSet(BaseFormViewSet):
 
     def get_serializer_class(self):
         return CustomerSerializer
-
-
-class CustomerWeekDaysFilter(django_filters.FilterSet):
-    class Meta:
-        model = CustomerWeekDays
-        fields = {
-            'customer': ['exact'],
-            'opening_time': ['exact', 'iexact'],
-            'closing_time': ['exact', 'iexact'],
-            'meridiem_indicator_opening_time': ['exact', 'iexact'],
-            'meridiem_indicator_closing_time': ['exact', 'iexact'],
-            'closed': ['exact'],
-        }
-
-
-class CustomerWeekDaysViewSet(BaseFormViewSet):
-    filterset_class = CustomerWeekDaysFilter
-    queryset = CustomerWeekDays.objects.all().order_by('-id')
-
-    def get_serializer_class(self):
-        return CustomerWeekDaysSerializer

@@ -1,13 +1,15 @@
 from rest_framework import routers
 
-from transit.rest_api.forms.customer import CustomerViewSet, CustomerWeekDaysViewSet
+from transit.rest_api.forms.customer import CustomerViewSet
 from transit.rest_api.forms.customer_type_master import CustomerTypeViewSet
+from transit.rest_api.forms.customer_week_days import CustomerWeekDaysViewSet
 from transit.rest_api.forms.delivery_status import DeliveryStatusViewSet
 from transit.rest_api.forms.driver_master import DriverViewSet
 from transit.rest_api.forms.item_details import ItemDetailsViewSet
 from transit.rest_api.forms.item_master import ItemViewSet
 from transit.rest_api.forms.mode_of_transport_master import ModeOfTransportViewSet
-from transit.rest_api.forms.order_details import OrderDetailsViewSet, OrderLineDetailsViewSet
+from transit.rest_api.forms.order_details import OrderDetailsViewSet
+from transit.rest_api.forms.order_line_details import OrderLineDetailsViewSet
 from transit.rest_api.forms.pod_variance import PODVarianceViewSet, PODVarianceDetailsViewSet
 from transit.rest_api.forms.shipment import ShipmentDetailsViewSet, ShipmentDetailFilesViewSet
 from transit.rest_api.forms.supplier_master import SupplierViewSet
