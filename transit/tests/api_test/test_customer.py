@@ -41,9 +41,9 @@ class TestCustomerViewSet(ManualFormTestCaseMixin, TestCase):
 
     def test_post(self):
         super(TestCustomerViewSet, self).test_post()
-        self.assertTrue(CustomerWeekDays.objects.filter(**{
-            'closing_time': '1', 'opening_time': '4', 'closed': False
-        }).exists())
+        self.assertTrue(CustomerWeekDays.objects.filter(
+            closing_time=1, opening_time=4, closed=False
+        ).exists())
 
     @property
     def expected_post_obj(self):

@@ -1,8 +1,7 @@
 import django_filters
-from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
-from transit.models import OrderDetails, OrderLineDetails
+from transit.models import OrderLineDetails
 from transit.rest_api.abstract import BaseFormViewSet
 
 

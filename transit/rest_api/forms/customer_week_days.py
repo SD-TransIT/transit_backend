@@ -1,10 +1,8 @@
 import django_filters
 from rest_framework import serializers
-from django.utils.translation import gettext_lazy as _
 
-from transit.models import Customer, CustomerWeekDays
+from transit.models import CustomerWeekDays
 from transit.rest_api.abstract import BaseFormViewSet
-from transit.rest_api.forms.fields import FormsDataFields
 
 
 class CustomerWeekDaysSerializer(serializers.ModelSerializer):
