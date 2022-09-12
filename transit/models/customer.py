@@ -40,7 +40,7 @@ class CustomerWeekDays(BaseModel):
     opening_time = models.CharField(db_column='OpeningTime', max_length=50)
     closing_time = models.CharField(db_column='ClosingTime', max_length=50)
     closed = models.BooleanField(
-        db_column='Closed', default=False, blank=True, null=True
+        db_column='Closed', default=False, null=True
     )
 
     meridiem_indicator_opening_time = models.CharField(

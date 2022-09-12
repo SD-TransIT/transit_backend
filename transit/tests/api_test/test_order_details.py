@@ -44,7 +44,9 @@ class TestOrderDetailsViewSet(ManualFormTestCaseMixin, TestCase):
 
     @property
     def expected_get_payload_properties(self) -> Dict[str, Any]:
-        return {}
+        return {
+            **self._TEST_SUBJECT_DATA
+        }
 
     @property
     def expected_post_obj(self):
