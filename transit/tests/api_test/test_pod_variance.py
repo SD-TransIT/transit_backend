@@ -5,7 +5,7 @@ from django.test import TestCase
 from transit.models import PODVariance
 from transit.rest_api.forms.pod_variance import PODVarianceViewSet
 from transit.tests.api_test.helpers.api_manual_form_test_case import ManualFormTestCaseMixin
-from transit.tests.api_test.helpers.test_objects_factory import PODVarianceFactory, OrderLineDetailsFactory
+from transit.tests.test_objects_factory import PODVarianceFactory, OrderLineDetailsFactory
 
 
 class TestPODVarianceViewSet(ManualFormTestCaseMixin, TestCase):

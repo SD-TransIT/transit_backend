@@ -1,20 +1,47 @@
 import django_filters
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers, filters
+from rest_framework.fields import Field, CharField
 from rest_framework.parsers import MultiPartParser
 
-from transit.models import ShipmentDetails, OrderDetails
-from transit.models.shipment import ShipmentDetailFiles
+from transit.models import ShipmentDetails, OrderDetails, OrderLineDetails
+from transit.models.shipment import ShipmentDetailFiles, ShipmentOrderMapping
 from transit.rest_api.abstract import BaseFormViewSet
+from transit.services.shipment_orders_service import ShipmentOrdersService
+import logging
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
+
+
+class ShipmentOrderMappingOrderNamesReadonlyField(CharField):
+    def to_representation(self, value):
+        order_lines = OrderDetails.objects.filter(shipment_mapping__in=value.all()).all()
+        relevant_line_items = OrderLineDetails.objects\
+            .filter(order_details__in=order_lines).all()\
+            .values_list("product__name", flat=True)
+        return list(relevant_line_items)
+
+
+class ShipmentOrderMappingCustomerNamesReadonlyField(CharField):
+    def to_representation(self, value):
+        customer = OrderDetails.objects.filter(shipment_mapping__in=value.all())\
+            .values_list('customer__name', flat=True)
+        if customer.count() > 1:
+            logger.error("ShipmentOrderMapping %s has multiple customer assigned."
+                         "All orders in scope of one shipment should be related to single customer."
+                         "Please fix this. ", str(value))
+        return customer.first()
 
 
 class ShipmentDetailsSerializer(serializers.ModelSerializer):
+    _shipment_orders_handler = ShipmentOrdersService()
+
     last_modified_by = serializers.HiddenField(default=None)
     driver_name = serializers.CharField(source='driver.name', read_only=True)
     transporter_name = serializers.CharField(source='transporter_details.name', read_only=True)
     vehicle_number = serializers.CharField(source='transporter_details.vehicle_number', read_only=True)
-    customer_name = serializers.CharField(source='customer.name', read_only=True)
-    order_names = serializers.ListField(source='order_mapping.customer.name', read_only=True)
+    customer_name = ShipmentOrderMappingCustomerNamesReadonlyField(source='order_mapping', read_only=True)
+    order_names = ShipmentOrderMappingOrderNamesReadonlyField(source='order_mapping', read_only=True)
 
     orders = serializers.ListField(
         child=serializers.ModelField(model_field=OrderDetails()._meta.pk),
@@ -29,12 +56,20 @@ class ShipmentDetailsSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = self.context['request'].user
         validated_data['last_modified_by'] = user
-        return super(ShipmentDetailsSerializer, self).create(validated_data)
+        orders_pks = validated_data.pop('orders', None)
+        orders = OrderDetails.objects.filter(pk__in=orders_pks)
+        shipment = super(ShipmentDetailsSerializer, self).create(validated_data)
+        self._shipment_orders_handler.create(shipment, orders)
+        return shipment
 
     def update(self, instance, validated_data):
         user = self.context['request'].user
         validated_data['last_modified_by'] = user.pk
-        return super(ShipmentDetailsSerializer, self).update(instance, validated_data)
+        orders_pks = validated_data.pop('orders', [])
+        orders = OrderDetails.objects.filter(pk__in=orders_pks)
+        shipment = super(ShipmentDetailsSerializer, self).update(instance, validated_data)
+        self._shipment_orders_handler.update(shipment, orders)
+        return shipment
 
     def validate(self, data): # noqa: WPS-122
         """
@@ -75,9 +110,11 @@ class ShipmentDetailsViewSet(BaseFormViewSet):
     filterset_class = ShipmentDetailsFilter
     queryset = ShipmentDetails.objects.all().order_by('-id')
     search_fields = [
-        'id', 'transporter_details__name', 'driver__name', 'transporter_details__vehicle_number',
+        'id', 'transporter_details__transporter__name', 'driver__name', 'transporter_details__vehicle_number',
         'ship_date', 'expected_delivery_date', 'custom_route_number', 'delay_justified', 'delivery_date',
-        'delivery_status', 'pod_status', 'pod', 'customer__name', 'order_mapping__customer__name']
+        'delivery_status__delivery_status', 'pod_status__delivery_status', 'pod',
+        'order_mapping__order_details__customer__name'
+    ]
 
     def get_serializer_class(self):
         return ShipmentDetailsSerializer

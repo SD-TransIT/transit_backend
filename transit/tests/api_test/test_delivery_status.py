@@ -5,7 +5,7 @@ from django.test import TestCase
 from transit.models import DeliveryStatus
 from transit.rest_api.forms.delivery_status import DeliveryStatusViewSet
 from transit.tests.api_test.helpers.api_manual_form_test_case import ManualFormTestCaseMixin
-from transit.tests.api_test.helpers.test_objects_factory import DeliveryStatusFactory
+from transit.tests.test_objects_factory import DeliveryStatusFactory
 
 
 class TestDeliveryStatusViewSet(ManualFormTestCaseMixin, TestCase):

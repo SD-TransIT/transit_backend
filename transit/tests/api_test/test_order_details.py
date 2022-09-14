@@ -6,7 +6,7 @@ from rest_framework import status
 from transit.models import OrderDetails
 from transit.rest_api.forms.order_details import OrderDetailsViewSet
 from transit.tests.api_test.helpers.api_manual_form_test_case import ManualFormTestCaseMixin
-from transit.tests.api_test.helpers.test_objects_factory import OrderDetailsFactory, OrderLineDetailsFactory, \
+from transit.tests.test_objects_factory import OrderDetailsFactory, OrderLineDetailsFactory, \
     CustomerFactory
 
 

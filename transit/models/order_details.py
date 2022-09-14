@@ -8,6 +8,25 @@ from transit.models.item import (
 )
 
 
+class OrderDetailsQueryset(models.QuerySet):
+    def with_shipment_details(self):
+        return self.filter(shipment_mapping__isnull=False)
+
+    def without_shipment_details(self):
+        return self.filter(shipment_mapping__isnull=True)
+
+
+class OrderDetailsManager(models.Manager):
+    def get_queryset(self):
+        return OrderDetailsQueryset(self.model, using=self._db)
+
+    def with_shipment_details(self):
+        return self.get_queryset().with_shipment_details()
+
+    def without_shipment_details(self):
+        return self.get_queryset().without_shipment_details()
+
+
 class OrderDetails(BaseModel):
     order_details_id = models.CharField(
         max_length=64, primary_key=True, unique=True,
@@ -18,6 +37,8 @@ class OrderDetails(BaseModel):
     order_received_date = models.CharField(
         db_column='OrderReceivedDate', max_length=255, blank=True, null=True
     )
+
+    objects = OrderDetailsManager()
 
     class Meta:
         managed = True
