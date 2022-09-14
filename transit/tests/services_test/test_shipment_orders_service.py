@@ -67,7 +67,7 @@ class TestShipmentOrderService(TestCase):
             "All orders assigned to order have to be assigned to same customers. "
             "Provided orders are assigned to multiple customers: .*")
         with self.assertRaisesRegex(serializers.ValidationError, expected_error):
-            service.create(
+            service.update(
                 shipment=self._test_shipment,
                 orders=[self._test_order_customer1, self._test_order_customer2]
             )
