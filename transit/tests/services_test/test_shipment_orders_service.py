@@ -45,8 +45,9 @@ class TestShipmentOrderService(TestCase):
 
     def test_create_multiple_customers(self):
         service = ShipmentOrdersService()
-        expected_error = "All orders assigned to order have to be assigned to same customers. " + \
-                         "Provided orders are assigned to multiple customers: .*"
+        expected_error = (
+            "All orders assigned to order have to be assigned to same customers. "
+            "Provided orders are assigned to multiple customers: .*")
         with self.assertRaisesRegex(serializers.ValidationError, expected_error):
             service.create(
                 shipment=self._test_shipment,
@@ -62,8 +63,9 @@ class TestShipmentOrderService(TestCase):
 
     def test_update_multiple_customers(self):
         service = ShipmentOrdersService()
-        expected_error = "All orders assigned to order have to be assigned to same customers. " + \
-                         "Provided orders are assigned to multiple customers: .*"
+        expected_error = (
+            "All orders assigned to order have to be assigned to same customers. "
+            "Provided orders are assigned to multiple customers: .*")
         with self.assertRaisesRegex(serializers.ValidationError, expected_error):
             service.create(
                 shipment=self._test_shipment,
