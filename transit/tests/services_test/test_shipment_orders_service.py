@@ -11,17 +11,17 @@ class TestShipmentOrderService(TestCase):
     def setUp(self):
         super(TestShipmentOrderService, self).setUp()
         self._test_shipment = ShipmentDetailsFactory().create_object(True)
-        self._test_order_customer1 = OrderDetailsFactory(
-            custom_props={
-                'order_details_id': 'CharID1',
-                'customer': CustomerFactory(
-                    custom_props={'name': 'OrderDetailCustomerTest',
-                                  'customer_type__customer_type_name': 'TypeForOrder1'}).create_object(True)
-                          }
-        ).create_object()
-        self._test_order2_customer1 = OrderDetailsFactory(
-            custom_props={'customer': self._test_order_customer1.customer, 'order_details_id': 'CharID2'}
-        ).create_object()
+        self._test_order_customer1 = OrderDetailsFactory(custom_props={
+            'order_details_id': 'CharID1',
+            'customer': CustomerFactory(custom_props={
+                'name': 'OrderDetailCustomerTest',
+                'customer_type__customer_type_name': 'TypeForOrder1'
+            }).create_object(True)
+        }).create_object()
+
+        self._test_order2_customer1 = OrderDetailsFactory(custom_props={
+            'customer': self._test_order_customer1.customer, 'order_details_id': 'CharID2'
+        }).create_object()
 
         self._test_order_customer2 = OrderDetailsFactory(custom_props={
             'order_details_id': 'CharID3',
@@ -45,11 +45,9 @@ class TestShipmentOrderService(TestCase):
 
     def test_create_multiple_customers(self):
         service = ShipmentOrdersService()
-
-        with self.assertRaisesRegex(
-            serializers.ValidationError,
-                "All orders assigned to order have to be assigned to same customers. "
-                "Provided orders are assigned to multiple customers: .*"):
+        expected_error = "All orders assigned to order have to be assigned to same customers. " \
+                         "Provided orders are assigned to multiple customers: .*"
+        with self.assertRaisesRegex(serializers.ValidationError, expected_error):
             service.create(
                 shipment=self._test_shipment,
                 orders=[self._test_order_customer1, self._test_order_customer2]
@@ -64,10 +62,9 @@ class TestShipmentOrderService(TestCase):
 
     def test_update_multiple_customers(self):
         service = ShipmentOrdersService()
-
-        with self.assertRaisesRegex(serializers.ValidationError,
-                                    "All orders assigned to order have to be assigned to same customers. "
-            "Provided orders are assigned to multiple customers: .*"):
+        expected_error = "All orders assigned to order have to be assigned to same customers. " \
+                         "Provided orders are assigned to multiple customers: .*"
+        with self.assertRaisesRegex(serializers.ValidationError,expected_error):
             service.create(
                 shipment=self._test_shipment,
                 orders=[self._test_order_customer1, self._test_order_customer2]

@@ -31,7 +31,7 @@ class ShipmentOrdersService:
     def update(self, shipment: ShipmentDetails, orders: Collection[OrderDetails]):
         # Remove orders that are existing for shipment but not part of payload
         existing_orders = self._get_orders_with_shipment(orders)
-        orders_to_remove_query = ~Q(order_details__pk__in=[o.pk for o in existing_orders])
+        orders_to_remove_query = ~Q(order_details__pk__in=[order.pk for order in existing_orders])
         shipment.order_mapping.all().filter(orders_to_remove_query).delete()
         # Add new shipment orders
         new_orders = self._get_orders_without_shipment(orders)

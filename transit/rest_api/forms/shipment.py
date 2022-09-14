@@ -1,14 +1,15 @@
+import logging
+
 import django_filters
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers, filters
-from rest_framework.fields import Field, CharField
+from rest_framework.fields import CharField
 from rest_framework.parsers import MultiPartParser
 
 from transit.models import ShipmentDetails, OrderDetails, OrderLineDetails
-from transit.models.shipment import ShipmentDetailFiles, ShipmentOrderMapping
+from transit.models.shipment import ShipmentDetailFiles
 from transit.rest_api.abstract import BaseFormViewSet
 from transit.services.shipment_orders_service import ShipmentOrdersService
-import logging
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -24,7 +25,7 @@ class ShipmentOrderMappingOrderNamesReadonlyField(CharField):
 
 
 class ShipmentOrderMappingCustomerNamesReadonlyField(CharField):
-    def to_representation(self, value): # noqa: WPS122
+    def to_representation(self, value):  # noqa: WPS122
         customer = OrderDetails.objects.filter(shipment_mapping__in=value.all())\
             .values_list('customer__name', flat=True)
         if customer.count() > 1:
