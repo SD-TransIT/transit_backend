@@ -1,12 +1,7 @@
-import re
-
-from django.utils.translation import gettext_lazy as _
 from django.test import TestCase
-from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
-from transit.models import ShipmentDetails, ShipmentOrderMapping
-from transit.rest_api.forms.shipment import ShipmentDetailsViewSet
+from transit.models import ShipmentOrderMapping
 from transit.services.shipment_orders_service import ShipmentOrdersService
 from transit.tests.test_objects_factory import ShipmentDetailsFactory, OrderDetailsFactory, CustomerFactory
 
@@ -25,14 +20,16 @@ class TestShipmentOrderService(TestCase):
                           }
         ).create_object()
         self._test_order2_customer1 = OrderDetailsFactory(
-            {'customer': self._test_order_customer1.customer, 'order_details_id': 'CharID2'}
+            custom_props={'customer': self._test_order_customer1.customer, 'order_details_id': 'CharID2'}
         ).create_object()
 
-        self._test_order_customer2 = OrderDetailsFactory(
-            {'order_details_id': 'CharID3', 'customer': CustomerFactory(
-                custom_props={'name': 'OrderDetailCustomerTest1',
-                              'customer_type__customer_type_name': 'TypeForOrder2'}).create_object(True)
+        self._test_order_customer2 = OrderDetailsFactory(custom_props={
+            'order_details_id': 'CharID3',
+            'customer': CustomerFactory(custom_props={
+                'name': 'OrderDetailCustomerTest1',
+                'customer_type__customer_type_name': 'TypeForOrder2'
             }).create_object(True)
+        }).create_object(True)
 
     def test_create_ok(self):
         service = ShipmentOrdersService()

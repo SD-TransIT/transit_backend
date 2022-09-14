@@ -17,7 +17,6 @@ class ShipmentOrdersService:
 
     @transaction.atomic
     def create(self, shipment: ShipmentDetails, orders: Collection[OrderDetails]):
-
         new_orders = list(self._get_orders_without_shipment(orders))
         if len(new_orders) != len(orders):
             raise serializers.ValidationError(
@@ -46,15 +45,15 @@ class ShipmentOrdersService:
             ShipmentOrderMapping.objects.create(shipment_details=shipment, order_details=order)
 
     def _get_orders_with_shipment(self, orders):
-        return OrderDetails.objects.filter(pk__in=[o.pk for o in orders]).with_shipment_details().all()
+        return OrderDetails.objects.filter(pk__in=[order.pk for order in orders]).with_shipment_details().all()
 
     def _get_orders_without_shipment(self, orders):
-        return OrderDetails.objects.filter(pk__in=[o.pk for o in orders]).without_shipment_details().all()
+        return OrderDetails.objects.filter(pk__in=[order.pk for order in orders]).without_shipment_details().all()
 
     def _validate_customers(self, shipment_order_mappings_queryset: QuerySet[ShipmentOrderMapping]):
         if not shipment_order_mappings_queryset.exists():
             return
-        customers = list(set([order.order_details.customer for order in shipment_order_mappings_queryset]))
+        customers = list(set(order.order_details.customer for order in shipment_order_mappings_queryset))
         customers = sorted(customers, key=lambda x: x.pk)
         if len(customers) != 1:
             raise serializers.ValidationError(
