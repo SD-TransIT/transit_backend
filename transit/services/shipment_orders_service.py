@@ -53,7 +53,7 @@ class ShipmentOrdersService:
     def _validate_customers(self, shipment_order_mappings_queryset: QuerySet[ShipmentOrderMapping]):
         if not shipment_order_mappings_queryset.exists():
             return
-        customers = list(set(order.order_details.customer for order in shipment_order_mappings_queryset))
+        customers = list({order.order_details.customer for order in shipment_order_mappings_queryset})
         customers = sorted(customers, key=lambda x: x.pk)
         if len(customers) != 1:
             raise serializers.ValidationError(
