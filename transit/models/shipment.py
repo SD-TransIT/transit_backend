@@ -1,5 +1,4 @@
-from django.db import models, transaction
-from django.utils.translation import gettext_lazy as _
+from django.db import models
 
 from transit.models.base import BaseModel
 from transit.models.delivery_status import DeliveryStatus
@@ -7,33 +6,6 @@ from transit.models.driver import Driver
 from transit.models.order_details import OrderDetails
 from transit.models.supplier import Supplier
 from transit.models.transporter import TransporterDetails
-
-
-class ShipmentDetailsManager(models.Manager):
-    # Simplifies M:N with ShipmentOrderMapping
-    @transaction.atomic
-    def create(self, *args, **kwargs):
-        orders = kwargs.get('orders')
-        shipment_orders = self._orders_to_order_objects(orders) if orders else []
-        shipment = super(ShipmentDetailsManager, self).create(*args, **kwargs)
-        for order in shipment_orders:
-            # TODO: M:N relation should be created automatically through django, this should be obsolete
-            ShipmentOrderMapping.objects.create(shipment_details=shipment, order_details=order)
-        return shipment
-
-    def _orders_to_order_objects(self, orders):
-        order_details = []
-        for order in orders:
-            if isinstance(order, OrderDetails):
-                order_details.append(order)
-            elif OrderDetails.objects.filter(pk=order).exists():
-                order_details.append(OrderDetails.objects.get(order))
-            else:
-                raise ValueError(
-                    _("Cannot bind order detail with code %s to OrderDetail object."
-                      "Passed orders should be either OrderDetail object or OrderDetails pk.") % repr(order)
-                )
-        return order_details
 
 
 class ShipmentDetails(BaseModel):
@@ -85,7 +57,7 @@ class ShipmentDetails(BaseModel):
 
 
 class ShipmentOrderMapping(BaseModel):
-    shipment_details = models.ForeignKey(ShipmentDetails, models.DO_NOTHING, db_column='ShipmentDetailsID',
+    shipment_details = models.ForeignKey(ShipmentDetails, models.CASCADE, db_column='ShipmentDetailsID',
                                          related_name='order_mapping')
     order_details = models.ForeignKey(OrderDetails, models.DO_NOTHING, db_column='OrderDetailsID',
                                       related_name='shipment_mapping')

@@ -5,7 +5,7 @@ from django.test import TestCase
 from transit.models import TransporterDetails
 from transit.rest_api.forms.transporter_details import TransporterDetailsViewSet
 from transit.tests.api_test.helpers.api_manual_form_test_case import ManualFormTestCaseMixin
-from transit.tests.api_test.helpers.test_objects_factory import TransporterDetailsFactory, TransporterFactory, \
+from transit.tests.test_objects_factory import TransporterDetailsFactory, TransporterFactory, \
     ModeOfTransportFactory
 
 

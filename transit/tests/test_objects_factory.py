@@ -184,7 +184,8 @@ class DriverFactory(_FormModelFactory):
 class OrderDetailsFactory(_FormModelFactory):
     model: ClassVar[Type[django.db.models.Model]] = OrderDetails
     related_models_factories = {'customer': CustomerFactory}
-    related_models_default_props = {'customer': {'name': 'OrderDetailCustomerTest'}}
+    related_models_default_props = {'customer': {'name': 'OrderDetailCustomerTest',
+                                                 'customer_type__customer_type_name': 'TypeForOrder'}}
     default_values: ClassVar[Dict] = {'order_details_id': 'CharDetailID', 'order_received_date': '2022-01-01'}
 
 
@@ -193,7 +194,7 @@ class OrderLineDetailsFactory(_FormModelFactory):
     related_models_factories = {
         'order_details': OrderDetailsFactory,
         'product': ItemFactory,  # In future product should be removed
-        'item_details': ItemDetailsFactory
+        'item_details': ItemDetailsFactory,
     }
     related_models_default_props = {'order_details': {'order_details_id': 'ForOrderLineDetails'},
                                     'item': {'name': 'ItemForOrderLineTest1'}}

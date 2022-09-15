@@ -5,7 +5,7 @@ from django.test import TestCase
 from transit.models import CustomerWeekDays
 from transit.rest_api.forms.customer_week_days import CustomerWeekDaysViewSet
 from transit.tests.api_test.helpers.api_manual_form_test_case import ManualFormTestCaseMixin
-from transit.tests.api_test.helpers.test_objects_factory import CustomerWeekDaysFactory, CustomerFactory
+from transit.tests.test_objects_factory import CustomerWeekDaysFactory, CustomerFactory
 
 
 class TestCustomerWeekDaysViewSet(ManualFormTestCaseMixin, TestCase):

@@ -5,7 +5,7 @@ from django.test import TestCase
 from transit.models import ItemDetails
 from transit.rest_api.forms.item_details import ItemDetailsViewSet
 from transit.tests.api_test.helpers.api_manual_form_test_case import ManualFormTestCaseMixin
-from transit.tests.api_test.helpers.test_objects_factory import ItemDetailsFactory, ItemFactory
+from transit.tests.test_objects_factory import ItemDetailsFactory, ItemFactory
 
 
 class TestItemDetailsViewSet(ManualFormTestCaseMixin, TestCase):

@@ -1,16 +1,16 @@
 import tempfile
 from typing import Dict, Any
-from django.test.client import encode_multipart
 
 from django.test import TestCase
+from django.test.client import encode_multipart
 from rest_framework import status
 
 from transit.models import ShipmentDetails
 from transit.rest_api.forms.shipment import ShipmentDetailsViewSet, ShipmentDetailFilesViewSet
 from transit.tests.api_test.helpers.api_manual_form_test_case import ManualFormTestCaseMixin
 from transit.tests.api_test.helpers.api_test_client import ApiTestClient
-from transit.tests.api_test.helpers.test_objects_factory import ShipmentDetailsFactory, DriverFactory, \
-    TransporterDetailsFactory, SupplierFactory, DeliveryStatusFactory
+from transit.tests.test_objects_factory import ShipmentDetailsFactory, DriverFactory, \
+    TransporterDetailsFactory, SupplierFactory, DeliveryStatusFactory, OrderDetailsFactory
 
 
 class TestShipmentDetailsViewSet(ManualFormTestCaseMixin, TestCase):
@@ -39,12 +39,15 @@ class TestShipmentDetailsViewSet(ManualFormTestCaseMixin, TestCase):
             custom_props={'delivery_status_key': 'delivered4', 'delivery_status': 'Delivered4'}
         ).create_object(True)
         self.__additional_pod_status = DeliveryStatusFactory().create_object(True)
+        self.__additional_order = OrderDetailsFactory().create_object(True)
 
         self._POST_REQUEST_PAYLOAD['transporter_details'] = self.__additional_transporter_details.pk
         self._POST_REQUEST_PAYLOAD['driver'] = self.__additional_driver.pk
         self._POST_REQUEST_PAYLOAD['supplier'] = self.__additional_supplier.pk
+
         self._POST_REQUEST_PAYLOAD['delivery_status'] = self.__additional_delivery_status.pk
         self._POST_REQUEST_PAYLOAD['pod_status'] = self.__additional_pod_status.pk
+        self._POST_REQUEST_PAYLOAD['orders'] = [self.__additional_order.pk]
 
         self._PATCH_REQUEST_PAYLOAD['driver'] = self.__additional_driver.pk
 
@@ -77,3 +80,10 @@ class TestShipmentDetailsViewSet(ManualFormTestCaseMixin, TestCase):
             self.assertEqual(response.status_code, status.HTTP_200_OK)
             self.assertIsNotNone(file_url)
             self.assertEqual(shipment, self.test_subject.pk)
+
+    @property
+    def expected_post_obj(self):
+        self._POST_REQUEST_PAYLOAD.pop('orders')
+        return self._MODEL_TYPE.objects.filter(
+            **self._POST_REQUEST_PAYLOAD
+        ).first()

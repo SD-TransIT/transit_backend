@@ -5,7 +5,7 @@ from django.test import TestCase
 from transit.models import Supplier
 from transit.rest_api.forms.supplier_master import SupplierViewSet
 from transit.tests.api_test.helpers.api_manual_form_test_case import ManualFormTestCaseMixin
-from transit.tests.api_test.helpers.test_objects_factory import SupplierFactory
+from transit.tests.test_objects_factory import SupplierFactory
 
 
 class TestSupplierViewSet(ManualFormTestCaseMixin, TestCase):
