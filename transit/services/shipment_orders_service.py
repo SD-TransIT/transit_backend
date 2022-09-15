@@ -1,4 +1,4 @@
-from collections.abc import Collection
+from typing import Collection
 
 from django.db import transaction
 from django.db.models import QuerySet, Q
