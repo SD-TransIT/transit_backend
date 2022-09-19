@@ -1,6 +1,7 @@
 import logging
 
 import django_filters
+from django.db import transaction
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 from rest_framework.fields import CharField
@@ -52,12 +53,14 @@ class ShipmentDetailsSerializer(serializers.ModelSerializer):
         fields = '__all__'
         ordering = ['-id']
 
+    @transaction.atomic
     def create(self, validated_data):
         orders = self._orders_from_validated_data(validated_data)
         shipment = super(ShipmentDetailsSerializer, self).create(validated_data)
         self._shipment_orders_handler.add_orders_to_shipment(shipment, orders)
         return shipment
 
+    @transaction.atomic
     def update(self, instance, validated_data):
         orders = self._orders_from_validated_data(validated_data)
         shipment = super(ShipmentDetailsSerializer, self).update(instance, validated_data)
