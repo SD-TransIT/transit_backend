@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 class ShipmentOrderDetailsField(ListField):
 
-    def to_internal_value(self, data): # noqa: WPS122
+    def to_internal_value(self, data):  # noqa: WPS122
         return OrderDetails.objects.get(pk=data)
 
     def to_representation(self, value: ShipmentOrderMapping):  # noqa: WPS122

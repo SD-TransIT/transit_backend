@@ -27,7 +27,7 @@ class ShipmentDetailsCostViewSet(BaseGenericViewSet):
 
     def _shipments_without_cost(self):
         shipment_qs = self.get_queryset().shipments_without_cost()
-        return  self._apply_query_filters(shipment_qs)
+        return self._apply_query_filters(shipment_qs)
 
     def _shipments_with_cost(self):
         shipment_qs = self.get_queryset().shipments_with_cost()
