@@ -18,7 +18,7 @@ class ShipmentDetailsQueryset(models.QuerySet):
     def vehicle_shipments(self, vehicle: TransporterDetails = None, vehicles: Collection[TransporterDetails] = None):
         """
         Filter ShipmentDetails for shipments relevant for given vehicle or vehicles list.
-        Only on of `vehicle` and `vehicles` arugments can be provided. If both are provided ValueError is raised.
+        Only on of `vehicle` and `vehicles` arguments can be provided. If both are provided ValueError is raised.
         :param vehicle: Object of TransporterDetails type
         :param vehicles: Collection of TransporterDetails instances.
         :return: filtered QuerySet
