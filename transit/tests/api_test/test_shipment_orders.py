@@ -1,4 +1,4 @@
-from typing import Dict, Any, Collection
+from typing import Collection
 
 from django.test import TestCase
 from django.urls import reverse
@@ -14,9 +14,9 @@ from transit.tests.test_objects_factory import ShipmentDetailsFactory, OrderDeta
 class ShipmentDetailsOrdersClient(ApiTestClient):
     # Has custom primary key - delivery_status_key
     _REVERSE_URL_BUILDER = {
-        'add_orders': lambda url, _id: reverse(F"API:{url}-add-orders-to-shipment",  kwargs={'pk': _id}),
-        'remove_orders': lambda url, _id: reverse(F"API:{url}-remove-orders-from-shipment",  kwargs={'pk': _id}),
-        'replace_orders': lambda url, _id: reverse(F"API:{url}-replace-orders-in-shipment",  kwargs={'pk': _id}),
+        'add_orders': lambda url, _id: reverse(F"API:{url}-add-orders-to-shipment", kwargs={'pk': _id}),
+        'remove_orders': lambda url, _id: reverse(F"API:{url}-remove-orders-from-shipment", kwargs={'pk': _id}),
+        'replace_orders': lambda url, _id: reverse(F"API:{url}-replace-orders-in-shipment", kwargs={'pk': _id}),
     }
 
     def make_orders_post(self, payload, action, shipment, auth_token=None, **extra):
