@@ -1,12 +1,10 @@
 
 import logging
-from typing import Collection
 
 from rest_framework import serializers, status
 from rest_framework.decorators import action
-from rest_framework.fields import Field, ListField
+from rest_framework.fields import ListField
 from rest_framework.response import Response
-from rest_framework.viewsets import GenericViewSet
 
 from transit.models import OrderDetails, ShipmentDetails, ShipmentOrderMapping, OrderLineDetails
 from transit.rest_api.abstract import BaseGenericViewSet
@@ -17,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 class ShipmentOrderDetailsField(ListField):
 
-    def to_internal_value(self, data):
+    def to_internal_value(self, data): # noqa: WPS122
         return OrderDetails.objects.get(pk=data)
 
     def to_representation(self, value: ShipmentOrderMapping):  # noqa: WPS122

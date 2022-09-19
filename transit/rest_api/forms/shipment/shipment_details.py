@@ -3,8 +3,6 @@ import logging
 import django_filters
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
-from rest_framework.decorators import action
-
 from rest_framework.fields import CharField
 
 from transit.models import OrderDetails, OrderLineDetails, ShipmentDetails

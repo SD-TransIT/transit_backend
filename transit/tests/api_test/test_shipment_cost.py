@@ -4,7 +4,6 @@ from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
 
-from transit.models import ShipmentDetails
 from transit.rest_api.forms.shipment.shipment_details_cost import ShipmentDetailsCostViewSet
 from transit.tests.api_test.helpers.api_crud_test_case import ViewSetRequestTestBase
 from transit.tests.api_test.helpers.api_test_client import ApiTestClient
@@ -14,8 +13,8 @@ from transit.tests.test_objects_factory import ShipmentDetailsFactory
 class ShipmentDetailsCostTestClient(ApiTestClient):
     # Has custom primary key - delivery_status_key
     _REVERSE_URL_BUILDER = {
-        'without_cost': lambda url: reverse(F"API:shipment_details_cost-get-shipments-without-cost"),
-        'with_cost': lambda url: reverse(F"API:shipment_details_cost-get-shipments-with-cost"),
+        'without_cost': lambda url: reverse(F"API:{url}-get-shipments-without-cost"),
+        'with_cost': lambda url: reverse(F"API:{url}-get-shipments-with-cost"),
     }
 
     def get_response(self, with_cost, auth_token=None, query=None, **extra):
