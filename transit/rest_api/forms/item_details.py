@@ -2,7 +2,7 @@ import django_filters
 from rest_framework import serializers
 
 from transit.models import ItemDetails
-from transit.rest_api.abstract import BaseFormViewSet
+from transit.rest_api.abstract import BaseModelFormViewSet
 
 
 class ItemDetailsSerializer(serializers.ModelSerializer):
@@ -29,7 +29,7 @@ class ItemDetailsFilter(django_filters.FilterSet):
         ordering = ['-id']
 
 
-class ItemDetailsViewSet(BaseFormViewSet):
+class ItemDetailsViewSet(BaseModelFormViewSet):
     filterset_class = ItemDetailsFilter
     queryset = ItemDetails.objects.all().order_by('-id')
     search_fields = [

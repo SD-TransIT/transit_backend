@@ -3,7 +3,7 @@ from rest_framework import serializers
 from django.utils.translation import gettext_lazy as _
 
 from transit.models import PODVariance, PODVarianceDetails
-from transit.rest_api.abstract import BaseFormViewSet
+from transit.rest_api.abstract import BaseModelFormViewSet
 
 
 class PODVarianceFilter(django_filters.FilterSet):
@@ -66,7 +66,7 @@ class PODVarianceSerializer(serializers.ModelSerializer):
         return validated
 
 
-class PODVarianceViewSet(BaseFormViewSet):
+class PODVarianceViewSet(BaseModelFormViewSet):
     filterset_class = PODVarianceFilter
     queryset = PODVariance.objects.all().order_by('-id')
 
@@ -74,7 +74,7 @@ class PODVarianceViewSet(BaseFormViewSet):
         return PODVarianceSerializer
 
 
-class PODVarianceDetailsViewSet(BaseFormViewSet):
+class PODVarianceDetailsViewSet(BaseModelFormViewSet):
     filterset_class = PODVarianceDetailsFilter
     queryset = PODVarianceDetails.objects.all().order_by('-id')
 

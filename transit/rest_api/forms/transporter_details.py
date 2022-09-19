@@ -2,7 +2,7 @@ import django_filters
 from rest_framework import serializers
 
 from transit.models import TransporterDetails
-from transit.rest_api.abstract import BaseFormViewSet
+from transit.rest_api.abstract import BaseModelFormViewSet
 
 
 class TransporterDetailsSerializer(serializers.ModelSerializer):
@@ -28,7 +28,7 @@ class TransporterDetailsFilter(django_filters.FilterSet):
         }
 
 
-class TransporterDetailsViewSet(BaseFormViewSet):
+class TransporterDetailsViewSet(BaseModelFormViewSet):
     filterset_class = TransporterDetailsFilter
     queryset = TransporterDetails.objects.all().order_by('-id')
     search_fields = [

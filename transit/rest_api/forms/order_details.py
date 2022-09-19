@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
 from transit.models import OrderDetails, OrderLineDetails
-from transit.rest_api.abstract import BaseFormViewSet
+from transit.rest_api.abstract import BaseModelFormViewSet
 
 
 class OrderDetailsFilter(django_filters.FilterSet):
@@ -56,7 +56,7 @@ class OrderDetailsSerializer(serializers.ModelSerializer):
         return validated
 
 
-class OrderDetailsViewSet(BaseFormViewSet):
+class OrderDetailsViewSet(BaseModelFormViewSet):
     filterset_class = OrderDetailsFilter
     lookup_url_kwarg = 'pk'
     lookup_field = 'pk'

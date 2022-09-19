@@ -6,7 +6,8 @@ from django.test.client import encode_multipart
 from rest_framework import status
 
 from transit.models import ShipmentDetails
-from transit.rest_api.forms.shipment import ShipmentDetailsViewSet, ShipmentDetailFilesViewSet
+from transit.rest_api.forms.shipment.shipment_details import ShipmentDetailsViewSet
+from transit.rest_api.forms.shipment.shipment_files import ShipmentDetailFilesViewSet
 from transit.tests.api_test.helpers.api_manual_form_test_case import ManualFormTestCaseMixin
 from transit.tests.api_test.helpers.api_test_client import ApiTestClient
 from transit.tests.test_objects_factory import ShipmentDetailsFactory, DriverFactory, \

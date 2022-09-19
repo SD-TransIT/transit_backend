@@ -2,7 +2,7 @@ import django_filters
 from rest_framework import serializers
 
 from transit.models import ModeOfTransport
-from transit.rest_api.abstract import BaseFormViewSet
+from transit.rest_api.abstract import BaseModelFormViewSet
 
 
 class ModeOfTransportSerializer(serializers.ModelSerializer):
@@ -22,7 +22,7 @@ class ModeOfTransportFilter(django_filters.FilterSet):
         ordering = ['-id']
 
 
-class ModeOfTransportViewSet(BaseFormViewSet):
+class ModeOfTransportViewSet(BaseModelFormViewSet):
     filterset_class = ModeOfTransportFilter
     queryset = ModeOfTransport.objects.all().order_by('-id')
     search_fields = ['id', 'class_mode', 'vehicle_type']

@@ -3,7 +3,7 @@ from rest_framework import serializers
 from django.utils.translation import gettext_lazy as _
 
 from transit.models import Customer, CustomerWeekDays
-from transit.rest_api.abstract import BaseFormViewSet
+from transit.rest_api.abstract import BaseModelFormViewSet
 from transit.rest_api.forms.fields import FormsDataFields
 
 
@@ -63,7 +63,7 @@ class CustomerFilter(django_filters.FilterSet):
         }
 
 
-class CustomerViewSet(BaseFormViewSet):
+class CustomerViewSet(BaseModelFormViewSet):
     filterset_class = CustomerFilter
     queryset = Customer.objects.all().order_by('-id')
     search_fields = [

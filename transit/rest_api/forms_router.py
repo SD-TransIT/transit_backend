@@ -11,7 +11,10 @@ from transit.rest_api.forms.mode_of_transport_master import ModeOfTransportViewS
 from transit.rest_api.forms.order_details import OrderDetailsViewSet
 from transit.rest_api.forms.order_line_details import OrderLineDetailsViewSet
 from transit.rest_api.forms.pod_variance import PODVarianceViewSet, PODVarianceDetailsViewSet
-from transit.rest_api.forms.shipment import ShipmentDetailsViewSet, ShipmentDetailFilesViewSet
+from transit.rest_api.forms.shipment.shipment_details import ShipmentDetailsViewSet
+from transit.rest_api.forms.shipment.shipment_details_cost import ShipmentDetailsCostViewSet
+from transit.rest_api.forms.shipment.shipment_files import ShipmentDetailFilesViewSet
+from transit.rest_api.forms.shipment.shipment_order_details import ShipmentOrderDetailsViewSet
 from transit.rest_api.forms.supplier_master import SupplierViewSet
 from transit.rest_api.forms.transporter import TransporterViewSet
 from transit.rest_api.forms.transporter_details import TransporterDetailsViewSet
@@ -41,6 +44,8 @@ def manual_forms_extra():
     router.register(r'order_line_details', OrderLineDetailsViewSet, basename='order_line_details')
     router.register(r'pod_variance_details', PODVarianceDetailsViewSet, basename='pod_variance_details')
     router.register(r'shipment_details_files', ShipmentDetailFilesViewSet, basename='shipment_details_files')
+    router.register(r'shipment_details_orders', ShipmentOrderDetailsViewSet, basename='shipment_details_orders')
+    router.register(r'shipment_details_cost', ShipmentDetailsCostViewSet, basename='shipment_details_cost')
     router.register(r'customer_week_days', CustomerWeekDaysViewSet, basename='customer_week_days')
     return router
 

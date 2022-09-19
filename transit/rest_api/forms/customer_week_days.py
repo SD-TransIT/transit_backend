@@ -2,7 +2,7 @@ import django_filters
 from rest_framework import serializers
 
 from transit.models import CustomerWeekDays
-from transit.rest_api.abstract import BaseFormViewSet
+from transit.rest_api.abstract import BaseModelFormViewSet
 
 
 class CustomerWeekDaysSerializer(serializers.ModelSerializer):
@@ -30,7 +30,7 @@ class CustomerWeekDaysFilter(django_filters.FilterSet):
         }
 
 
-class CustomerWeekDaysViewSet(BaseFormViewSet):
+class CustomerWeekDaysViewSet(BaseModelFormViewSet):
     filterset_class = CustomerWeekDaysFilter
     queryset = CustomerWeekDays.objects.all().order_by('-id')
 
