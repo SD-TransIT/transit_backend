@@ -4,6 +4,14 @@ from rest_framework.permissions import IsAuthenticated
 from transit.rest_api.permissions import IsFormsClerk
 
 
-class BaseFormViewSet(viewsets.ModelViewSet):
+class BaseModelFormViewSet(viewsets.ModelViewSet):
     filter_backends = [filters.SearchFilter]
+    permission_classes = (IsAuthenticated, IsFormsClerk)
+
+
+class BaseGenericViewSet(viewsets.GenericViewSet):
+    permission_classes = (IsAuthenticated, IsFormsClerk)
+
+
+class BaseApiSetView(viewsets.ViewSet):
     permission_classes = (IsAuthenticated, IsFormsClerk)

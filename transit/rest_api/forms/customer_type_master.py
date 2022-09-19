@@ -2,7 +2,7 @@ import django_filters
 from rest_framework import serializers
 
 from transit.models import CustomerType
-from transit.rest_api.abstract import BaseFormViewSet
+from transit.rest_api.abstract import BaseModelFormViewSet
 
 
 class CustomerTypeSerializer(serializers.ModelSerializer):
@@ -21,7 +21,7 @@ class CustomerFilter(django_filters.FilterSet):
         }
 
 
-class CustomerTypeViewSet(BaseFormViewSet):
+class CustomerTypeViewSet(BaseModelFormViewSet):
     filterset_class = CustomerFilter
     queryset = CustomerType.objects.all().order_by('-id')
     search_fields = ['id', 'customer_type_name']

@@ -33,7 +33,7 @@ class TestShipmentOrderService(TestCase):
 
     def test_create_ok(self):
         service = ShipmentOrdersService()
-        service.create(
+        service.add_orders_to_shipment(
             shipment=self._test_shipment,
             orders=[self._test_order_customer1, self._test_order2_customer1]
         )
@@ -49,17 +49,17 @@ class TestShipmentOrderService(TestCase):
             "All orders assigned to order have to be assigned to same customers. "
             "Provided orders are assigned to multiple customers: .*")
         with self.assertRaisesRegex(serializers.ValidationError, expected_error):
-            service.create(
+            service.add_orders_to_shipment(
                 shipment=self._test_shipment,
                 orders=[self._test_order_customer1, self._test_order_customer2]
             )
 
     def test_create_order_with_shipment(self):
         service = ShipmentOrdersService()
-        service.create(self._test_shipment, [self._test_order_customer1])
+        service.add_orders_to_shipment(self._test_shipment, [self._test_order_customer1])
         with self.assertRaisesRegex(serializers.ValidationError,
-                                    "Some of provided shipment details already assigned to shipment: .*"):
-            service.create(self._test_shipment, [self._test_order_customer1])
+                                    "Part of provided order details already assigned to shipment: .*"):
+            service.add_orders_to_shipment(self._test_shipment, [self._test_order_customer1])
 
     def test_update_multiple_customers(self):
         service = ShipmentOrdersService()
@@ -67,18 +67,18 @@ class TestShipmentOrderService(TestCase):
             "All orders assigned to order have to be assigned to same customers. "
             "Provided orders are assigned to multiple customers: .*")
         with self.assertRaisesRegex(serializers.ValidationError, expected_error):
-            service.update(
+            service.replace_shipment_orders(
                 shipment=self._test_shipment,
                 orders=[self._test_order_customer1, self._test_order_customer2]
             )
 
     def test_update_ok_remove_not_lister(self):
         service = ShipmentOrdersService()
-        service.create(
+        service.add_orders_to_shipment(
             shipment=self._test_shipment,
             orders=[self._test_order2_customer1]
         )
-        service.update(
+        service.replace_shipment_orders(
             shipment=self._test_shipment,
             orders=[self._test_order_customer1]
         )
@@ -94,11 +94,11 @@ class TestShipmentOrderService(TestCase):
 
     def test_update_ok_one_existing_one_new(self):
         service = ShipmentOrdersService()
-        service.create(
+        service.add_orders_to_shipment(
             shipment=self._test_shipment,
             orders=[self._test_order2_customer1]
         )
-        service.update(
+        service.replace_shipment_orders(
             shipment=self._test_shipment,
             orders=[self._test_order2_customer1, self._test_order_customer1]
         )

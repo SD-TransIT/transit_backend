@@ -2,7 +2,7 @@ import django_filters
 from rest_framework import serializers
 
 from transit.models import Driver
-from transit.rest_api.abstract import BaseFormViewSet
+from transit.rest_api.abstract import BaseModelFormViewSet
 
 
 class DriverSerializer(serializers.ModelSerializer):
@@ -26,7 +26,7 @@ class DriverFilter(django_filters.FilterSet):
         }
 
 
-class DriverViewSet(BaseFormViewSet):
+class DriverViewSet(BaseModelFormViewSet):
     filterset_class = DriverFilter
     queryset = Driver.objects.all().order_by('-id')
     search_fields = ['id', 'name', 'transporter__name']

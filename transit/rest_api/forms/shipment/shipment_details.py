@@ -2,16 +2,13 @@ import logging
 
 import django_filters
 from django.utils.translation import gettext_lazy as _
-from rest_framework import serializers, filters
+from rest_framework import serializers
 from rest_framework.fields import CharField
-from rest_framework.parsers import MultiPartParser
 
-from transit.models import ShipmentDetails, OrderDetails, OrderLineDetails
-from transit.models.shipment import ShipmentDetailFiles
-from transit.rest_api.abstract import BaseFormViewSet
+from transit.models import OrderDetails, OrderLineDetails, ShipmentDetails
+from transit.rest_api.abstract import BaseModelFormViewSet
 from transit.services.shipment_orders_service import ShipmentOrdersService
 
-# Get an instance of a logger
 logger = logging.getLogger(__name__)
 
 
@@ -56,22 +53,22 @@ class ShipmentDetailsSerializer(serializers.ModelSerializer):
         ordering = ['-id']
 
     def create(self, validated_data):
-        user = self.context['request'].user
-        validated_data['last_modified_by'] = user
-        orders_pks = validated_data.pop('orders', None)
-        orders = OrderDetails.objects.filter(pk__in=orders_pks)
+        orders = self._orders_from_validated_data(validated_data)
         shipment = super(ShipmentDetailsSerializer, self).create(validated_data)
-        self._shipment_orders_handler.create(shipment, orders)
+        self._shipment_orders_handler.add_orders_to_shipment(shipment, orders)
         return shipment
 
     def update(self, instance, validated_data):
+        orders = self._orders_from_validated_data(validated_data)
+        shipment = super(ShipmentDetailsSerializer, self).update(instance, validated_data)
+        self._shipment_orders_handler.replace_shipment_orders(shipment, orders)
+        return shipment
+
+    def _orders_from_validated_data(self, validated_data):
         user = self.context['request'].user
         validated_data['last_modified_by'] = user.pk
         orders_pks = validated_data.pop('orders', [])
-        orders = OrderDetails.objects.filter(pk__in=orders_pks)
-        shipment = super(ShipmentDetailsSerializer, self).update(instance, validated_data)
-        self._shipment_orders_handler.update(shipment, orders)
-        return shipment
+        return OrderDetails.objects.filter(pk__in=orders_pks)
 
     def validate(self, data): # noqa: WPS-122
         """
@@ -83,7 +80,7 @@ class ShipmentDetailsSerializer(serializers.ModelSerializer):
     def _orders_not_updatable(self, shipment_data):
         if self.instance and shipment_data.get('orders'):
             raise serializers.ValidationError(
-                _("Shipment Orders have to be updated using shipment_order endpoint.")
+                _("Shipment Orders have to be updated using shipment/<shipment_id>/shipment_order endpoint.")
             )
         return shipment_data
 
@@ -108,7 +105,7 @@ class ShipmentDetailsFilter(django_filters.FilterSet):
         }
 
 
-class ShipmentDetailsViewSet(BaseFormViewSet):
+class ShipmentDetailsViewSet(BaseModelFormViewSet):
     filterset_class = ShipmentDetailsFilter
     queryset = ShipmentDetails.objects.all().order_by('-id')
     search_fields = [
@@ -120,22 +117,3 @@ class ShipmentDetailsViewSet(BaseFormViewSet):
 
     def get_serializer_class(self):
         return ShipmentDetailsSerializer
-
-
-class ShipmentDetailFilesSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ShipmentDetailFiles
-        fields = ('id', 'shipment', 'file')
-        read_only_fields = ['id']
-        ordering = ['-id']
-
-
-class ShipmentDetailFilesViewSet(BaseFormViewSet):
-    parser_classes = (MultiPartParser,)
-    queryset = ShipmentDetailFiles.objects.all()
-    serializer_class = ShipmentDetailFilesSerializer
-    filter_backends = [filters.SearchFilter]
-    search_fields = ['shipment__id']
-
-    def pre_save(self, obj):
-        obj.file = self.request.FILES.get('file')

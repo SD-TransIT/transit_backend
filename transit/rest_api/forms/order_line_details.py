@@ -2,7 +2,7 @@ import django_filters
 from rest_framework import serializers
 
 from transit.models import OrderLineDetails
-from transit.rest_api.abstract import BaseFormViewSet
+from transit.rest_api.abstract import BaseModelFormViewSet
 
 
 class OrderLineDetailsFilter(django_filters.FilterSet):
@@ -28,7 +28,7 @@ class OrderLineDetailsSerializer(serializers.ModelSerializer):
         ordering = ['-id']
 
 
-class OrderLineDetailsViewSet(BaseFormViewSet):
+class OrderLineDetailsViewSet(BaseModelFormViewSet):
     filterset_class = OrderLineDetailsFilter
     # Optional ID required by creating through OrderDetails
     id = serializers.IntegerField(required=False)

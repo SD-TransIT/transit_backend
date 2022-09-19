@@ -37,8 +37,8 @@ class CustomerWeekDays(BaseModel):
         Customer, models.DO_NOTHING, db_column='CustomerID'
     )
     day = models.IntegerField(db_column='Day')
-    opening_time = models.CharField(db_column='OpeningTime', max_length=50)
-    closing_time = models.CharField(db_column='ClosingTime', max_length=50)
+    opening_time = models.CharField(db_column='OpeningTime', max_length=50, default="N/A")
+    closing_time = models.CharField(db_column='ClosingTime', max_length=50, default="N/A")
     closed = models.BooleanField(
         db_column='Closed', default=False, null=True
     )

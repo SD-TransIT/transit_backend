@@ -2,7 +2,7 @@ import django_filters
 from rest_framework import serializers
 
 from transit.models import Supplier
-from transit.rest_api.abstract import BaseFormViewSet
+from transit.rest_api.abstract import BaseModelFormViewSet
 from transit.rest_api.forms.fields import FormsDataFields
 
 
@@ -23,7 +23,7 @@ class SupplierFilter(django_filters.FilterSet):
         }
 
 
-class SupplierViewSet(BaseFormViewSet):
+class SupplierViewSet(BaseModelFormViewSet):
     filterset_class = SupplierFilter
     queryset = Supplier.objects.all().order_by('-id')
     search_fields = ['id', 'name', 'phone', 'email', *FormsDataFields.GEOGRAPHICAL_MODEL_FIELDS]

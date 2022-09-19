@@ -1,3 +1,5 @@
+from typing import Collection
+
 from django.db import models
 
 from transit.models.base import BaseModel
@@ -5,7 +7,61 @@ from transit.models.delivery_status import DeliveryStatus
 from transit.models.driver import Driver
 from transit.models.order_details import OrderDetails
 from transit.models.supplier import Supplier
-from transit.models.transporter import TransporterDetails
+from transit.models.transporter import TransporterDetails, Transporter
+
+
+class ShipmentDetailsQueryset(models.QuerySet):
+
+    def transporter_shipments(self, transporter: Transporter):
+        return self.filter(transporter_details__transporter=transporter).distinct()
+
+    def vehicle_shipments(self, vehicle: TransporterDetails = None, vehicles: Collection[TransporterDetails] = None):
+        """
+        Filter ShipmentDetails for shipments relevant for given vehicle or vehicles list.
+        Only on of `vehicle` and `vehicles` arguments can be provided. If both are provided ValueError is raised.
+        :param vehicle: Object of TransporterDetails type
+        :param vehicles: Collection of TransporterDetails instances.
+        :return: filtered QuerySet
+        """
+        if vehicle and vehicles:
+            raise ValueError(
+                "`vehicles` and `vehicle` arguments cannot be used in the same time in vehicle_shipments"
+            )
+        vehicles = vehicles if vehicles else [vehicle]
+
+        return self.filter(transporter_details__in=vehicles).distinct()
+
+    def shipments_with_cost(self):
+        """
+        Filter for shipments that have base_cost different from null.
+        :return: filtered QuerySet
+        """
+        return self.filter(transporter_base_cost__isnull=False)
+
+    def shipments_without_cost(self):
+        """
+        Filter for shipments that where base_cost is null.
+        :return: filtered QuerySet
+        """
+        return self.filter(transporter_base_cost__isnull=True)
+
+
+class ShipmentDetailsManager(models.Manager):
+
+    def get_queryset(self):
+        return ShipmentDetailsQueryset(self.model, using=self._db)
+
+    def transporter_shipments(self, transporter: Transporter):
+        return self.get_queryset().transporter_shipments(transporter)
+
+    def vehicle_shipments(self, vehicle: TransporterDetails = None, vehicles: Collection[TransporterDetails] = None):
+        return self.get_queryset().vehicles_shipments(vehicle=vehicle, vehicles=vehicles)
+
+    def shipments_with_cost(self):
+        return self.get_queryset().shipments_with_cost()
+
+    def shipments_without_cost(self):
+        return self.get_queryset().shipments_without_cost()
 
 
 class ShipmentDetails(BaseModel):
@@ -50,6 +106,8 @@ class ShipmentDetails(BaseModel):
     description = models.CharField(db_column='Description', max_length=50, blank=True, null=True)
     ropo_number = models.CharField(db_column='ROPONumber', max_length=255, blank=True, null=True)
     signed_by = models.CharField(db_column='SignedBy', max_length=255, blank=True, null=True)
+
+    objects = ShipmentDetailsManager()
 
     class Meta:
         managed = True

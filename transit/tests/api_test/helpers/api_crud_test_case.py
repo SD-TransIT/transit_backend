@@ -32,12 +32,12 @@ class ViewSetRequestTestBase:
     _VIEW_SET: ModelViewSet = None
     _DETAIL_IDENTIFIER: Any
 
-    _POST_REQUEST_PAYLOAD: Dict = {}  # Used in post request
-    _PATCH_REQUEST_PAYLOAD: Dict = {}  # Used in post request
+    _POST_REQUEST_PAYLOAD: Dict = {}  # Used in POST request
+    _PATCH_REQUEST_PAYLOAD: Dict = {}  # Used in PATCH request
 
     @classmethod
     def setup_helper(cls):
-        cls.API_HELPER = ApiTestClient(cls._URL, cls._VIEW_SET)
+        cls.API_HELPER = cls._API_HELPER_TYPE(cls._URL, cls._VIEW_SET)
         user_helper = UserTestHelper(username=cls._USERNAME)
         for permission in cls._USER_PERMISSIONS:
             user_helper.add_user_permission(permission)
