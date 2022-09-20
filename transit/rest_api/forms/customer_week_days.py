@@ -1,5 +1,8 @@
 import django_filters
-from rest_framework import serializers
+from django.db import transaction
+from rest_framework import serializers, status
+from rest_framework.decorators import action
+from rest_framework.response import Response
 
 from transit.models import CustomerWeekDays
 from transit.rest_api.abstract import BaseModelFormViewSet
@@ -36,3 +39,18 @@ class CustomerWeekDaysViewSet(BaseModelFormViewSet):
 
     def get_serializer_class(self):
         return CustomerWeekDaysSerializer
+
+    @action(detail=False, methods=['post'])
+    def bulk_create(self, request, *args, **kwargs):
+        week_days_creation_result = self._create_inputs(request.data)
+        return Response(week_days_creation_result, status=status.HTTP_201_CREATED)
+
+    @transaction.atomic
+    def _create_inputs(self, list_of_week_days):
+        outputs = []
+        for week_day_element in list_of_week_days:
+            serializer = self.get_serializer(data=week_day_element)
+            serializer.is_valid(raise_exception=True)
+            self.perform_create(serializer)
+            outputs.append(serializer.data)
+        return outputs
