@@ -78,9 +78,10 @@ class TestCustomerViewSet(ManualFormTestCaseMixin, TestCase):
         self.API_HELPER.make_post_request(
             self._POST_REQUEST_PAYLOAD, token
         )
-        payload = self._build_week_days_payload()
 
-        response = self.API_HELPER.replace_working_hours(payload, self.test_subject, token)
+        payload = self._build_week_days_payload()
+        self.API_HELPER.replace_working_hours(payload, self.test_subject, token)
+
         delivery_hour_1_created = self.test_subject.week_days\
             .filter(closed=True, day=2, customer=self.test_subject.pk)\
             .exists()

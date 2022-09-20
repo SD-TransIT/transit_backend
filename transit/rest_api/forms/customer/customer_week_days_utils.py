@@ -35,7 +35,7 @@ class CustomerWeekDaysSerializerWrapper(serializers.Serializer):
         week_days = [CustomerWeekDays(**day) for day in self.validated_data['week_days']]
         self._service.replace_customer_weekdays(customer=self.instance, weekdays=week_days)
 
-    def to_internal_value(self, data):
+    def to_internal_value(self, data):  # noqa: WPS122
         # As customer is ModelField it will not be automatically bind to customer object
         internal = super(CustomerWeekDaysSerializerWrapper, self).to_internal_value(data)
         for week_day in internal['week_days']:
