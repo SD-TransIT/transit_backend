@@ -1,7 +1,5 @@
 import django_filters
 from django.db import transaction
-from drf_yasg import openapi
-from drf_yasg.utils import swagger_auto_schema
 from rest_framework import serializers, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -44,8 +42,8 @@ class CustomerWeekDaysViewSet(BaseModelFormViewSet):
 
     @action(detail=False, methods=['post'])
     def bulk_create(self, request, *args, **kwargs):
-        result = self._create_inputs(request.data)
-        return Response(result, status=status.HTTP_201_CREATED)
+        week_days_creation_result = self._create_inputs(request.data)
+        return Response(week_days_creation_result, status=status.HTTP_201_CREATED)
 
     @transaction.atomic
     def _create_inputs(self, list_of_week_days):
