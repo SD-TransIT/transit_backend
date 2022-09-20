@@ -3,7 +3,7 @@ from typing import Dict, Any
 from django.test import TestCase
 
 from transit.models import Customer, CustomerWeekDays
-from transit.rest_api.forms.customer import CustomerViewSet
+from transit.rest_api.forms.customer.customer import CustomerViewSet
 from transit.tests.api_test.helpers.api_manual_form_test_case import ManualFormTestCaseMixin
 from transit.tests.test_objects_factory import CustomerFactory, CustomerTypeFactory
 
