@@ -8,14 +8,15 @@ from rest_framework.response import Response
 
 from transit.models import Customer, CustomerWeekDays
 from transit.rest_api.abstract import BaseModelFormViewSet
-from transit.rest_api.forms.customer.customer_week_days import CustomerWeekDaysSerializer
-from transit.rest_api.forms.customer.week_days_utils import CustomerWeekDaysSerializerWrapper
+from transit.rest_api.forms.customer.week_days import CustomerWeekDaysSerializer
+from transit.rest_api.forms.customer.customer_week_days_utils import CustomerWeekDaysSerializerWrapper, \
+    CustomerWeekDaysSerializerOptionalCustomer
 from transit.rest_api.forms.fields import FormsDataFields
 
 
 class CustomerSerializer(serializers.ModelSerializer):
     customer_type_name = serializers.CharField(source='customer_type.customer_type_name', read_only=True)
-    week_days = CustomerWeekDaysSerializer(many=True, required=False)
+    week_days = CustomerWeekDaysSerializerOptionalCustomer(many=True, required=False)
 
     class Meta:
         model = Customer
