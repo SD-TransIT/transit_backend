@@ -34,7 +34,7 @@ class Customer(BaseModel, GeographicalModel):
 
 class CustomerWeekDays(BaseModel):
     customer = models.ForeignKey(
-        Customer, models.DO_NOTHING, db_column='CustomerID'
+        Customer, models.CASCADE, db_column='CustomerID', related_name='week_days'
     )
     day = models.IntegerField(db_column='Day')
     opening_time = models.CharField(db_column='OpeningTime', max_length=50, default="N/A")
