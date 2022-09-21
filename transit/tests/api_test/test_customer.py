@@ -93,6 +93,16 @@ class TestCustomerViewSet(ManualFormTestCaseMixin, TestCase):
         self.assertTrue(delivery_hour_1_created)
         self.assertTrue(delivery_hour_2_created)
 
+    def test_remove_working_hours(self):
+        token = self.USER_HELPER.get_access_token()
+        # Extend post request by additional week day data
+        self._POST_REQUEST_PAYLOAD['week_days'] = [{"day": 3, "closed": True}]
+        self.API_HELPER.make_post_request(
+            self._POST_REQUEST_PAYLOAD, token
+        )
+
+        self.API_HELPER.replace_working_hours({}, self.test_subject, token)
+        self.assertEqual(self.test_subject.week_days.count(), 0)
     def _build_week_days_payload(self):
         return {
             "week_days": [
