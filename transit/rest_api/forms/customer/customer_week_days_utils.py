@@ -20,7 +20,7 @@ class CustomerWeekDaysSerializerWrapper(serializers.Serializer):
     _service = CustomerWeekdaysService()
 
     week_days = serializers.ListField(
-        child=CustomerWeekDaysSerializerOptionalCustomer(), required=True, allow_empty=False
+        child=CustomerWeekDaysSerializerOptionalCustomer(), required=True, allow_empty=True
     )
 
     def update(self, instance, validated_data):
