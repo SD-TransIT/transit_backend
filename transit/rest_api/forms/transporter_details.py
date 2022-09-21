@@ -32,7 +32,7 @@ class TransporterDetailsViewSet(BaseModelFormViewSet):
     filterset_class = TransporterDetailsFilter
     queryset = TransporterDetails.objects.all().order_by('-id')
     search_fields = [
-        'id', 'transporter__name', 'vehicle_number', 'vehicle_volume', 'vehicle_capacity_volume',
+        'id', 'transporter__name', 'vehicle_number', 'vehicle_capacity_volume',
         'vehicle_capacity_weight', 'mode_of_transport__vehicle_type'
     ]
 
