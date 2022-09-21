@@ -9,7 +9,6 @@ from rest_framework.fields import CharField
 from transit.models import OrderDetails, OrderLineDetails, ShipmentDetails
 from transit.rest_api.abstract import BaseModelFormViewSet
 from transit.services.shipment_orders_service import ShipmentOrdersService
-from transit.rest_api.forms.order_details import OrderDetailsSerializer
 
 logger = logging.getLogger(__name__)
 
