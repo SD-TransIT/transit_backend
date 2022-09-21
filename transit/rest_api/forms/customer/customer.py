@@ -91,7 +91,7 @@ class CustomerViewSet(BaseModelFormViewSet):
         customer = self.get_object()
         serializer = self._workhours_serializer(instance=customer, data=request.data)
         if not serializer.is_valid():
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            raise serializers.ValidationError(serializer.errors)
         return serializer
 
     def _valid_work_hours(self, serializer):
