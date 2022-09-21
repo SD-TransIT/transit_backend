@@ -103,6 +103,7 @@ class TestCustomerViewSet(ManualFormTestCaseMixin, TestCase):
 
         self.API_HELPER.replace_working_hours({}, self.test_subject, token)
         self.assertEqual(self.test_subject.week_days.count(), 0)
+
     def _build_week_days_payload(self):
         return {
             "week_days": [
