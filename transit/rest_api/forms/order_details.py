@@ -61,7 +61,7 @@ class OrderDetailsViewSet(BaseModelFormViewSet):
     lookup_url_kwarg = 'pk'
     lookup_field = 'pk'
     queryset = OrderDetails.objects.all().order_by('-order_received_date')
-    search_fields = ['order_details_id', 'customer__name', 'order_received_date']
+    search_fields = ['order_details_id', 'customer__name', 'customer__id', 'order_received_date']
 
     def get_serializer_class(self):
         return OrderDetailsSerializer

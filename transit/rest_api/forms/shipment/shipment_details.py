@@ -22,6 +22,13 @@ class ShipmentOrderMappingOrderNamesReadonlyField(CharField):
         return list(relevant_line_items)
 
 
+class ShipmentOrderMappingOrderNumbersReadonlyField(CharField):
+    def to_representation(self, value):  # noqa: WPS122
+        order_details_ids = OrderDetails.objects.filter(shipment_mapping__in=value.all()).all()\
+            .values_list('order_details_id', flat=True)
+        return list(order_details_ids)
+
+
 class ShipmentOrderMappingCustomerNamesReadonlyField(CharField):
     def to_representation(self, value):  # noqa: WPS122
         customer = OrderDetails.objects.filter(shipment_mapping__in=value.all())\
@@ -37,11 +44,14 @@ class ShipmentDetailsSerializer(serializers.ModelSerializer):
     _shipment_orders_handler = ShipmentOrdersService()
 
     last_modified_by = serializers.HiddenField(default=None)
+    supplier_name = serializers.CharField(source='supplier.name', read_only=True)
     driver_name = serializers.CharField(source='driver.name', read_only=True)
-    transporter_name = serializers.CharField(source='transporter_details.name', read_only=True)
+    transporter_name = serializers.CharField(source='transporter_details.transporter.name', read_only=True)
+    transporter_id = serializers.CharField(source='transporter_details.transporter.id', read_only=True)
     vehicle_number = serializers.CharField(source='transporter_details.vehicle_number', read_only=True)
     customer_name = ShipmentOrderMappingCustomerNamesReadonlyField(source='order_mapping', read_only=True)
     order_names = ShipmentOrderMappingOrderNamesReadonlyField(source='order_mapping', read_only=True)
+    order_ids = ShipmentOrderMappingOrderNumbersReadonlyField(source='order_mapping', read_only=True)
 
     orders = serializers.ListField(
         child=serializers.ModelField(model_field=OrderDetails()._meta.pk),
