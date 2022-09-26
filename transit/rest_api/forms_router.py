@@ -1,8 +1,10 @@
 from rest_framework import routers
 
+from transit.rest_api.excel_uploads import ItemMasterExcelUploadView, ItemDetailExcelUploadView, \
+    CustomerDetailExcelUploadView, SupplierExcelUploadView, OrderDetailsExcelUploadView
 from transit.rest_api.forms.customer.customer import CustomerViewSet
-from transit.rest_api.forms.customer_type_master import CustomerTypeViewSet
 from transit.rest_api.forms.customer.week_days import CustomerWeekDaysViewSet
+from transit.rest_api.forms.customer_type_master import CustomerTypeViewSet
 from transit.rest_api.forms.delivery_status import DeliveryStatusViewSet
 from transit.rest_api.forms.driver_master import DriverViewSet
 from transit.rest_api.forms.item_details import ItemDetailsViewSet
@@ -50,10 +52,27 @@ def manual_forms_extra():
     return router
 
 
+def excel_upload_views():
+    router = routers.DefaultRouter()
+    router.register(r'excel_upload/item_master', ItemMasterExcelUploadView, basename='item_master_excel_upload')
+    router.register(r'excel_upload/item_detail', ItemDetailExcelUploadView, basename='item_detail_excel_upload')
+    router.register(
+        r'excel_upload/customer_detail', CustomerDetailExcelUploadView, basename='customer_detail_excel_upload'
+    )
+    router.register(
+        r'excel_upload/supplier_master', SupplierExcelUploadView, basename='supplier_master_excel_upload'
+    )
+    router.register(
+        r'excel_upload/order_detail', OrderDetailsExcelUploadView, basename='order_detail_excel_upload'
+    )
+    return router
+
+
 def assemble_build_router():
     router = routers.DefaultRouter()
     router.registry.extend(manual_forms().registry)
     router.registry.extend(manual_forms_extra().registry)
+    router.registry.extend(excel_upload_views().registry)
     return router
 
 

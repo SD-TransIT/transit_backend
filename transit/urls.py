@@ -21,8 +21,8 @@ from django.contrib import admin
 from django.urls import path
 
 from transit import settings
-from transit.rest_api.urls import urlpatterns as rest_api_url_patterns
 from transit.rest_api.swagger_urls import urlpatterns as swagger_url_patterns
+from transit.rest_api.urls import urlpatterns as rest_api_url_patterns
 
 urlpatterns = [
     path('admin/', admin.site.urls),

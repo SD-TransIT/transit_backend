@@ -153,3 +153,9 @@ If so one of the fields is redundant since Driver:Transporter is N:1 relation an
   PODVariance in database.
   * Old quality and new quality seems to actually be 'declared' and 'actual' quantities, should 
   it be renamed?
+  * Excel upload: Item Code doesn't exist in the system, Items have only name, should it be added?
+  * Excel upload: Customer Excel upload doesn't provide customer type column, should it be added? 
+  * Excel upload: Customer ID not stored in DB as string (PK id only), should it be added?
+  * Should Customer Name be unique across the application? (Multiple references in excel upload - No Customer ID code)
+  * Excel upload: OrderDetails don't provide information about item details, it's obligatory attribute 
+  in order line detail so at the moment it's generated (using random batch number). 

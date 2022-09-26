@@ -99,6 +99,7 @@ class ShipmentDetailsSerializer(serializers.ModelSerializer):
 
 
 class ShipmentDetailsFilter(django_filters.FilterSet):
+
     class Meta:
         model = ShipmentDetails
         fields = {

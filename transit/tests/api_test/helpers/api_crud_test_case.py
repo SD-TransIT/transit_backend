@@ -68,6 +68,10 @@ class ModelViewsetRequestTestBase(ViewSetRequestTestBase):
 
     @classmethod
     def setup_helper(cls):
+        """
+        Should be called during setUp() or setUpClass() in deriving classes.
+        :return:
+        """
         super(ModelViewsetRequestTestBase, cls).setup_helper()
         test_subject = cls._get_or_create_test_subject()
         cls.test_subject = test_subject
