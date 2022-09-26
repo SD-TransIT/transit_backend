@@ -3,8 +3,8 @@ from rest_framework import routers
 from transit.rest_api.excel_uploads import ItemMasterExcelUploadView, ItemDetailExcelUploadView, \
     CustomerDetailExcelUploadView, SupplierExcelUploadView, OrderDetailsExcelUploadView
 from transit.rest_api.forms.customer.customer import CustomerViewSet
-from transit.rest_api.forms.customer_type_master import CustomerTypeViewSet
 from transit.rest_api.forms.customer.week_days import CustomerWeekDaysViewSet
+from transit.rest_api.forms.customer_type_master import CustomerTypeViewSet
 from transit.rest_api.forms.delivery_status import DeliveryStatusViewSet
 from transit.rest_api.forms.driver_master import DriverViewSet
 from transit.rest_api.forms.item_details import ItemDetailsViewSet

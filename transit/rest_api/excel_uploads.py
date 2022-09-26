@@ -1,6 +1,5 @@
 import abc
 import logging
-import tempfile
 from typing import Type
 
 import pandas
@@ -16,7 +15,6 @@ from transit.services.excelUpload import ExcelUpload
 from transit.services.pandasToDjango.base import PandasToDjangoMappingAbs
 from transit.services.pandasToDjango.mappings import ItemMasterMapping, CustomerDetailMapping, ItemDetailMapping, \
     OrderDetailsMapping, SupplierMasterMapping
-
 
 logger = logging.getLogger(__name__)
 
@@ -36,7 +34,7 @@ class BaseExcelUploadViewSet(abc.ABC, GenericViewSet):
             return pandas.datetime.strptime(date, "%d/%m/%Y")
         except TypeError as e:
             logger.warning("Invalid datetime format in excel upload, "
-                           F"expected Text column with data in format %d/%m/%Y, detail: {e}")
+                           "expected Text column with data in format %d/%m/%Y, detail: %s", e)
             return date
 
     @property
@@ -105,7 +103,7 @@ class OrderDetailsExcelUploadView(BaseExcelUploadViewSet):
         # obj.line_items, therefore they were passed as extra line_items_temp argument.
         for order_detail in django_objects:
             lit[order_detail] = order_detail.line_items_temp
-            del order_detail.line_items_temp
+            del order_detail.line_items_temp  # noqa: WPS100
 
         # Orders are saved
         self.mapping_class.model.objects.bulk_create(django_objects)

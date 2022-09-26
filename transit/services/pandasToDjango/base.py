@@ -1,15 +1,16 @@
 import abc
 from typing import Dict, Callable, Any, Type, List
-from numpy import nan
+
 import pandas
 from django.db import models
 from django.utils.functional import classproperty
+from django.utils.translation import gettext_lazy as _
+from numpy import nan
 from pandas import DataFrame
 from pydantic.dataclasses import dataclass
-from django.utils.translation import gettext_lazy as _
 
 
-class PandasMappingException(Exception):
+class PandasMappingError(Exception):
     def __init__(self, **kwargs):
         self.message = kwargs['message']
         super().__init__(self.message)
@@ -40,14 +41,16 @@ class PandasToDjangoMappingAbs(abc.ABC):
     def mapping_definition(self) -> Dict[str, PandasCellMappingDefinition]:
         """
         Dict with mapping definition where key is pandas column name and value is a function mapping cell value from
-         given column to value accepted django model field name.
-        Example:
-            {
-                'Customer ID': PandasCellMappingDefinition(
-                    'customer_type_name',
-                    lambda x: return CustomerType.objects.get(name=x)
-                )
-            }
+        given column to value accepted django model field name.
+
+        :Example:
+
+        >>>{
+        ...   'Customer ID': PandasCellMappingDefinition('customer_type_name',
+        ...       lambda x: return CustomerType.objects.get(name=x)
+        ...   )
+        ...}
+
         :return: models.Model
         """
         ...
@@ -57,9 +60,12 @@ class PandasToDjangoMappingAbs(abc.ABC):
         """
         If provided dataframe contains rows that should not be considered during mapping,
         these fields should be explicitly provided under excluded fields.
-        Example:
-            `excluded_fields = ['Item Code', 'Item Value']`
-            will exclude columns 'Item Code', 'Item Value' from calculations.
+
+        :Example:
+
+        >>>excluded_fields = ['Item Code', 'Item Value']
+
+        will exclude columns 'Item Code', 'Item Value' from calculations.
 
         :return: List of DataFrame column names.
         """
@@ -77,13 +83,13 @@ class PandasToDjangoMappingAbs(abc.ABC):
         errors = {}
         django_objects = []
 
-        for i, row in df.iterrows():
+        for index, row in df.iterrows():
             try:
                 django_objects.append(self._map_pandas_row(row))
-            except PandasMappingException as e:
-                errors[i] = e.message
+            except PandasMappingError as e:
+                errors[index] = e.message
         if errors:
-            raise PandasMappingException(message=str(errors))
+            raise PandasMappingError(message=str(errors))
         return django_objects
 
     def _map_pandas_row(self, row_data: pandas.Series) -> models.Model:
@@ -95,17 +101,17 @@ class PandasToDjangoMappingAbs(abc.ABC):
         """
         django_data, errors = self._map_row(row_data)
         if errors:
-            raise PandasMappingException(message=str(errors))
+            raise PandasMappingError(message=str(errors))
         return self.model(**django_data)
 
     def _map_row(self, row_data: pandas.Series):
         errors = {}
         django_data = {}
-        for k, v in row_data.items():
+        for model_attribute, model_value in row_data.items():
             try:
-                mapping: PandasCellMappingDefinition = self.mapping_definition[str(k)]
-                django_data[mapping.django_model_field] = mapping.mapping_function(v)
-            except Exception as exc:
-                errors[k] = _(F"Error occurred during mapping value %s, details: %s") % (v, str(exc))
+                mapping: PandasCellMappingDefinition = self.mapping_definition[str(model_attribute)]
+                django_data[mapping.django_model_field] = mapping.mapping_function(model_value)
+            except Exception as exc:  # noqa: PIE786
+                errors[model_attribute] =\
+                    _("Error occurred during mapping value %s, details: %s") % (model_value, str(exc))
         return django_data, errors
-

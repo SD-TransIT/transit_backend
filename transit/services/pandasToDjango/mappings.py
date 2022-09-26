@@ -10,7 +10,7 @@ from pandas import DataFrame
 
 from transit.models import Item, ItemDetails, Customer, OrderDetails, Supplier, OrderLineDetails, CustomerType
 from transit.services.pandasToDjango.base import PandasToDjangoMappingAbs, PandasCellMappingDefinition, \
-    PandasMappingException
+    PandasMappingError
 
 
 class ItemMasterMapping(PandasToDjangoMappingAbs):
@@ -146,7 +146,7 @@ class OrderDetailsMapping(PandasToDjangoMappingAbs):
         Line items are added to django model as related field .line_items, however entities are not saved in db.
         """
         grouped = pandas_rows.groupby(['Customer Order Number', 'Order Received Date (DD/MM/YYYY)', 'Customer Name'])
-        order_lines = [grouped.get_group(x) for x in grouped.groups]
+        order_lines = [grouped.get_group(order_group) for order_group in grouped.groups]
         orders = []
         for order in order_lines:
             # This super() call is used to on groupby() product, therefore all elements would be the same.
@@ -159,7 +159,7 @@ class OrderDetailsMapping(PandasToDjangoMappingAbs):
     @staticmethod
     def _unique_order_detail_id(detail_id):
         if OrderDetails.objects.filter(order_details_id=detail_id).exists():
-            raise PandasMappingException(message=(
+            raise PandasMappingError(message=(
                 _('Customer Order Number %s already exist. Value has to be unique') % detail_id
             ))
         return detail_id

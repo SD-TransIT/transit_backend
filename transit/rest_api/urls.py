@@ -13,7 +13,6 @@ from transit.rest_api.avaialble_froms_meta import FormsInfoViewSet
 from transit.rest_api.forms_router import forms_router
 from transit.rest_api.users import UserViewSet
 
-
 # Routers provide an easy way of automatically determining the URL conf.
 
 main_router = routers.DefaultRouter()

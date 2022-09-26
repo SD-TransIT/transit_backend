@@ -1,11 +1,9 @@
-import datetime
-
 from django.test import TestCase
 from django.test.client import encode_multipart
 from rest_framework import status
 
 from transit.models import Supplier
-from transit.rest_api.excel_uploads import ItemMasterExcelUploadView, ItemDetailExcelUploadView
+from transit.rest_api.excel_uploads import ItemDetailExcelUploadView
 from transit.tests.api_test.helpers.api_crud_test_case import ViewSetRequestTestBase
 
 

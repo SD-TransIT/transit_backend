@@ -99,11 +99,9 @@ class ShipmentDetailsSerializer(serializers.ModelSerializer):
 
 
 class ShipmentDetailsFilter(django_filters.FilterSet):
-    #no_cost = django_filters.BooleanFilter(name='transporter_base_cost__isnull')
 
     class Meta:
         model = ShipmentDetails
-       # fields = ('no_cost',)
         fields = {
             'ship_date': ['exact', 'lte', 'gte'],
             'expected_delivery_date': ['exact', 'lte', 'gte'],
