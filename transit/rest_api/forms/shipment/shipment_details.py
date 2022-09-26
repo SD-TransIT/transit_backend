@@ -105,7 +105,7 @@ class ShipmentDetailsFilter(django_filters.FilterSet):
             'ship_date': ['exact', 'lte', 'gte'],
             'expected_delivery_date': ['exact', 'lte', 'gte'],
             'delivery_date': ['exact', 'lte', 'gte'],
-            'transporter_base_cost': ['exact', 'lte', 'gte'],
+            'transporter_base_cost': ['exact', 'lte', 'gte', 'isnull'],
             'number_of_kilometers': ['exact', 'lte', 'gte'],
             'transporter_per_diem': ['exact', 'lte', 'gte'],
             'transporter_additional_cost': ['exact', 'lte', 'gte'],
