@@ -11,7 +11,7 @@ class ShipmentAddCostsService:
     @transaction.atomic
     def add_cost_to_shipment(self, shipment):
         """
-            Save costs for given shipment with `weekdays`.
+            Save costs to given shipment.
 
             :param shipment: shipment to which costs will be assigned.
         """
