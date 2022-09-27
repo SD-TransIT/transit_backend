@@ -7,7 +7,6 @@ from rest_framework.response import Response
 
 from transit.models import OrderDetails, OrderLineDetails
 from transit.rest_api.abstract import BaseModelFormViewSet
-from transit.rest_api.forms.order_details.order_line_details import OrderLineDetailsSerializer
 from transit.services.order_service import OrderLineItemsService
 
 
