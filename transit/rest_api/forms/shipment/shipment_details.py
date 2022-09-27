@@ -125,7 +125,7 @@ class ShipmentDetailsFilter(django_filters.FilterSet):
 
 class ShipmentAddCostsSerializerWrapper(serializers.ModelSerializer):
     """
-        Utilizes ShipmentDetailsSerializer for purpose of bulk update of costs of shipments.
+        Utilizes ShipmentDetailsSerializer for purpose of bulk update of shipments costs.
     """
     _service = ShipmentAddCostsService()
 
