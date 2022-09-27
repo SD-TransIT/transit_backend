@@ -10,7 +10,6 @@ from transit.models import Customer, CustomerWeekDays
 from transit.rest_api.abstract import BaseModelFormViewSet
 from transit.rest_api.forms.customer.customer_week_days_utils import CustomerWeekDaysSerializerWrapper, \
     CustomerWeekDaysSerializerOptionalCustomer
-from transit.rest_api.forms.customer.week_days import CustomerWeekDaysSerializer
 from transit.rest_api.forms.fields import FormsDataFields
 
 
@@ -80,7 +79,7 @@ class CustomerViewSet(BaseModelFormViewSet):
     def get_serializer_class(self):
         return CustomerSerializer
 
-    @swagger_auto_schema(methods=['post'], request_body=CustomerWeekDaysSerializer)
+    @swagger_auto_schema(methods=['post'], request_body=CustomerWeekDaysSerializerWrapper)
     @action(detail=True, methods=['post'])
     def replace_working_hours(self, request, pk=None):
         serializer = self._build_workhours_serializer(request)

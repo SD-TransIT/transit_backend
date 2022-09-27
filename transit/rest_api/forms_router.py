@@ -11,7 +11,7 @@ from transit.rest_api.forms.item_details import ItemDetailsViewSet
 from transit.rest_api.forms.item_master import ItemViewSet
 from transit.rest_api.forms.mode_of_transport_master import ModeOfTransportViewSet
 from transit.rest_api.forms.order_details import OrderDetailsViewSet
-from transit.rest_api.forms.order_line_details import OrderLineDetailsViewSet
+from transit.rest_api.forms.order_details.order_line_details import OrderLineDetailsViewSet
 from transit.rest_api.forms.pod_variance import PODVarianceViewSet, PODVarianceDetailsViewSet
 from transit.rest_api.forms.shipment.shipment_details import ShipmentDetailsViewSet
 from transit.rest_api.forms.shipment.shipment_details_cost import ShipmentDetailsCostViewSet
