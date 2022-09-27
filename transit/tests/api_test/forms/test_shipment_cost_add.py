@@ -44,13 +44,12 @@ class TestShipmentCostAddViewSet(ViewSetRequestTestBase, TestCase):
         payload = self._build_add_costs_to_shipment_payload(self._shipment_cost.pk)
         self.API_HELPER.add_costs_to_shipment(payload, token)
 
-        is_shipment_updated_by_cost = self._MODEL_TYPE.objects\
-            .filter(
-              id=self._shipment_cost.pk,
-              transporter_base_cost='0.65',
-              transporter_additional_cost='2.66',
-              number_of_kilometers='678.00'
-            )\
+        is_shipment_updated_by_cost = self._MODEL_TYPE.objects \
+            .filter(id=self._shipment_cost.pk,
+                    transporter_base_cost='0.65',
+                    transporter_additional_cost='2.66',
+                    number_of_kilometers='678.00'
+                    ) \
             .exists()
 
         self.assertTrue(is_shipment_updated_by_cost)
@@ -62,11 +61,9 @@ class TestShipmentCostAddViewSet(ViewSetRequestTestBase, TestCase):
         }
 
     def _build_add_costs_to_shipment_payload(self, shipment_pk):
-        return [
-                {
-                    "id": shipment_pk,
-                    "transporter_base_cost": "0.65",
-                    "transporter_additional_cost": "2.66",
-                    "number_of_kilometers": "678",
-                },
-            ]
+        return [{
+            "id": shipment_pk,
+            "transporter_base_cost": "0.65",
+            "transporter_additional_cost": "2.66",
+            "number_of_kilometers": "678",
+        }]
