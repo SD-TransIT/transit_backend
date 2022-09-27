@@ -28,6 +28,6 @@ class OrderLineItemsService:
         not_included.all().delete()
 
     def _create_new_line_items(self, order: OrderDetails, line_items: Collection[OrderLineDetails]):
-        for item in line_items:
-            item.order_details = order
+        for line_item in line_items:
+            line_item.order_details = order
         OrderLineDetails.objects.bulk_create(line_items)
