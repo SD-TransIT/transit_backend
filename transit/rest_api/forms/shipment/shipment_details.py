@@ -133,7 +133,7 @@ class ShipmentAddCostsSerializerWrapper(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         raise NotImplementedError('update() not supported in ShipmentAddCostsSerializer,'
-                                  ' data should be alternated using replace_working_hours')
+                                  ' data should be alternated using add_cost_to_shipment')
 
     def create(self, validated_data):
         raise NotImplementedError('create() not supported in ShipmentAddCostsSerializer,'
