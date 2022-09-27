@@ -1,0 +1,2 @@
+from transit.rest_api.forms.order_details.order_details import OrderDetailsViewSet, OrderDetailsSerializer
+from transit.rest_api.forms.order_details.order_line_details import OrderLineDetailsViewSet, OrderLineDetailsSerializer

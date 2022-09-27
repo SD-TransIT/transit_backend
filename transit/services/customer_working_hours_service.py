@@ -31,9 +31,3 @@ class CustomerWeekdaysService:
         for day in weekdays:
             day.customer = customer
         CustomerWeekDays.objects.bulk_create(weekdays)
-
-    def _existing_weekdays(self, weekdays):
-        return CustomerWeekDays.objects.filter(pk__in=[day.pk for day in weekdays])
-
-    def _get_weekdays_without_customer(self, weekdays):
-        return OrderDetails.objects.filter(pk__in=[order.pk for order in weekdays]).without_customer_details().all()

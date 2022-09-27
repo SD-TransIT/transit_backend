@@ -80,7 +80,7 @@ class CustomerViewSet(BaseModelFormViewSet):
     def get_serializer_class(self):
         return CustomerSerializer
 
-    @swagger_auto_schema(methods=['post'], request_body=CustomerWeekDaysSerializer)
+    @swagger_auto_schema(methods=['post'], request_body=CustomerWeekDaysSerializerWrapper)
     @action(detail=True, methods=['post'])
     def replace_working_hours(self, request, pk=None):
         serializer = self._build_workhours_serializer(request)
