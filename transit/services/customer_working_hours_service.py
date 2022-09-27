@@ -2,7 +2,7 @@ from typing import Collection
 
 from django.db import transaction
 
-from transit.models import OrderDetails, CustomerWeekDays, Customer
+from transit.models import CustomerWeekDays, Customer
 
 
 class CustomerWeekdaysService:

@@ -10,7 +10,6 @@ from transit.models import Customer, CustomerWeekDays
 from transit.rest_api.abstract import BaseModelFormViewSet
 from transit.rest_api.forms.customer.customer_week_days_utils import CustomerWeekDaysSerializerWrapper, \
     CustomerWeekDaysSerializerOptionalCustomer
-from transit.rest_api.forms.customer.week_days import CustomerWeekDaysSerializer
 from transit.rest_api.forms.fields import FormsDataFields
 
 
