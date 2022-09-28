@@ -15,9 +15,8 @@ class ShipmentAddCostsService:
 
             :param shipment: shipment to which costs will be assigned.
         """
-
-        ShipmentDetails.objects.filter(id=shipment['id']).update(
-            transporter_base_cost=shipment['transporter_base_cost'],
-            transporter_additional_cost=shipment['transporter_additional_cost'],
-            number_of_kilometers=shipment['number_of_kilometers']
-        )
+        shipment_id = shipment.pop('id')
+        shipment_detail = ShipmentDetails.objects.get(id=shipment_id)
+        for attr, value in shipment.items():
+            setattr(shipment_detail, attr, value)
+        shipment_detail.save()
