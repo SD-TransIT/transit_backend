@@ -15,10 +15,10 @@ class Item(BaseModel):
     )
 
     volume = models.DecimalField(
-        db_column='volume', null=True, max_digits=18, decimal_places=2
+        db_column='volume', blank=True, null=True, max_digits=18, decimal_places=2
     )
     cost = models.DecimalField(
-        db_column='Cost', null=True, max_digits=18, decimal_places=2
+        db_column='Cost', blank=True, null=True, max_digits=18, decimal_places=2
     )
     weight = models.DecimalField(
         db_column='Weight', blank=True, null=True, max_digits=18, decimal_places=2
@@ -40,11 +40,11 @@ class Item(BaseModel):
 
 
 class ItemDetails(BaseModel):
-    batch_number = models.CharField(db_column='BatchNumber', max_length=255, null=False)
+    batch_number = models.CharField(db_column='BatchNumber', max_length=255, null=False, blank=False)
 
-    expiry_date = models.DateTimeField(db_column='ExpiryDate', null=True)
-    manufacturing_date = models.DateTimeField(db_column='ManufacturingDate', null=True)
-    received_date = models.DateTimeField(db_column='ReceivedDate', null=True)
+    expiry_date = models.DateTimeField(db_column='ExpiryDate', null=True, blank=True)
+    manufacturing_date = models.DateTimeField(db_column='ManufacturingDate', null=True, blank=True)
+    received_date = models.DateTimeField(db_column='ReceivedDate', null=True, blank=True)
 
     gtin = models.BigIntegerField(db_column="GTIN", blank=True, null=True)
     lot_number = models.CharField(db_column='LotNumber', max_length=255, blank=True, null=True)

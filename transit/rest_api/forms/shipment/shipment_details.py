@@ -3,11 +3,15 @@ import logging
 import django_filters
 from django.db import transaction
 from django.utils.translation import gettext_lazy as _
-from rest_framework import serializers
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework import serializers, status
+from rest_framework.decorators import action
 from rest_framework.fields import CharField
+from rest_framework.response import Response
 
 from transit.models import OrderDetails, OrderLineDetails, ShipmentDetails
 from transit.rest_api.abstract import BaseModelFormViewSet
+from transit.services.shipment_add_costs_service import ShipmentAddCostsService
 from transit.services.shipment_orders_service import ShipmentOrdersService
 
 logger = logging.getLogger(__name__)
@@ -119,6 +123,35 @@ class ShipmentDetailsFilter(django_filters.FilterSet):
         }
 
 
+class ShipmentAddCostsSerializerWrapper(serializers.ModelSerializer):
+    """
+        Utilizes ShipmentDetailsSerializer for purpose of bulk update of shipments costs.
+    """
+    _service = ShipmentAddCostsService()
+
+    id = serializers.IntegerField()
+
+    def update(self, instance, validated_data):
+        raise NotImplementedError('update() not supported in ShipmentAddCostsSerializer,'
+                                  ' data should be alternated using add_cost_to_shipment')
+
+    def create(self, validated_data):
+        raise NotImplementedError('create() not supported in ShipmentAddCostsSerializer,'
+                                  ' data should be alternated using add_cost_to_shipment')
+
+    def add_cost_to_shipment(self):
+        shipment = dict(self.validated_data)
+        self._service.add_cost_to_shipment(shipment=shipment)
+
+    class Meta:
+        model = ShipmentDetails
+        fields = [
+            'id', 'transporter_base_cost',
+            'transporter_additional_cost', 'number_of_kilometers',
+        ]
+        ordering = ['-id']
+
+
 class ShipmentDetailsViewSet(BaseModelFormViewSet):
     filterset_class = ShipmentDetailsFilter
     queryset = ShipmentDetails.objects.all().order_by('-id')
@@ -129,5 +162,23 @@ class ShipmentDetailsViewSet(BaseModelFormViewSet):
         'order_mapping__order_details__customer__name'
     ]
 
+    _add_cost_shipment_serializer = ShipmentAddCostsSerializerWrapper
+
     def get_serializer_class(self):
         return ShipmentDetailsSerializer
+
+    @swagger_auto_schema(methods=['put'], request_body=_add_cost_shipment_serializer)
+    @action(detail=False, methods=['put'])
+    def add_costs_to_shipment(self, request, *args, **kwargs):
+        shipment_add_costs_result = self._create_inputs(request.data)
+        return Response(shipment_add_costs_result, status=status.HTTP_200_OK)
+
+    @transaction.atomic
+    def _create_inputs(self, list_of_shipments):
+        outputs = []
+        for shipment in list_of_shipments:
+            serializer = self._add_cost_shipment_serializer(data=shipment, partial=True)
+            serializer.is_valid(raise_exception=True)
+            serializer.add_cost_to_shipment()
+            outputs.append(serializer.data)
+        return outputs
