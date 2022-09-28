@@ -17,6 +17,6 @@ class ShipmentAddCostsService:
         """
         shipment_id = shipment.pop('id')
         shipment_detail = ShipmentDetails.objects.get(id=shipment_id)
-        for attr, value in shipment.items():
-            setattr(shipment_detail, attr, value)
+        for attribute, attribute_value in shipment.items():
+            setattr(shipment_detail, attribute, attribute_value)
         shipment_detail.save()
