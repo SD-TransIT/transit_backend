@@ -69,6 +69,11 @@ class PODVarianceSerializer(serializers.ModelSerializer):
 class PODVarianceViewSet(BaseModelFormViewSet):
     filterset_class = PODVarianceFilter
     queryset = PODVariance.objects.all().order_by('-id')
+    search_fields = [
+        'id', 'shipment__id', 'dso_type',
+        'details__order_line_details__order_details__order_details_id',
+        'details__quantity',
+    ]
 
     def get_serializer_class(self):
         return PODVarianceSerializer
@@ -77,6 +82,10 @@ class PODVarianceViewSet(BaseModelFormViewSet):
 class PODVarianceDetailsViewSet(BaseModelFormViewSet):
     filterset_class = PODVarianceDetailsFilter
     queryset = PODVarianceDetails.objects.all().order_by('-id')
+    search_fields = [
+        'id', 'pod_variance__shipment__id', 'pod_variance__dso_type',
+        'quantity', 'order_line_details__order_details__order_details_id',
+    ]
 
     def get_serializer_class(self):
         return PODVarianceDetailsSerializer
