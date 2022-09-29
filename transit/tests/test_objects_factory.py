@@ -186,7 +186,7 @@ class OrderDetailsFactory(_FormModelFactory):
     related_models_factories = {'customer': CustomerFactory}
     related_models_default_props = {'customer': {'name': 'OrderDetailCustomerTest',
                                                  'customer_type__customer_type_name': 'TypeForOrder'}}
-    default_values: ClassVar[Dict] = {'order_details_id': 'CharDetailID', 'order_received_date': '2022-01-01'}
+    default_values: ClassVar[Dict] = {'order_received_date': '2022-01-01'}
 
 
 class OrderLineDetailsFactory(_FormModelFactory):
@@ -196,8 +196,7 @@ class OrderLineDetailsFactory(_FormModelFactory):
         'product': ItemFactory,  # In future product should be removed
         'item_details': ItemDetailsFactory,
     }
-    related_models_default_props = {'order_details': {'order_details_id': 'ForOrderLineDetails'},
-                                    'item': {'name': 'ItemForOrderLineTest1'}}
+    related_models_default_props = {'item': {'name': 'ItemForOrderLineTest1'}}
     default_values: ClassVar[Dict] = {'quantity': '10'}
 
 
