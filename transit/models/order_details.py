@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.db import models
 
 from transit.models.base import BaseModel
@@ -30,7 +32,8 @@ class OrderDetailsManager(models.Manager):
 class OrderDetails(BaseModel):
     order_details_id = models.CharField(
         max_length=64, primary_key=True, unique=True,
-        db_column='OrderDetailsID', blank=False, null=False
+        db_column='OrderDetailsID', blank=False, null=False,
+        default=lambda: datetime.now().strftime("%y%m%d%H%M%S%f")
     )
 
     customer = models.ForeignKey(Customer, models.DO_NOTHING, db_column='CustomerID')
