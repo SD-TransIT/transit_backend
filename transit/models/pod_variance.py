@@ -23,6 +23,16 @@ class PODVarianceDetails(BaseModel):
 
     quantity = models.DecimalField(db_column='Quantity', max_digits=18, decimal_places=2)
 
+    @property
+    def product_name(self):
+        """get product name saved in order line details"""
+        return self.order_line_details.product.name
+
+    @property
+    def old_quantity(self):
+        """get original quantity saved in order line details"""
+        return self.order_line_details.quantity
+
     class Meta:
         managed = True
         db_table = 'PODVarianceDetails'
