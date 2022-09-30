@@ -60,7 +60,7 @@ class PODVarianceSerializer(serializers.ModelSerializer):
 
     @transaction.atomic
     def update(self, instance, validated_data):
-        super(PODVarianceSerializer, self).update(instance, validated_data)
+        # firstly update pod variance details objects
         pod_variance_details = validated_data.pop('pod_variance_details', [])
         for details_dict in pod_variance_details:
             pod_variance = details_dict.pop('pod_variance')
@@ -69,7 +69,8 @@ class PODVarianceSerializer(serializers.ModelSerializer):
                 pod_variance__id=pod_variance,
                 order_line_details=order_line_details
             ).update(**details_dict)
-        return {**validated_data, "id": instance.id}  # noqa: R50
+        # secondly modify pod variance object
+        return super(PODVarianceSerializer, self).update(instance, validated_data)  # noqa: R50
 
     def validate(self, data): # noqa: WPS-122
         """
