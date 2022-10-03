@@ -85,6 +85,15 @@ will be taken. Password will not be overwritten, email will not be updated.
 Open `http://localhost:8000/api/swagger/` to confirm that
 backend is running. Swagger should be visible.
 
+#### 5. [Optional] Populate database with test data. 
+Demo data can be added to application using 
+```shell
+docker-compose run web shell scripts/create_demo_data.bash
+```
+It'll populate database with fixed collection of item types, vehicle types, customer types and random
+collection of customers, suppliers, orders and shipments. It can be called multiple times, while fixed collections 
+will not duplicate, new collections of random batches will be added.
+
 ### Additional setup 
 #### 1. S3 File storage
 To use S3 storage instead of standard file storage following env variables 

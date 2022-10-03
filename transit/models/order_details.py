@@ -29,15 +29,15 @@ class OrderDetailsManager(models.Manager):
         return self.get_queryset().without_shipment_details()
 
 
-def generate_order_id():
+def _default_order_details_id():
     return datetime.now().strftime("%y%m%d%H%M%S%f")
 
 
 class OrderDetails(BaseModel):
     order_details_id = models.CharField(
         max_length=64, primary_key=True, unique=True,
-        db_column='OrderDetailsID', blank=False, null=False,
-        default=generate_order_id
+        db_column='OrderDetailsID',
+        default=_default_order_details_id
     )
 
     customer = models.ForeignKey(Customer, models.DO_NOTHING, db_column='CustomerID')
@@ -59,7 +59,8 @@ class OrderLineDetails(BaseModel):
     # TODO - product (item) and item details could be fixed, we could keep one of them only
     #  Only details should be stored. Product is redundant.
     product = models.ForeignKey(Item, models.DO_NOTHING, db_column='ProductID')
-    item_details = models.ForeignKey(ItemDetails, models.DO_NOTHING, db_column='ItemDetailsID')
+    item_details = models.ForeignKey(ItemDetails, models.DO_NOTHING, db_column='ItemDetailsID',
+                                     related_name='order_line_item')
     quantity = models.DecimalField(db_column='Quantity', max_digits=18, decimal_places=2)
     old_quantity = models.DecimalField(
         db_column='OldQuantity', max_digits=18, decimal_places=2, null=True

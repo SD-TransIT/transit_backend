@@ -38,5 +38,5 @@ class TestTransporterDetailsViewSet(ManualFormTestCaseMixin, TestCase):
     def expected_get_payload_properties(self) -> Dict[str, Any]:
         return {
             'transporter': self.test_subject.transporter.pk,
-            'vehicle_number': '75192', 'vehicle_capacity_volume': '40', 'vehicle_capacity_weight': '70'
+            'vehicle_number': '75192', 'vehicle_capacity_volume': '40.000000', 'vehicle_capacity_weight': '70.000000'
         }
