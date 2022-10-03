@@ -34,6 +34,7 @@ class OrderLineDetailsViewSet(BaseModelFormViewSet):
     id = serializers.IntegerField(required=False)
     lookup_url_kwarg = 'pk'
     queryset = OrderLineDetails.objects.all()
+    search_fields = ['order_details__order_details_id', 'quantity', 'old_quantity']
 
     def get_serializer_class(self):
         return OrderLineDetailsSerializer
