@@ -99,6 +99,15 @@ class OrderDetailsViewSet(BaseModelFormViewSet):
     def get_serializer_class(self):
         return OrderDetailsSerializer
 
+    @action(detail=False, methods=['get'])
+    def orders_without_pagination(self, request, pk=None):
+        orders = self.request.query_params.get('orders')
+        queryset = self.queryset
+        if orders:
+            queryset = queryset.filter(order_details_id__in=orders.split(','))
+        serializer = self.get_serializer_class()(queryset, many=True)
+        return Response(serializer.data)
+
     @swagger_auto_schema(methods=['post'], request_body=OrderLineDetailsSerializerWrapper)
     @action(detail=True, methods=['post'])
     def replace_line_items(self, request, pk=None):

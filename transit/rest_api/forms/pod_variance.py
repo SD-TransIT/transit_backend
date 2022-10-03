@@ -1,6 +1,9 @@
 import django_filters
+from django.db import transaction
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
+from rest_framework.decorators import action
+from rest_framework.response import Response
 
 from transit.models import PODVariance, PODVarianceDetails
 from transit.rest_api.abstract import BaseModelFormViewSet
@@ -30,8 +33,8 @@ class PODVarianceDetailsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PODVarianceDetails
-        fields = ['id', 'pod_variance', 'order_line_details', 'quantity']
-        read_only_fields = ['id']
+        fields = ['id', 'pod_variance', 'order_line_details', 'quantity', 'product_name', 'old_quantity']
+        read_only_fields = ['id', 'product_name', 'old_quantity']
 
     def create(self, validated_data):
         validated_data['pod_variance'] = PODVariance.objects.get(pk=validated_data['pod_variance'])
@@ -53,6 +56,20 @@ class PODVarianceSerializer(serializers.ModelSerializer):
             details_dict['pod_variance'] = pod_variance
             PODVarianceDetails(**details_dict).save()
         return pod_variance  # noqa: R504
+
+    @transaction.atomic
+    def update(self, instance, validated_data):
+        # firstly update pod variance details objects
+        pod_variance_details = validated_data.pop('pod_variance_details', [])
+        for details_dict in pod_variance_details:
+            pod_variance = details_dict.pop('pod_variance')
+            order_line_details = details_dict.pop('order_line_details')
+            PODVarianceDetails.objects.filter(
+                pod_variance__id=pod_variance,
+                order_line_details=order_line_details
+            ).update(**details_dict)
+        # secondly modify pod variance object
+        return super(PODVarianceSerializer, self).update(instance, validated_data)  # noqa: R50
 
     def validate(self, data): # noqa: WPS-122
         """
@@ -89,3 +106,12 @@ class PODVarianceDetailsViewSet(BaseModelFormViewSet):
 
     def get_serializer_class(self):
         return PODVarianceDetailsSerializer
+
+    @action(detail=False, methods=['get'])
+    def pod_details_without_pagination(self, request, pk=None):
+        pod_variance = self.request.query_params.get('pod_variance')
+        queryset = self.queryset
+        if pod_variance:
+            queryset = queryset.filter(pod_variance=pod_variance)
+        serializer = self.get_serializer_class()(queryset, many=True)
+        return Response(serializer.data)
