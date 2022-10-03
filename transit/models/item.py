@@ -15,13 +15,13 @@ class Item(BaseModel):
     )
 
     volume = models.DecimalField(
-        db_column='volume', blank=True, null=True, max_digits=18, decimal_places=2
+        db_column='volume', blank=True, null=True, max_digits=18, decimal_places=6
     )
     cost = models.DecimalField(
         db_column='Cost', blank=True, null=True, max_digits=18, decimal_places=2
     )
     weight = models.DecimalField(
-        db_column='Weight', blank=True, null=True, max_digits=18, decimal_places=2
+        db_column='Weight', blank=True, null=True, max_digits=18, decimal_places=6
     )
 
     category = models.CharField(db_column='Category', max_length=255, blank=True, null=True)

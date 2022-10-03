@@ -21,6 +21,8 @@ docutils==0.19
 drf-spectacular==0.23.1
 drf-spectacular-sidecar==2022.8.1
 drf-yasg==1.21.3
+et-xmlfile==1.1.0
+Faker==15.0.0
 filelock==3.7.1
 flake8==5.0.4
 idna==3.3
@@ -34,6 +36,7 @@ Markdown==3.4.1
 MarkupSafe==2.1.1
 mccabe==0.7.0
 numpy==1.23.3
+openpyxl==3.0.10
 packaging==21.3
 pandas==1.5.0
 platformdirs==2.5.2
@@ -51,6 +54,7 @@ python-dateutil==2.8.2
 pytz==2022.1
 PyYAML==6.0
 requests==2.28.1
+rest-pandas==1.1.0
 ruamel.yaml==0.17.21
 ruamel.yaml.clib==0.2.6
 s3transfer==0.6.0

@@ -27,17 +27,17 @@ class Transporter(BaseModel, GeographicalModel):
 
 class TransporterDetails(BaseModel):
     transporter = models.ForeignKey(
-        Transporter, models.DO_NOTHING, db_column='TransporterID'
+        Transporter, models.DO_NOTHING, db_column='TransporterID', related_name='vehicles'
     )
 
     vehicle_number = models.CharField(
         db_column='VehicleNumber', max_length=255, blank=True, null=True
     )
-    vehicle_capacity_volume = models.CharField(
-        db_column="VehicleCapacityVolume", max_length=255, blank=True, null=True
+    vehicle_capacity_volume = models.DecimalField(
+        db_column="VehicleCapacityVolume", max_length=255, null=True, decimal_places=6, max_digits=18
     )
-    vehicle_capacity_weight = models.CharField(
-        db_column="VehicleCapacityWeight", max_length=255, blank=True, null=True
+    vehicle_capacity_weight = models.DecimalField(
+        db_column="VehicleCapacityWeight", max_length=255, null=True, decimal_places=6, max_digits=18
     )
 
     mode_of_transport = models.ForeignKey(

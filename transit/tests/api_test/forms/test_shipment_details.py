@@ -1,7 +1,9 @@
+import os
+import shutil
 import tempfile
 from typing import Dict, Any
 
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.test.client import encode_multipart
 from rest_framework import status
 
@@ -14,6 +16,7 @@ from transit.tests.test_objects_factory import ShipmentDetailsFactory, DriverFac
     TransporterDetailsFactory, SupplierFactory, DeliveryStatusFactory, OrderDetailsFactory
 
 
+@override_settings(MEDIA_ROOT='transit/tests/photo_temp_files')
 class TestShipmentDetailsViewSet(ManualFormTestCaseMixin, TestCase):
     _URL = 'shipment_details'
     _VIEW_SET = ShipmentDetailsViewSet
@@ -67,20 +70,26 @@ class TestShipmentDetailsViewSet(ManualFormTestCaseMixin, TestCase):
                 'file': tmp,
                 'shipment': self.test_subject.pk,
             }
-            response = client.make_post_request(
-                encode_multipart('BoUnDaRyStRiNg', payload),
-                auth_token=self.USER_HELPER.get_access_token(),
-                content_type='multipart/form-data; boundary=BoUnDaRyStRiNg'
-            )
+            try:
+                response = client.make_post_request(
+                    encode_multipart('BoUnDaRyStRiNg', payload),
+                    auth_token=self.USER_HELPER.get_access_token(),
+                    content_type='multipart/form-data; boundary=BoUnDaRyStRiNg'
+                )
+                self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+                response = client.make_get_request(
+                    identifier=response.data['id'],
+                    auth_token=self.USER_HELPER.get_access_token())
 
-            self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-            response = client.make_get_request(
-                identifier=response.data['id'],
-                auth_token=self.USER_HELPER.get_access_token())
-            file_url, shipment = response.data['file'], response.data['shipment']
-            self.assertEqual(response.status_code, status.HTTP_200_OK)
-            self.assertIsNotNone(file_url)
-            self.assertEqual(shipment, self.test_subject.pk)
+                file_url, shipment = response.data['file'], response.data['shipment']
+
+                self.assertEqual(response.status_code, status.HTTP_200_OK)
+                self.assertIsNotNone(file_url)
+                self.assertEqual(shipment, self.test_subject.pk)
+            finally:
+                # Cleanup temporary test media root
+                if os.path.exists('transit/tests/photo_temp_files'):
+                    shutil.rmtree('transit/tests/photo_temp_files')
 
     @property
     def expected_post_obj(self):

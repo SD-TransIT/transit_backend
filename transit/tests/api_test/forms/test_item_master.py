@@ -21,7 +21,7 @@ class TestItemViewSet(ManualFormTestCaseMixin, TestCase):
     @property
     def expected_get_payload_properties(self) -> Dict[str, Any]:
         return {
-            'name': "ItemName", 'volume': '20.00', 'cost': '40.00',
-            'weight': '50.00', 'category': 'ItemCategory',
+            'name': "ItemName", 'volume': '20.000000', 'cost': '40.00',
+            'weight': '50.000000', 'category': 'ItemCategory',
             'sub_category': 'SubCategory', 'conditions': 'ColdChain'
         }

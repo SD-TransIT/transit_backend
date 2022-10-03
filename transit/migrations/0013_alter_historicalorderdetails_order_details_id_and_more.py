@@ -11,14 +11,4 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AlterField(
-            model_name='historicalorderdetails',
-            name='order_details_id',
-            field=models.CharField(db_column='OrderDetailsID', db_index=True, default=transit.models.order_details.generate_order_id, max_length=64),
-        ),
-        migrations.AlterField(
-            model_name='orderdetails',
-            name='order_details_id',
-            field=models.CharField(db_column='OrderDetailsID', default=transit.models.order_details.generate_order_id, max_length=64, primary_key=True, serialize=False, unique=True),
-        ),
     ]
