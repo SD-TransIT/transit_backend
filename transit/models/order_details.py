@@ -37,7 +37,7 @@ class OrderDetails(BaseModel):
     order_details_id = models.CharField(
         max_length=64, primary_key=True, unique=True,
         db_column='OrderDetailsID', blank=False, null=False,
-        default=generate_order_id()
+        default=generate_order_id
     )
 
     customer = models.ForeignKey(Customer, models.DO_NOTHING, db_column='CustomerID')

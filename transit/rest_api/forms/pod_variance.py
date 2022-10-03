@@ -4,7 +4,6 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from typing import Collection
 
 from transit.models import PODVariance, PODVarianceDetails
 from transit.rest_api.abstract import BaseModelFormViewSet
