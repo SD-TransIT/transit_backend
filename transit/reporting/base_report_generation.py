@@ -1,12 +1,11 @@
 import abc
+import warnings
 from abc import abstractmethod
 from typing import Dict
 
 import pandas as pd
-import warnings
-from django.db.models import QuerySet
-
 from django.db import connections
+from django.db.models import QuerySet
 
 
 class BaseReportGenerator(abc.ABC):
@@ -48,8 +47,7 @@ class BaseReportGenerator(abc.ABC):
         user_filtering = self._apply_filters()
         df_input_queryset = self.get_queryset_values_list(user_filtering)
         df = self._read_dataframe_sql(df_input_queryset)
-        report = self._perform_calculations(df, **kwargs)
-        return report
+        return self._perform_calculations(df, **kwargs)
 
     def _apply_filters(self):
         return self.base_queryset.filter(**self.filters)
@@ -62,8 +60,7 @@ class BaseReportGenerator(abc.ABC):
         # SQLAlchemy and string URI connection.
         with warnings.catch_warnings():
             warnings.simplefilter(action='ignore', category=UserWarning)
-            df = pd.read_sql(query, db_conn, params=params)
-            return df
+            return pd.read_sql(query, db_conn, params=params)
 
     def _validate_filters(self, filters: Dict[str, str]):
         """

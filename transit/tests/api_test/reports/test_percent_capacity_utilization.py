@@ -2,17 +2,14 @@ import datetime
 
 import pandas as pd
 from django.test import TestCase
-from django.test.client import encode_multipart
 from rest_framework import status
 from rest_framework.reverse import reverse
 
-from transit.models import ItemDetails
 from transit.rest_api.excel_uploads import ItemDetailExcelUploadView
 from transit.services.shipment_orders_service import ShipmentOrdersService
 from transit.tests.api_test.helpers.api_crud_test_case import ViewSetRequestTestBase
 from transit.tests.api_test.helpers.api_test_client import ApiTestClient
-from transit.tests.test_objects_factory import ItemFactory, ShipmentDetailsFactory, OrderDetailsFactory, \
-    OrderLineDetailsFactory
+from transit.tests.test_objects_factory import ShipmentDetailsFactory, OrderLineDetailsFactory
 
 
 class ReportCapacityTestClient(ApiTestClient):
@@ -24,7 +21,7 @@ class ReportCapacityTestClient(ApiTestClient):
     def get_report(self, auth_token, from_date, to_date, **extra):
         self._auth(auth_token)
         url = self._get_request_url('report')
-        query = {'date_from': from_date, 'date_to': to_date,  'format': 'json'}
+        query = {'date_from': from_date, 'date_to': to_date, 'format': 'json'}
         return self._make_request(self.factory.get, path=url, data=query, **extra)
 
 
@@ -47,9 +44,9 @@ class TestReportCapacity(ViewSetRequestTestBase, TestCase):
 
     def test_report_generation(self):
         token = self.USER_HELPER.get_access_token()
-        result = self.API_HELPER.get_report(token, '2021-07-01', '2021-09-30')
-        self.assertEqual(result.status_code, status.HTTP_200_OK)
-        pd.testing.assert_frame_equal(result.data, self.expected_payload())
+        response = self.API_HELPER.get_report(token, '2021-07-01', '2021-09-30')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        pd.testing.assert_frame_equal(response.data, self.expected_payload())
 
     def expected_payload(self):
         return pd.DataFrame([{
