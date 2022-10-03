@@ -1,4 +1,4 @@
-from rest_pandas import PandasSimpleView, PandasViewSet
+from rest_pandas import PandasSimpleView
 
 from transit.reporting.percent_capacity_utilization import PercentCapacityUtilizationReport
 
