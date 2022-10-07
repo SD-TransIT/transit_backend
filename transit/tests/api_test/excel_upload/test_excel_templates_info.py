@@ -41,4 +41,4 @@ class TestExcelTemplatesInfoForm(ViewSetRequestTestBase, TestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def expected_payload(self, form_type):
-        return pd.DataFrame(ExcelTemplatesInfo().excel_example_data[form_type])
+        return pd.read_excel(ExcelTemplatesInfo().excel_example_data[form_type], na_filter=False)

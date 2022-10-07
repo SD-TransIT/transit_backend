@@ -1,5 +1,3 @@
-import pandas as pd
-
 from django.http import HttpResponse
 from django.utils.translation import gettext_lazy as _
 
@@ -10,22 +8,14 @@ from rest_framework import serializers, viewsets
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated
 
-from transit.rest_api.excel.example_excel_data import (
-    CUSTOMER_EXAMPLE_DATA,
-    ITEM_DETAILS_EXAMPLE_DATA,
-    ITEM_MASTER_EXAMPLE_DATA,
-    ORDER_DETAILS_EXAMPLE_DATA,
-    SUPPLIER_EXAMPLE_DATA
-)
-
 
 class ExcelTemplatesInfo(serializers.Serializer):
     excel_example_data = {
-        'customer_master': CUSTOMER_EXAMPLE_DATA,
-        'item_details': ITEM_DETAILS_EXAMPLE_DATA,
-        'item_master': ITEM_MASTER_EXAMPLE_DATA,
-        'order_details': ORDER_DETAILS_EXAMPLE_DATA,
-        'supplier_master': SUPPLIER_EXAMPLE_DATA,
+        'customer_master': 'transit/rest_api/excel/excel_template_files/CustomerMasterExample.xlsx',
+        'item_details': 'transit/rest_api/excel/excel_template_files/ItemDetailsExample.xlsx',
+        'item_master': 'transit/rest_api/excel/excel_template_files/ItemMasterExample.xlsx',
+        'order_details': 'transit/rest_api/excel/excel_template_files/OrderDetailsExample.xlsx',
+        'supplier_master': 'transit/rest_api/excel/excel_template_files/SupplierMasterExample.xlsx',
     }
 
     def get_example_data_for_excel(self, form_type):
@@ -50,11 +40,11 @@ class ExcelTemplatesInfoViewSet(viewsets.ViewSet):
     def list(self, request):
         form_type = self.request.GET.get('form_type', None)
         if form_type and form_type in ExcelTemplatesInfo().excel_example_data:
-            filename = f"template_{form_type}"
-            df = pd.DataFrame(ExcelTemplatesInfo().get_example_data_for_excel(form_type))
-            response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-            response['Content-Disposition'] = f'attachment; filename={filename}.xlsx'
-            df.to_excel(response, index=False)
+            file_path = ExcelTemplatesInfo().get_example_data_for_excel(form_type)
+            file_name = file_path.split('/').pop()
+            document = open(file_path, 'rb')
+            response = HttpResponse(document, content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+            response['Content-Disposition'] = f'attachment; filename={file_name}'
             return response
         else:
             raise ValidationError(_('Bad request. Such kind of excel upload does not exist in system.'))
