@@ -5,7 +5,7 @@ from django.test.client import encode_multipart
 from rest_framework import status
 
 from transit.models import ItemDetails
-from transit.rest_api.excel_uploads import ItemDetailExcelUploadView
+from transit.rest_api.excel.excel_uploads import ItemDetailExcelUploadView
 from transit.tests.api_test.helpers.api_crud_test_case import ViewSetRequestTestBase
 from transit.tests.test_objects_factory import ItemFactory
 

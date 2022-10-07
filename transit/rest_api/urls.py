@@ -9,7 +9,7 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView
 )
 
-from transit.rest_api.avaialble_froms_meta import FormsInfoViewSet
+from transit.rest_api.available_forms_meta import FormsInfoViewSet
 from transit.rest_api.forms_router import forms_router
 from transit.rest_api.users import UserViewSet
 

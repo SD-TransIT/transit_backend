@@ -1,6 +1,7 @@
 from rest_framework import routers
 
-from transit.rest_api.excel_uploads import ItemMasterExcelUploadView, ItemDetailExcelUploadView, \
+from transit.rest_api.excel.excel_templates_info import ExcelTemplatesInfoViewSet
+from transit.rest_api.excel.excel_uploads import ItemMasterExcelUploadView, ItemDetailExcelUploadView, \
     CustomerDetailExcelUploadView, SupplierExcelUploadView, OrderDetailsExcelUploadView
 from transit.rest_api.forms.customer.customer import CustomerViewSet
 from transit.rest_api.forms.customer.week_days import CustomerWeekDaysViewSet
@@ -64,6 +65,9 @@ def excel_upload_views():
     )
     router.register(
         r'excel_upload/order_detail', OrderDetailsExcelUploadView, basename='order_detail_excel_upload'
+    )
+    router.register(
+        r'download_excel_template', ExcelTemplatesInfoViewSet, basename='download_excel_template'
     )
     return router
 
