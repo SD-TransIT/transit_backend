@@ -35,5 +35,10 @@ class TestExcelTemplatesInfoForm(ViewSetRequestTestBase, TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         pd.testing.assert_frame_equal(received_data_frame, self.expected_payload(self._FORM_TYPE))
 
+    def test_customer_master_download_bad_template(self):
+        token = self.USER_HELPER.get_access_token()
+        response = self.API_HELPER.get_excel_template(token, 'customer_details_master')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def expected_payload(self, form_type):
         return pd.DataFrame(ExcelTemplatesInfo().excel_example_data[form_type])
