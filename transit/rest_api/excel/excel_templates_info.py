@@ -1,4 +1,7 @@
-from django.http import HttpResponse
+from django.http import (
+    Http404,
+    HttpResponse
+)
 from django.utils.translation import gettext_lazy as _
 
 from drf_yasg import openapi
@@ -42,9 +45,15 @@ class ExcelTemplatesInfoViewSet(viewsets.ViewSet):
         if form_type and form_type in ExcelTemplatesInfo().excel_example_data:
             file_path = ExcelTemplatesInfo().get_example_data_for_excel(form_type)
             file_name = file_path.split('/').pop()
-            document = open(file_path, 'rb')
-            response = HttpResponse(document, content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-            response['Content-Disposition'] = f'attachment; filename={file_name}'
-            return response
+            try:
+                with open(file_path, 'rb') as document:
+                    response = HttpResponse(
+                        document,
+                        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                    )
+                    response['Content-Disposition'] = f'attachment; filename={file_name}'
+                    return response
+            except IOError:
+                raise Http404(_('There is a problem with processing such file.'))
         else:
             raise ValidationError(_('Bad request. Such kind of excel upload does not exist in system.'))
