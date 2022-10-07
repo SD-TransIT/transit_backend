@@ -5,7 +5,7 @@ from django.test import TestCase
 from rest_framework import status
 from rest_framework.reverse import reverse
 
-from transit.rest_api.excel_uploads import ItemDetailExcelUploadView
+from transit.rest_api.excel.excel_uploads import ItemDetailExcelUploadView
 from transit.services.shipment_orders_service import ShipmentOrdersService
 from transit.tests.api_test.helpers.api_crud_test_case import ViewSetRequestTestBase
 from transit.tests.api_test.helpers.api_test_client import ApiTestClient
