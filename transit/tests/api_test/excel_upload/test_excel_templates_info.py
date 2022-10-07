@@ -28,14 +28,14 @@ class TestExcelTemplatesInfoForm(ViewSetRequestTestBase, TestCase):
         super(TestExcelTemplatesInfoForm, self).setUp()
         self.setup_helper()
 
-    def test_customer_master_download_template(self):
+    def test_download_template(self):
         token = self.USER_HELPER.get_access_token()
         response = self.API_HELPER.get_excel_template(token, self._FORM_TYPE)
         received_data_frame = pd.read_excel(response.content, na_filter=False)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         pd.testing.assert_frame_equal(received_data_frame, self.expected_payload(self._FORM_TYPE))
 
-    def test_customer_master_download_bad_template(self):
+    def test_download_bad_template(self):
         token = self.USER_HELPER.get_access_token()
         response = self.API_HELPER.get_excel_template(token, 'customer_details_master')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
