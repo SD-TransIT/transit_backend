@@ -43,10 +43,11 @@ class ReportingUtils:
         :return: List of ORM references that can be used as input of values_list() on ShipmentDetails.
         """
         return [
+            'pk',
             'ship_date',
             'transporter_details__transporter__name', 'transporter_details__transporter__pk',
             'transporter_details__vehicle_number', 'transporter_details__pk',
-            'custom_route_number'
+            'custom_route_number',
         ]
 
     @staticmethod
