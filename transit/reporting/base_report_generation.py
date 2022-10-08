@@ -4,6 +4,7 @@ from abc import abstractmethod
 from typing import Dict
 
 import pandas as pd
+from django.core.exceptions import ValidationError
 from django.db import connections
 from django.db.models import QuerySet
 
@@ -47,6 +48,7 @@ class BaseReportGenerator(abc.ABC):
         user_filtering = self._apply_filters()
         df_input_queryset = self.get_queryset_values_list(user_filtering)
         df = self._read_dataframe_sql(df_input_queryset)
+        df = self._preprocess_data_frame(df)
         return self._perform_calculations(df, **kwargs)
 
     def _apply_filters(self):
@@ -55,7 +57,7 @@ class BaseReportGenerator(abc.ABC):
     def _read_dataframe_sql(self, django_queryset: QuerySet):
         db_conn = connections['default']
         query, params = django_queryset.query.sql_with_params()
-
+        print("QUERY, PARAMS", query, params)
         # Additional context manager to surpass warning regarding pandas supporting only
         # SQLAlchemy and string URI connection.
         with warnings.catch_warnings():
@@ -66,10 +68,28 @@ class BaseReportGenerator(abc.ABC):
         """
         Additional method allowing validating filters provided during initialization.
         Can be used when report has obligatory filters or if user input has to be alternated.
+        Default filters for reports require date_from and date_to filters.
 
         :raises: ValueError: if provided filters don't meet criteria.
 
         :param filters: dictionary with input provided by user.
         :return: Validated filters
         """
-        return filters or {}
+        keys = filters.keys()
+        if not filters.get('date_from') or not filters.get('date_to') or len(keys) != 2:
+            raise ValidationError(
+                "Filters for PercentCapacityUtilizationReport should provide only date_from and date_to")
+        return {
+            'ship_date__gte': filters['date_from'],
+            'ship_date__lte': filters['date_to'],
+        }
+
+    def _preprocess_data_frame(self, df):
+        """
+        Method is executed before _perform_calculations is called.
+        Allows applying additional changes to dataframe before calculations are performed.
+        E.g. change data types. By default, no changes are applied.
+        :param df:
+        :return: preprocessed dataframe
+        """
+        return df

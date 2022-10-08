@@ -1,22 +1,17 @@
-from typing import Dict
-
 import numpy as np
 import pandas as pd
-from django.core.exceptions import ValidationError
 
-from transit.models import ShipmentDetails
 from transit.reporting.base_report_generation import BaseReportGenerator
+from transit.reporting.reporting_utils import ReportingUtils
 
 
 class PercentCapacityUtilizationReport(BaseReportGenerator):
     def get_base_queryset(self):
-        return self._get_assigned_shipments()
+        return ReportingUtils.get_assigned_shipments()
 
     def get_queryset_values_list(self, queryset):
         return queryset.values_list(
-            'ship_date', 'transporter_details__transporter__name',
-            'transporter_details__vehicle_number',
-            'custom_route_number',
+            *ReportingUtils.get_base_shipment_report_values_list(),
             'transporter_details__vehicle_capacity_volume',
             'order_mapping__order_details__line_items__product__volume'
         )
@@ -27,27 +22,20 @@ class PercentCapacityUtilizationReport(BaseReportGenerator):
         df['CustomRouteNumber'].replace(to_replace=[None], value='', inplace=True)
         df['volume'].replace(to_replace=[None], value=np.nan, inplace=True)
         grouped = df.groupby(['TransporterName', 'VehicleNumber', 'CustomRouteNumber'])
-        grouped_dates = grouped['ShipDate'].agg(['unique'])
-        grouped_dates['ShipDate'] = grouped_dates['unique'].apply(lambda x: x[0] if len(x) == 1 else 'Many')
-        grouped_dates = grouped_dates.drop(['unique'], axis=1)
+
+        aggregation = ReportingUtils.vehicle_shipment_aggregation(grouped)
         grouped_values = grouped[['VehicleCapacityVolume', 'volume']].sum()
-        report_data = pd.concat([grouped_dates, grouped_values], axis=1)
+
+        report_data = pd.concat([aggregation, grouped_values], axis=1)
         report_data['PercentUtilization'] = (report_data['volume'] / report_data['VehicleCapacityVolume'] * 100)
         report_data['PercentUtilization'] = report_data['PercentUtilization'].round(2)
+
+        # Index is dropped as aggregation is already included in DF
+        report_data.reset_index(drop=True, inplace=True)
         return report_data
 
-    def _get_assigned_shipments(self):
-        return ShipmentDetails.objects.filter(
-            ship_date__isnull=False,
-            transporter_details__transporter__name__isnull=False
-        )
-
-    def _validate_filters(self, filters: Dict[str, str]):
-        keys = filters.keys()
-        if not filters.get('date_from') or not filters.get('date_to') or len(keys) != 2:
-            raise ValidationError(
-                "Filters for PercentCapacityUtilizationReport should provide only date_from and date_to")
-        return {
-            'ship_date__gte': filters['date_from'],
-            'ship_date__lte': filters['date_to'],
-        }
+    def _preprocess_data_frame(self, df):
+        df = ReportingUtils.preprocess_shipment_date(df)
+        df['CustomRouteNumber'].replace(to_replace=[None], value='', inplace=True)
+        df['volume'].replace(to_replace=[None], value=np.nan, inplace=True)
+        return df
