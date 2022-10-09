@@ -3,7 +3,7 @@ import pandas as pd
 from transit.models import ShipmentDetails
 
 
-class ReportingUtils:
+class ReportingUtils:  # noqa: PIE798
     @staticmethod
     def vehicle_shipment_aggregation(grouped_df):
         """
