@@ -91,7 +91,7 @@ class BaseReportGenerator(abc.ABC):
         }
 
     def __parse_date(self, filter_date):
-        return datetime.datetime.strptime(filter_date,  "%Y-%m-%d").replace(tzinfo=timezone(settings.TIME_ZONE))
+        return datetime.datetime.strptime(filter_date, "%Y-%m-%d").replace(tzinfo=timezone(settings.TIME_ZONE))
 
     def _preprocess_data_frame(self, df):
         """

@@ -98,17 +98,17 @@ class ReportTestCaseMixin(abc.ABC, ViewSetRequestTestBase):
         )
         self.partially_complete_shipment.save()
 
-        item = Item()
-        item.save()
+        test_item = Item()
+        test_item.save()
 
-        item_detail = ItemDetails(batch_number='AOSUDB', item=item)
+        item_detail = ItemDetails(batch_number='AOSUDB', item=test_item)
         item_detail.save()
 
         order = OrderDetails(customer=self.order_line_detail_complete.order_details.customer)
         order.save()
 
         self.order_line_detail_partial = OrderLineDetails(
-            order_details=order, product=item, item_details=item_detail, quantity=5
+            order_details=order, product=test_item, item_details=item_detail, quantity=5
         )
         self.order_line_detail_partial.save()
 
