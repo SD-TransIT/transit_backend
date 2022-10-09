@@ -4,18 +4,28 @@ from transit.models import ShipmentDetails
 
 
 class ReportingUtils:
-
     @staticmethod
     def vehicle_shipment_aggregation(grouped_df):
         """
+        :return: DataFrame in which columns are Shipment Date, Transporter Name, Vehicle Number and Custom Route Number.
+        """
+        return ReportingUtils.shipment_aggregation(
+            grouped_df=grouped_df,
+            aggregation_group=['TransporterName', 'VehicleNumber', 'CustomRouteNumber']
+        )
+
+    @staticmethod
+    def shipment_aggregation(grouped_df, aggregation_group):
+        """
         From pandas DataFrameGroupBy object (DataFrame to which groupby() is applied) creates aggregation on
         shipment, transporter name, vehicle number and customer route number.
+        :param aggregation_group: List of columns on which group will be mapped.
         :param grouped_df: df.groupby()
-        :return: DataFrame in which columns are Shipment Date, Transporter Name, Vehicle Number and Custom Route Number.
+        :return: DataFrame in which columns
         """
         grouping_date = grouped_df['ShipDate'].agg(['unique']).rename({'unique': 'ShipmentDate'})
         grouping_date['ShipDate'] = grouping_date['unique'].apply(lambda x: x[0] if len(x) == 1 else 'Many')
-        grouping_transporter = grouped_df[['TransporterName', 'VehicleNumber', 'CustomRouteNumber']].first()
+        grouping_transporter = grouped_df[aggregation_group].first()
         aggregation = pd.concat([grouping_date, grouping_transporter], axis=1)
         aggregation = aggregation.drop(['unique'], axis=1)
         return aggregation

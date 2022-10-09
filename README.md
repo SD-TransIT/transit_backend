@@ -168,3 +168,4 @@ If so one of the fields is redundant since Driver:Transporter is N:1 relation an
   * Should Customer Name be unique across the application? (Multiple references in excel upload - No Customer ID code)
   * Excel upload: OrderDetails don't provide information about item details, it's obligatory attribute 
   in order line detail so at the moment it's generated (using random batch number). 
+  * DSO (Pod Variance) and Pod status (Delivery Status) should be in 1:1 relation with shipment (currently 1:M)

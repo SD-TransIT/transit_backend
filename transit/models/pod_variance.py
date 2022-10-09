@@ -1,15 +1,23 @@
 from django.db import models
-
+from django.utils.translation import gettext_lazy as _
 from transit.models.base import BaseModel
 from transit.models.order_details import OrderLineDetails
 from transit.models.shipment import ShipmentDetails
 
 
 class PODVariance(BaseModel):
-    shipment = models.ForeignKey(ShipmentDetails, models.DO_NOTHING, db_column='ShipmentID',
-                                 related_name='pod_variances')
+    class DSOType(models.TextChoices):  # noqa: WPS141
+        DAMAGED = 'damaged', _('Damaged')
+        SHORT = 'short', _('Short')
+        OVER = 'over', _('Over')
+        OTHER = 'other', _('Other')
+
+    shipment = models.ForeignKey(
+        ShipmentDetails, models.DO_NOTHING, db_column='ShipmentID', related_name='pod_variances')
+
     dso_type = models.CharField(
-        db_column='DSOType', max_length=255, blank=True, null=True
+        db_column='DSOType', max_length=255, null=True,
+        choices=DSOType.choices
     )
 
     class Meta:
