@@ -37,5 +37,6 @@ class PercentCapacityUtilizationReport(BaseReportGenerator):
     def _preprocess_data_frame(self, df):
         df = ReportingUtils.preprocess_shipment_date(df)
         df['CustomRouteNumber'].replace(to_replace=[None], value='', inplace=True)
+        df['VehicleNumber'].replace(to_replace=[None], value='', inplace=True)
         df['volume'].replace(to_replace=[None], value=np.nan, inplace=True)
         return df

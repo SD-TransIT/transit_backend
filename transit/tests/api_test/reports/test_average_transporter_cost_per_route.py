@@ -28,8 +28,8 @@ class TestReportCapacity(ReportTestCaseMixin, TestCase):
         return pd.DataFrame([{
             "row": 0,
             "ShipDate": self.partially_complete_shipment.ship_date.date(),
-            "TransporterName": self.complete_shipment.transporter_details.transporter.name,
-            "VehicleNumber": self.complete_shipment.transporter_details.vehicle_number,
+            "TransporterName": self.partially_complete_shipment.transporter_details.transporter.name,
+            "VehicleNumber": self.partially_complete_shipment.transporter_details.vehicle_number,
             "CustomRoutes": 1,
             "TotalCost": 0,
             "AverageTransporterCostPerRoute": 0.0

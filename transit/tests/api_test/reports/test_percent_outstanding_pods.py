@@ -28,7 +28,7 @@ class TestReportCapacity(ReportTestCaseMixin, TestCase):
             "row": 0,
             "ShipDate": self.complete_shipment.ship_date.date(),
             "TransporterName": self.complete_shipment.transporter_details.transporter.name,
-            "VehicleNumber": self.complete_shipment.transporter_details.vehicle_number,
+            "VehicleNumber": '75192',  # Default vehicle number from factory
             "CustomRouteNumber": "66",
             "TotalPODs": 1,
             "OutstandingPODs": 1,
@@ -40,7 +40,7 @@ class TestReportCapacity(ReportTestCaseMixin, TestCase):
             "row": 0,
             "ShipDate": self.partially_complete_shipment.ship_date.date(),
             "TransporterName": self.partially_complete_shipment.transporter_details.transporter.name,
-            "VehicleNumber": self.partially_complete_shipment.transporter_details.vehicle_number,
+            "VehicleNumber": '',
             "CustomRouteNumber": "",
             "TotalPODs": 1,
             "OutstandingPODs": 1,

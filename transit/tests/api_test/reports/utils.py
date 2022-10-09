@@ -75,7 +75,9 @@ class ReportTestCaseMixin(abc.ABC, ViewSetRequestTestBase):
 
     def _create_complete_shipment(self):
         ship_date = datetime.datetime(year=2021, month=8, day=1, tzinfo=datetime.timezone.utc)
-        self.complete_shipment = ShipmentDetailsFactory(custom_props={'ship_date': ship_date}).create_object(True)
+        self.complete_shipment = ShipmentDetailsFactory(
+            custom_props={'ship_date': ship_date, 'transporter_details__vehicle_number': None}
+        ).create_object(True)
         self.order_line_detail_complete = OrderLineDetailsFactory().create_object(True)
         service = ShipmentOrdersService()
         service.add_orders_to_shipment(
