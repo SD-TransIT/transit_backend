@@ -1,5 +1,6 @@
 import abc
 import logging
+from datetime import datetime
 from typing import Type
 
 import pandas
@@ -31,10 +32,10 @@ class BaseExcelUploadViewSet(abc.ABC, GenericViewSet):
     @staticmethod
     def date_parser(date):
         try:
-            return pandas.datetime.strptime(date, "%d/%m/%Y")
+            return datetime.strptime(date, "%d/%m/%Y")
         except TypeError as e:
             logger.warning("Invalid datetime format in excel upload, "
-                           "expected Text column with data in format %s, detail: %s", '%d/%m/%Y', e)
+                           "expected Text column with data in format %s, detail: %s", r'%d/%m/%Y', e)
             return date
 
     @property
