@@ -28,7 +28,7 @@ class AverageTransporterCostPerEachReport(BaseReportGenerator):
             'TotalCost': combined_cost['TransporterBaseCost'] + combined_cost['TransporterAdditionalCost'],
         })
 
-        totals['AverageTransporterCostPerEach'] = totals['TotalCost']/totals['TotalEaches']
+        totals['AverageTransporterCostPerEach'] = totals['TotalCost'] / totals['TotalEaches']
         report_data = pd.concat([aggregation, totals], axis=1)
         report_data.reset_index(drop=True, inplace=True)
         return report_data

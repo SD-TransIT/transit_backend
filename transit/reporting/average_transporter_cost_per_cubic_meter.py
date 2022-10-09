@@ -31,7 +31,7 @@ class AverageTransporterCostPerCubicMeterReport(BaseReportGenerator):
             'TotalCost': combined_cost['TransporterBaseCost'] + combined_cost['TransporterAdditionalCost'],
         })
 
-        totals['AverageTransporterCostPerCubicMeter'] = totals['TotalCost']/totals['TotalVolume']
+        totals['AverageTransporterCostPerCubicMeter'] = totals['TotalCost'] / totals['TotalVolume']
         report_data = pd.concat([aggregation, totals], axis=1)
         report_data.reset_index(drop=True, inplace=True)
         return report_data

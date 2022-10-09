@@ -27,8 +27,7 @@ class ReportingUtils:
         grouping_date['ShipDate'] = grouping_date['unique'].apply(lambda x: x[0] if len(x) == 1 else 'Many')
         grouping_transporter = grouped_df[aggregation_group].first()
         aggregation = pd.concat([grouping_date, grouping_transporter], axis=1)
-        aggregation = aggregation.drop(['unique'], axis=1)
-        return aggregation
+        return aggregation.drop(['unique'], axis=1)
 
     @staticmethod
     def get_assigned_shipments():

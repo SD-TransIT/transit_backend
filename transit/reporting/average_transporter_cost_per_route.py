@@ -1,11 +1,6 @@
-from typing import Dict
-
-import numpy as np
 import pandas as pd
-from django.core.exceptions import ValidationError
 from django.db.models import Q
 
-from transit.models import ShipmentDetails
 from transit.reporting.base_report_generation import BaseReportGenerator
 from transit.reporting.reporting_utils import ReportingUtils
 

@@ -30,12 +30,10 @@ class AverageTransporterCostPerKilometerReport(BaseReportGenerator):
         report_data['AverageCostPerKilometer'] = report_data['TotalCost'].divide(divider).astype(float).round(2)
 
         report_data.reset_index(drop=True, inplace=True)
-        report_data = report_data[[
+        return report_data[[
             'ShipDate', 'TransporterName', 'VehicleNumber', 'CustomRouteNumber',
             'TotalCost', 'TotalNumberOfKilometers', 'AverageCostPerKilometer'
         ]]
-
-        return report_data
 
     def _preprocess_data_frame(self, df):
         df = ReportingUtils.preprocess_shipment_date(df)
