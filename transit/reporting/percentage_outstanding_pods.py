@@ -27,8 +27,8 @@ class PercentageOutstandingPODsReport(BaseReportGenerator):
         pods = pd.DataFrame({
             'TotalPODs': grouped['id'].agg(pd.Series.nunique),
             # Delivered shipments but without delivered POD
-            'OutstandingPODs': grouped['DeliveryStatus'].apply(
-                lambda x: (x != DeliveryStatus.Status.DELIVERED)).sum()
+            'OutstandingPODs': grouped['DeliveryStatus'].agg('unique').apply(
+                lambda x: (x != DeliveryStatus.Status.DELIVERED)).count()
         })
 
         pods['PercentageOfOutstandingPODs'] = ((pods['OutstandingPODs']/pods['TotalPODs'])*100).round(2)

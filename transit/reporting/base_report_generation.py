@@ -1,4 +1,5 @@
 import abc
+import datetime
 import warnings
 from abc import abstractmethod
 from typing import Dict
@@ -7,6 +8,9 @@ import pandas as pd
 from django.core.exceptions import ValidationError
 from django.db import connections
 from django.db.models import QuerySet
+from pytz import timezone
+
+from transit import settings
 
 
 class BaseReportGenerator(abc.ABC):
@@ -80,9 +84,12 @@ class BaseReportGenerator(abc.ABC):
             raise ValidationError(
                 "Filters for PercentCapacityUtilizationReport should provide only date_from and date_to")
         return {
-            'ship_date__gte': filters['date_from'],
-            'ship_date__lte': filters['date_to'],
+            'ship_date__gte': self.__parse_date(filter_date=filters['date_from']),
+            'ship_date__lte': self.__parse_date(filter_date=filters['date_to']),
         }
+
+    def __parse_date(self, filter_date):
+        return datetime.datetime.strptime(filter_date,  "%Y-%m-%d").replace(tzinfo=timezone(settings.TIME_ZONE))
 
     def _preprocess_data_frame(self, df):
         """

@@ -2,14 +2,10 @@ import datetime
 
 import pandas as pd
 from django.test import TestCase
-from rest_framework import status
 
 from transit.models import DeliveryStatus
-from transit.rest_api.excel.excel_uploads import ItemDetailExcelUploadView
-from transit.services.shipment_orders_service import ShipmentOrdersService
-from transit.tests.api_test.helpers.api_crud_test_case import ViewSetRequestTestBase
-from transit.tests.api_test.reports.utils import ReportTestClient, ReportTestCaseMixin
-from transit.tests.test_objects_factory import ShipmentDetailsFactory, OrderLineDetailsFactory, DeliveryStatusFactory
+from transit.tests.api_test.reports.utils import ReportTestCaseMixin
+from transit.tests.test_objects_factory import ShipmentDetailsFactory, DeliveryStatusFactory
 
 
 class TestReportCapacity(ReportTestCaseMixin, TestCase):
