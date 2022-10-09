@@ -63,7 +63,7 @@ class BaseReportGenerator(abc.ABC):
     def _read_dataframe_sql(self, django_queryset: QuerySet):
         db_conn = connections['default']
         query, params = django_queryset.query.sql_with_params()
-        print("QUERY, PARAMS", query, params)
+
         # Additional context manager to surpass warning regarding pandas supporting only
         # SQLAlchemy and string URI connection.
         with warnings.catch_warnings():
