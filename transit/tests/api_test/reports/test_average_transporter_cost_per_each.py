@@ -9,7 +9,7 @@ from transit.tests.test_objects_factory import ShipmentDetailsFactory, DeliveryS
 
 
 class TestReportCapacity(ReportTestCaseMixin, TestCase):
-    _URL = 'average_transporter_cost_per_cubic_meter'
+    _URL = 'average_transporter_cost_per_each'
 
     def expected_payload(self):
         return pd.DataFrame([{
@@ -18,7 +18,7 @@ class TestReportCapacity(ReportTestCaseMixin, TestCase):
             "TransporterName": self.shipment.transporter_details.transporter.name,
             "VehicleNumber": self.shipment.transporter_details.vehicle_number,
             "CustomRouteNumber": "66",
-            "TotalVolume": 20.0,
+            "TotalEaches": 10.0,
             "TotalCost": 1150.0,
-            "AverageTransporterCostPerCubicMeter": 57.5
+            "AverageTransporterCostPerEach": 115.0
         }])
