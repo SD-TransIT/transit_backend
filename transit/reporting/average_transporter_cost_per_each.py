@@ -1,10 +1,5 @@
-from typing import Dict
-
-import numpy as np
 import pandas as pd
-from django.core.exceptions import ValidationError
 
-from transit.models import ShipmentDetails
 from transit.reporting.base_report_generation import BaseReportGenerator
 from transit.reporting.reporting_utils import ReportingUtils
 
@@ -41,4 +36,6 @@ class AverageTransporterCostPerEachReport(BaseReportGenerator):
     def _preprocess_data_frame(self, df):
         df = ReportingUtils.preprocess_shipment_date(df)
         df['CustomRouteNumber'].replace(to_replace=[None], value='', inplace=True)
+        df['TransporterBaseCost'].replace(to_replace=[None], value=0.0, inplace=True)
+        df['TransporterAdditionalCost'].replace(to_replace=[None], value=0.0, inplace=True)
         return df

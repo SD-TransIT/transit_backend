@@ -1,12 +1,8 @@
-import datetime
-
 import pandas as pd
 from django.test import TestCase
 
-from transit.models import DeliveryStatus, PODVariance, ShipmentOrderMapping, OrderLineDetails
-from transit.services.shipment_orders_service import ShipmentOrdersService
+from transit.models import PODVariance
 from transit.tests.api_test.reports.utils import ReportTestCaseMixin
-from transit.tests.test_objects_factory import ShipmentDetailsFactory, DeliveryStatusFactory, OrderLineDetailsFactory
 
 
 class TestReportCapacity(ReportTestCaseMixin, TestCase):
@@ -14,24 +10,35 @@ class TestReportCapacity(ReportTestCaseMixin, TestCase):
 
     def setUp(self):
         super(TestReportCapacity, self).setUp()
-        ship_date_3 = datetime.datetime(year=2021, month=8, day=1, tzinfo=datetime.timezone.utc)
-        self.shipment3 = ShipmentDetailsFactory(custom_props={'ship_date': ship_date_3}).create_object(True)
-        pod_variance = PODVariance(shipment=self.shipment3, dso_type=PODVariance.DSOType.DAMAGED.name)
-        pod_variance.save()
-        ShipmentOrderMapping.objects.filter(order_details=self.order_line_detail.order_details).delete()
-        service = ShipmentOrdersService()
-        self.order_line_detail.old_quantity = 5.0
-        self.order_line_detail.save()
-        service.add_orders_to_shipment(shipment=self.shipment3, orders=[self.order_line_detail.order_details])
+        PODVariance.objects.create(shipment=self.complete_shipment, dso_type=PODVariance.DSOType.DAMAGED.name)
+        PODVariance.objects.create(shipment=self.partially_complete_shipment, dso_type=PODVariance.DSOType.DAMAGED.name)
 
-    def expected_payload(self):
+        self.order_line_detail_complete.old_quantity = 5.0
+        self.order_line_detail_complete.save()
+
+        self.order_line_detail_partial.old_quantity = 3.0
+        self.order_line_detail_partial.save()
+
+    def expected_payload_complete(self):
         return pd.DataFrame([{
             "row": 0,
-            "ShipDate": datetime.date(year=2021, month=8, day=1),
-            "TransporterName": self.shipment.transporter_details.transporter.name,
-            "VehicleNumber": self.shipment.transporter_details.vehicle_number,
+            "ShipDate": self.complete_shipment.ship_date.date(),
+            "TransporterName": self.complete_shipment.transporter_details.transporter.name,
+            "VehicleNumber": self.complete_shipment.transporter_details.vehicle_number,
             "CustomRouteNumber": "66",
             "DSOType": 'DAMAGED',
             "OldQuantity": 5.0,
             "NewQuantity": 10.0,
+        }])
+
+    def expected_payload_partial(self):
+        return pd.DataFrame([{
+            "row": 0,
+            "ShipDate": self.partially_complete_shipment.ship_date.date(),
+            "TransporterName": self.partially_complete_shipment.transporter_details.transporter.name,
+            "VehicleNumber": self.partially_complete_shipment.transporter_details.vehicle_number,
+            "CustomRouteNumber": "",
+            "DSOType": 'DAMAGED',
+            "OldQuantity": 3.0,
+            "NewQuantity": 5.0,
         }])

@@ -1,17 +1,13 @@
-from typing import Dict
-
 import numpy as np
 import pandas as pd
-from django.core.exceptions import ValidationError
 
-from transit.models import ShipmentDetails
 from transit.reporting.base_report_generation import BaseReportGenerator
 from transit.reporting.reporting_utils import ReportingUtils
 
 
 class AverageTransporterCostPerKilometerReport(BaseReportGenerator):
     def get_base_queryset(self):
-        return ReportingUtils.get_invoiced_shipments()
+        return ReportingUtils.get_invoiced_shipments().filter(number_of_kilometers__isnull=False)
 
     def get_queryset_values_list(self, queryset):
         return queryset.values_list(
@@ -30,8 +26,8 @@ class AverageTransporterCostPerKilometerReport(BaseReportGenerator):
         combined_km = pd.DataFrame({'TotalNumberOfKilometers': grouped['NumberOfKilometers'].sum()})
 
         report_data = pd.concat([aggregation, combined_cost, combined_km], axis=1)
-        report_data['AverageCostPerKilometer'] = \
-            (report_data['TotalCost'] / report_data['TotalNumberOfKilometers']).round(2)
+        divider = report_data['TotalNumberOfKilometers'].where(report_data['TotalNumberOfKilometers'] != 0, np.nan)
+        report_data['AverageCostPerKilometer'] = report_data['TotalCost'].divide(divider).astype(float).round(2)
 
         report_data.reset_index(drop=True, inplace=True)
         report_data = report_data[[
@@ -44,4 +40,5 @@ class AverageTransporterCostPerKilometerReport(BaseReportGenerator):
     def _preprocess_data_frame(self, df):
         df = ReportingUtils.preprocess_shipment_date(df)
         df['CustomRouteNumber'].replace(to_replace=[None], value='', inplace=True)
+        df['TransporterAdditionalCost'].replace(to_replace=[None], value=0.0, inplace=True)
         return df

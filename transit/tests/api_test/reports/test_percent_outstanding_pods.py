@@ -20,14 +20,28 @@ class TestReportCapacity(ReportTestCaseMixin, TestCase):
         ).create_object()
         self.shipment3.delivery_status = self.delivered
         self.shipment3.save()
+        self.partially_complete_shipment.delivery_status = self.delivered
+        self.partially_complete_shipment.save()
 
-    def expected_payload(self):
+    def expected_payload_complete(self):
         return pd.DataFrame([{
             "row": 0,
-            "ShipDate": datetime.date(year=2021, month=8, day=1),
-            "TransporterName": self.shipment.transporter_details.transporter.name,
-            "VehicleNumber": self.shipment.transporter_details.vehicle_number,
+            "ShipDate": self.complete_shipment.ship_date.date(),
+            "TransporterName": self.complete_shipment.transporter_details.transporter.name,
+            "VehicleNumber": self.complete_shipment.transporter_details.vehicle_number,
             "CustomRouteNumber": "66",
+            "TotalPODs": 1,
+            "OutstandingPODs": 1,
+            "PercentageOfOutstandingPODs": 100.0
+        }])
+
+    def expected_payload_partial(self):
+        return pd.DataFrame([{
+            "row": 0,
+            "ShipDate": self.partially_complete_shipment.ship_date.date(),
+            "TransporterName": self.partially_complete_shipment.transporter_details.transporter.name,
+            "VehicleNumber": self.partially_complete_shipment.transporter_details.vehicle_number,
+            "CustomRouteNumber": "",
             "TotalPODs": 1,
             "OutstandingPODs": 1,
             "PercentageOfOutstandingPODs": 100.0

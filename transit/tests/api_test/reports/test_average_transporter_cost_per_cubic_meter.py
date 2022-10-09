@@ -1,24 +1,41 @@
-import datetime
-
 import pandas as pd
 from django.test import TestCase
 
-from transit.models import DeliveryStatus
 from transit.tests.api_test.reports.utils import ReportTestCaseMixin
-from transit.tests.test_objects_factory import ShipmentDetailsFactory, DeliveryStatusFactory
 
 
 class TestReportCapacity(ReportTestCaseMixin, TestCase):
     _URL = 'average_transporter_cost_per_cubic_meter'
 
-    def expected_payload(self):
+    def setUp(self):
+        # Volume is required
+        super(TestReportCapacity, self).setUp()
+        product_item = self.partially_complete_shipment.order_mapping\
+            .first().order_details.line_items.first().product
+        product_item.volume = 123.0
+        product_item.save()
+        self.partially_complete_shipment.save()
+
+    def expected_payload_complete(self):
         return pd.DataFrame([{
             "row": 0,
-            "ShipDate": datetime.date(year=2021, month=8, day=1),
-            "TransporterName": self.shipment.transporter_details.transporter.name,
-            "VehicleNumber": self.shipment.transporter_details.vehicle_number,
+            "ShipDate": self.complete_shipment.ship_date.date(),
+            "TransporterName": self.complete_shipment.transporter_details.transporter.name,
+            "VehicleNumber": self.complete_shipment.transporter_details.vehicle_number,
             "CustomRouteNumber": "66",
             "TotalVolume": 20.0,
             "TotalCost": 1150.0,
             "AverageTransporterCostPerCubicMeter": 57.5
+        }])
+
+    def expected_payload_partial(self):
+        return pd.DataFrame([{
+            "row": 0,
+            "ShipDate": self.partially_complete_shipment.ship_date.date(),
+            "TransporterName": self.complete_shipment.transporter_details.transporter.name,
+            "VehicleNumber": self.complete_shipment.transporter_details.vehicle_number,
+            "CustomRouteNumber": "",
+            "TotalVolume": 123.0,
+            "TotalCost": 0,
+            "AverageTransporterCostPerCubicMeter": 0.0
         }])

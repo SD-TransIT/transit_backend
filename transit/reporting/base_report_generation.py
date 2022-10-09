@@ -53,6 +53,8 @@ class BaseReportGenerator(abc.ABC):
         df_input_queryset = self.get_queryset_values_list(user_filtering)
         df = self._read_dataframe_sql(df_input_queryset)
         df = self._preprocess_data_frame(df)
+        if df.empty:
+            raise ValidationError(F'No data for report for provided filters: \n\t{self.filters}')
         return self._perform_calculations(df, **kwargs)
 
     def _apply_filters(self):
