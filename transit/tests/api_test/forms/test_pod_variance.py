@@ -14,9 +14,9 @@ class TestPODVarianceViewSet(ManualFormTestCaseMixin, TestCase):
     _MODEL_TYPE = PODVariance
     _TEST_SUBJECT_DATA = PODVarianceFactory.default_values.copy()
     _POST_REQUEST_PAYLOAD = {
-        'dso_type': 'PostnewDSOType',
+        'dso_type': 'damaged',
     }
-    _PATCH_REQUEST_PAYLOAD = {'dso_type': 'UpdatedDSOType'}
+    _PATCH_REQUEST_PAYLOAD = {'dso_type': 'damaged'}
 
     @classmethod
     def _get_or_create_test_subject(cls):

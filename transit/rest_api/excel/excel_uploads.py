@@ -34,7 +34,7 @@ class BaseExcelUploadViewSet(abc.ABC, GenericViewSet):
             return pandas.datetime.strptime(date, "%d/%m/%Y")
         except TypeError as e:
             logger.warning("Invalid datetime format in excel upload, "
-                           "expected Text column with data in format %d/%m/%Y, detail: %s", e)
+                           "expected Text column with data in format %s, detail: %s", '%d/%m/%Y', e)
             return date
 
     @property
