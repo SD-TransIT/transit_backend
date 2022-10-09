@@ -22,7 +22,6 @@ class TestReportCapacity(ReportTestCaseMixin, TestCase):
         service = ShipmentOrdersService()
         self.order_line_detail.old_quantity = 5.0
         self.order_line_detail.save()
-        print(list(OrderLineDetails.objects.values_list('old_quantity')))
         service.add_orders_to_shipment(shipment=self.shipment3, orders=[self.order_line_detail.order_details])
 
     def expected_payload(self):

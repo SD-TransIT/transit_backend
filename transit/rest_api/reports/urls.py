@@ -3,6 +3,8 @@ from django.urls import (
 )
 
 from transit.rest_api.reports.average_product_cost_per_shipment import AverageProductCostPerShipmentReportView
+from transit.rest_api.reports.average_transporter_cost_per_cubic_meter import \
+    AverageTransporterCostPerCubicMeterReportView
 from transit.rest_api.reports.average_transporter_cost_per_kilometer import AverageTransporterCostPerKilometerReportView
 from transit.rest_api.reports.number_of_dso_shipments import NumberOfDSOShipmentsReportView
 from transit.rest_api.reports.percent_capacity_utilization import PercentCapacityUtilizationReportView
@@ -33,5 +35,10 @@ urlpatterns = [
     path(
         r'number_of_damaged_short_over_shipments/',
         NumberOfDSOShipmentsReportView.as_view(), name='number_of_damaged_short_over_shipments'
+    ),
+    path(
+        r'average_transporter_cost_per_cubic_meter_report/',
+        AverageTransporterCostPerCubicMeterReportView.as_view(),
+        name='average_transporter_cost_per_cubic_meter_report'
     ),
 ]
