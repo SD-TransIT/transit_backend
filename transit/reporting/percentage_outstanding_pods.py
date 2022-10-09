@@ -31,7 +31,7 @@ class PercentageOutstandingPODsReport(BaseReportGenerator):
                 lambda x: (x != DeliveryStatus.Status.DELIVERED)).count()
         })
 
-        pods['PercentageOfOutstandingPODs'] = ((pods['OutstandingPODs']/pods['TotalPODs'])*100).round(2)
+        pods['PercentageOfOutstandingPODs'] = ((pods['OutstandingPODs'] / pods['TotalPODs']) * 100).round(2)
 
         report_data = pd.concat([aggregation, pods], axis=1)
         report_data.reset_index(drop=True, inplace=True)
