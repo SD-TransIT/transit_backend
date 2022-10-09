@@ -5,6 +5,7 @@ from django.urls import (
 from transit.rest_api.reports.average_product_cost_per_shipment import AverageProductCostPerShipmentReportView
 from transit.rest_api.reports.average_transporter_cost_per_kilometer import AverageTransporterCostPerKilometerReportView
 from transit.rest_api.reports.percent_capacity_utilization import PercentCapacityUtilizationReportView
+from transit.rest_api.reports.percent_outstanding_pods import PercentageOutstandingPODsReportView
 
 urlpatterns = [
     path(
@@ -18,5 +19,9 @@ urlpatterns = [
     path(
         r'average_transporter_cost_per_kilometer/',
         AverageTransporterCostPerKilometerReportView.as_view(), name='average_transporter_cost_per_kilometer'
+    ),
+    path(
+        r'percentage_outstanding_pods/',
+        PercentageOutstandingPODsReportView.as_view(), name='percentage_outstanding_pods'
     ),
 ]

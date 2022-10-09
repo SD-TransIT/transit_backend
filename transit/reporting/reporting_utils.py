@@ -33,6 +33,14 @@ class ReportingUtils:
         )
 
     @staticmethod
+    def get_invoiced_shipments():
+        """
+        Query returning invoiced shipments, defined as assigned shipments with cost data.
+        :return: queryset on ShipmentDetails
+        """
+        return ReportingUtils.get_assigned_shipments().filter(transporter_base_cost__isnull=False)
+
+    @staticmethod
     def get_base_shipment_report_values_list():
         """
         Values used commonly in aggregation of data for shipment based reports. Columns included are:

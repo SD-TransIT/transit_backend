@@ -11,7 +11,7 @@ from transit.reporting.reporting_utils import ReportingUtils
 
 class AverageTransporterCostPerKilometerReport(BaseReportGenerator):
     def get_base_queryset(self):
-        return ReportingUtils.get_assigned_shipments()
+        return ReportingUtils.get_invoiced_shipments()
 
     def get_queryset_values_list(self, queryset):
         return queryset.values_list(
