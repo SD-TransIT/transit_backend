@@ -1,7 +1,6 @@
 from rest_pandas import PandasSimpleView
 
 from transit.reporting.orders_with_no_shipping_details import OrdersWithNoShippingDetailsReport
-from transit.reporting.percentage_outstanding_pods import PercentageOutstandingPODsReport
 
 
 class OrdersWithNoShippingDetailsReportView(PandasSimpleView):

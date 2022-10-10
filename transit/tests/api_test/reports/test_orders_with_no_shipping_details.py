@@ -1,12 +1,7 @@
-import datetime
-
-import numpy as np
 import pandas as pd
 from django.test import TestCase
 
-from transit.models import DeliveryStatus
 from transit.tests.api_test.reports.utils import ReportTestCaseMixin
-from transit.tests.test_objects_factory import ShipmentDetailsFactory, DeliveryStatusFactory
 
 
 class TestReportCapacity(ReportTestCaseMixin, TestCase):

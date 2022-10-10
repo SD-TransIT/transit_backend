@@ -1,7 +1,6 @@
 import pandas as pd
 from django.db.models import Sum
 
-from transit.models import DeliveryStatus
 from transit.reporting.base_report_generation import BaseReportGenerator
 from transit.reporting.reporting_utils import ReportingUtils
 
