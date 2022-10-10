@@ -22,7 +22,8 @@ class AverageTransporterCostPerShipmentByTransporterReport(BaseReportGenerator):
 
         total_shipments = pd.DataFrame({'TotalNumberOfShipments': grouped['id'].agg(pd.Series.nunique)})
         combined_cost = grouped[['TransporterBaseCost', 'TransporterAdditionalCost']].sum()
-        combined_cost['TotalTransporterCost'] = combined_cost['TransporterBaseCost'] + combined_cost['TransporterAdditionalCost']
+        combined_cost['TotalTransporterCost'] = \
+            combined_cost['TransporterBaseCost'] + combined_cost['TransporterAdditionalCost']
 
         report_data = pd.concat([aggregation, total_shipments, combined_cost], axis=1)
         divider = report_data['TotalNumberOfShipments'].where(report_data['TotalNumberOfShipments'] != 0, np.nan)

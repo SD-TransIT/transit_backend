@@ -21,8 +21,7 @@ class OrdersReadyToBeShippedReport(BaseReportGenerator):
         )
 
     def _perform_calculations(self, df, **kwargs):
-        df = df.rename(columns={
+        return df.rename(columns={
             'id': 'ShipmentNumber',
             'OrderDetailsID': 'OrderNumber'
         })
-        return df
