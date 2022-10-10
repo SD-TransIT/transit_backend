@@ -1,4 +1,5 @@
 import pandas as pd
+from django.db.models import Q
 
 from transit.models import ShipmentDetails
 
@@ -40,6 +41,20 @@ class ReportingUtils:  # noqa: PIE798
             ship_date__isnull=False,
             transporter_details__transporter__name__isnull=False
         )
+
+    @staticmethod
+    def get_shipments_with_missing_details():
+        """
+        Not fully defined shipments, defined as shipments where at least one of:
+        - Ship Date
+        - Expected Delivery Date
+        - Transporter Base Cost
+        - Number of Kilometers
+        is missing.
+        """
+        query_filter = Q(ship_date__isnull=True) | Q(expected_delivery_date__isnull=True)
+        query_filter |= Q(transporter_base_cost__isnull=True) | Q(number_of_kilometers__isnull=True)
+        return ShipmentDetails.objects.filter(query_filter)
 
     @staticmethod
     def get_invoiced_shipments():

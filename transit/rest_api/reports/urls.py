@@ -15,6 +15,7 @@ from transit.rest_api.reports.average_transporter_cost_per_shipment_by_transport
     AverageTransporterCostPerShipmentByTransporterReportView
 )
 from transit.rest_api.reports.number_of_dso_shipments import NumberOfDSOShipmentsReportView
+from transit.rest_api.reports.orders_with_no_shipping_details import OrdersWithNoShippingDetailsReportView
 from transit.rest_api.reports.orders_ready_to_be_shipped import OrdersReadyToBeShippedReportView
 from transit.rest_api.reports.percent_capacity_utilization import PercentCapacityUtilizationReportView
 from transit.rest_api.reports.percent_on_time_deliveries import PercentageOnTimeDeliveriesReportView
@@ -65,6 +66,11 @@ urlpatterns = [
         r'average_transporter_cost_per_route/',
         AverageTransporterCostPerRouteReportView.as_view(),
         name='average_transporter_cost_per_route'
+    ),
+    path(
+        r'orders_with_no_shipping_details/',
+        OrdersWithNoShippingDetailsReportView.as_view(),
+        name='orders_with_no_shipping_details'
     ),
     path(
         r'average_kilometers_per_shipment/',
