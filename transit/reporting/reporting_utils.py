@@ -54,8 +54,7 @@ class ReportingUtils:  # noqa: PIE798
         """
         return ShipmentDetails.objects.filter(
             Q(ship_date__isnull=True) | Q(expected_delivery_date__isnull=True)
-            |
-            Q(transporter_base_cost__isnull=True) | Q(number_of_kilometers__isnull=True)
+          | Q(transporter_base_cost__isnull=True) | Q(number_of_kilometers__isnull=True)
         )
 
     @staticmethod
