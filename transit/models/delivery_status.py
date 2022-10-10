@@ -7,6 +7,11 @@ class DeliveryStatus(models.Model):
         UNDEFINED = 'undefined', _('Undefined')
         DELIVERED = 'delivered', _('Delivered')
         NOT_DELIVERED = 'not_delivered', _('Not Delivered')
+        OTHER = 'other', _('Other')
+        POD_SIGNED_COMPLETE = 'pod_signed_complete', _("POD signed complete")
+        POD_SIGNED_DSO = 'pod_signed_dso', _('POD signed DSO')
+        ROBBERY = 'robbery', _('Robbery')
+        ACCIDENT = 'accident', _('Accident')
 
     delivery_status_key = models.CharField(
         max_length=64, primary_key=True, unique=True,
