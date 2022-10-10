@@ -15,6 +15,7 @@ from transit.rest_api.reports.average_transporter_cost_per_shipment_by_transport
     AverageTransporterCostPerShipmentByTransporterReportView
 )
 from transit.rest_api.reports.number_of_dso_shipments import NumberOfDSOShipmentsReportView
+from transit.rest_api.reports.orders_ready_to_be_shipped import OrdersReadyToBeShippedReportView
 from transit.rest_api.reports.percent_capacity_utilization import PercentCapacityUtilizationReportView
 from transit.rest_api.reports.percent_on_time_deliveries import PercentageOnTimeDeliveriesReportView
 from transit.rest_api.reports.percent_outstanding_pods import PercentageOutstandingPODsReportView
@@ -74,5 +75,10 @@ urlpatterns = [
         r'average_transporter_cost_per_shipment/',
         AverageTransporterCostPerShipmentByTransporterReportView.as_view(),
         name='average_transporter_cost_per_shipment'
+    ),
+    path(
+        r'orders_ready_to_be_shipped/',
+        OrdersReadyToBeShippedReportView.as_view(),
+        name='orders_ready_to_be_shipped'
     )
 ]
