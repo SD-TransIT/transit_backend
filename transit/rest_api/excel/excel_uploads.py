@@ -1,8 +1,8 @@
 import abc
 import logging
+from datetime import datetime
 from typing import Type
 
-import pandas
 from django.db import transaction
 from django.utils.translation import gettext_lazy as _
 from drf_yasg import openapi
@@ -31,10 +31,10 @@ class BaseExcelUploadViewSet(abc.ABC, GenericViewSet):
     @staticmethod
     def date_parser(date):
         try:
-            return pandas.datetime.strptime(date, "%d/%m/%Y")
+            return datetime.strptime(date, "%d/%m/%Y")
         except TypeError as e:
             logger.warning("Invalid datetime format in excel upload, "
-                           "expected Text column with data in format %d/%m/%Y, detail: %s", e)
+                           "expected Text column with data in format %s, detail: %s", r'%d/%m/%Y', e)
             return date
 
     @property

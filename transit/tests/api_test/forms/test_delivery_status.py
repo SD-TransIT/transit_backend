@@ -13,8 +13,8 @@ class TestDeliveryStatusViewSet(ManualFormTestCaseMixin, TestCase):
     _VIEW_SET = DeliveryStatusViewSet
     _MODEL_TYPE = DeliveryStatus
     _TEST_SUBJECT_DATA = DeliveryStatusFactory.default_values.copy()
-    _POST_REQUEST_PAYLOAD = {"delivery_status_key": "not_delivered", 'delivery_status': 'Not Delivered'}
-    _PATCH_REQUEST_PAYLOAD = {"delivery_status_key": "delivered", 'delivery_status': 'Delivered9'}
+    _POST_REQUEST_PAYLOAD = {"delivery_status_key": "not_delivered", 'delivery_status': 'not_delivered'}
+    _PATCH_REQUEST_PAYLOAD = {"delivery_status_key": "delivered", 'delivery_status': 'delivered'}
 
     @classmethod
     def _get_or_create_test_subject(cls):

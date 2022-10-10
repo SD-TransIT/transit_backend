@@ -1,12 +1,11 @@
 from rest_pandas import PandasSimpleView
 
-from transit.reporting.percent_capacity_utilization import PercentCapacityUtilizationReport
+from transit.reporting.percentage_on_time_deliveries import PercentageOnTimeDeliveriesReport
 
 
-class PercentCapacityUtilizationReportView(PandasSimpleView):
+class PercentageOnTimeDeliveriesReportView(PandasSimpleView):
     def get_data(self, request, *args, **kwargs):
-
         filters = {
             'date_from': request.query_params.get('date_from'),
             'date_to': request.query_params.get('date_to')}
-        return PercentCapacityUtilizationReport(filters).create_report()
+        return PercentageOnTimeDeliveriesReport(filters).create_report()
