@@ -3,6 +3,9 @@ from django.urls import (
 )
 
 from transit.rest_api.reports.average_product_cost_per_shipment import AverageProductCostPerShipmentReportView
+from transit.rest_api.reports.average_kilometers_per_shipment_by_transporter import (
+    AverageKilometersPerShipmentByTransporterReportView
+)
 from transit.rest_api.reports.average_transporter_cost_per_cubic_meter import \
     AverageTransporterCostPerCubicMeterReportView
 from transit.rest_api.reports.average_transporter_cost_per_each import AverageTransporterCostPerEachReportView
@@ -58,5 +61,10 @@ urlpatterns = [
         r'average_transporter_cost_per_route/',
         AverageTransporterCostPerRouteReportView.as_view(),
         name='average_transporter_cost_per_route'
+    ),
+    path(
+        r'average_kilometers_per_shipment/',
+        AverageKilometersPerShipmentByTransporterReportView.as_view(),
+        name='average_kilometers_per_shipment'
     ),
 ]
