@@ -12,6 +12,7 @@ class DeliveryStatus(models.Model):
         POD_SIGNED_DSO = 'pod_signed_dso', _('POD signed DSO')
         ROBBERY = 'robbery', _('Robbery')
         ACCIDENT = 'accident', _('Accident')
+        CLIENT_NOT_PRESENT = 'client_not_present', _('Client not present')
 
     delivery_status_key = models.CharField(
         max_length=64, primary_key=True, unique=True,
