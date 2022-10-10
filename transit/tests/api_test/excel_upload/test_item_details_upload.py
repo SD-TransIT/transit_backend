@@ -29,9 +29,9 @@ class TestItemDetailsExcelUpload(ViewSetRequestTestBase, TestCase):
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertTrue(ItemDetails.objects.filter(
             item__name='Test Item 1', batch_number='BN001',
-            expiry_date=datetime.date(year=2023, month=12, day=31),
-            manufacturing_date=datetime.date(year=2021, month=2, day=1),
-            received_date=datetime.date(year=2022, month=10, day=12),
+            expiry_date=datetime.datetime(year=2023, month=12, day=31, tzinfo=datetime.timezone.utc),
+            manufacturing_date=datetime.datetime(year=2021, month=2, day=1, tzinfo=datetime.timezone.utc),
+            received_date=datetime.datetime(year=2022, month=10, day=12, tzinfo=datetime.timezone.utc),
             lot_number='lotnumber', serial_number='12367', gtin=12345,
             funding_source='Test Source 1'
         ).exists())

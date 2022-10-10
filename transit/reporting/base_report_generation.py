@@ -1,10 +1,10 @@
 import abc
-import datetime
 import warnings
 from abc import abstractmethod
 from typing import Dict
 
 import pandas as pd
+from dateutil import parser
 from django.core.exceptions import ValidationError
 from django.db import connections
 from django.db.models import QuerySet
@@ -91,7 +91,7 @@ class BaseReportGenerator(abc.ABC):
         }
 
     def __parse_date(self, filter_date):
-        return datetime.datetime.strptime(filter_date, "%Y-%m-%d").replace(tzinfo=timezone(settings.TIME_ZONE))
+        return parser.parse(filter_date).replace(tzinfo=timezone(settings.TIME_ZONE))
 
     def _preprocess_data_frame(self, df):
         """
