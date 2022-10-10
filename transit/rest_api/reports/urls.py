@@ -3,13 +3,20 @@ from django.urls import (
 )
 
 from transit.rest_api.reports.average_product_cost_per_shipment import AverageProductCostPerShipmentReportView
+from transit.rest_api.reports.average_kilometers_per_shipment_by_transporter import (
+    AverageKilometersPerShipmentByTransporterReportView
+)
 from transit.rest_api.reports.average_transporter_cost_per_cubic_meter import \
     AverageTransporterCostPerCubicMeterReportView
 from transit.rest_api.reports.average_transporter_cost_per_each import AverageTransporterCostPerEachReportView
 from transit.rest_api.reports.average_transporter_cost_per_kilometer import AverageTransporterCostPerKilometerReportView
 from transit.rest_api.reports.average_transporter_cost_per_route import AverageTransporterCostPerRouteReportView
+from transit.rest_api.reports.average_transporter_cost_per_shipment_by_transporter import (
+    AverageTransporterCostPerShipmentByTransporterReportView
+)
 from transit.rest_api.reports.number_of_dso_shipments import NumberOfDSOShipmentsReportView
 from transit.rest_api.reports.orders_with_no_shipping_details import OrdersWithNoShippingDetailsReportView
+from transit.rest_api.reports.orders_ready_to_be_shipped import OrdersReadyToBeShippedReportView
 from transit.rest_api.reports.percent_capacity_utilization import PercentCapacityUtilizationReportView
 from transit.rest_api.reports.percent_on_time_deliveries import PercentageOnTimeDeliveriesReportView
 from transit.rest_api.reports.percent_outstanding_pods import PercentageOutstandingPODsReportView
@@ -65,4 +72,19 @@ urlpatterns = [
         OrdersWithNoShippingDetailsReportView.as_view(),
         name='orders_with_no_shipping_details'
     ),
+    path(
+        r'average_kilometers_per_shipment/',
+        AverageKilometersPerShipmentByTransporterReportView.as_view(),
+        name='average_kilometers_per_shipment'
+    ),
+    path(
+        r'average_transporter_cost_per_shipment/',
+        AverageTransporterCostPerShipmentByTransporterReportView.as_view(),
+        name='average_transporter_cost_per_shipment'
+    ),
+    path(
+        r'orders_ready_to_be_shipped/',
+        OrdersReadyToBeShippedReportView.as_view(),
+        name='orders_ready_to_be_shipped'
+    )
 ]
