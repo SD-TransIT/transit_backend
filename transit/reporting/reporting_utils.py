@@ -46,14 +46,16 @@ class ReportingUtils:  # noqa: PIE798
     def get_shipments_with_missing_details():
         """
         Not fully defined shipments, defined as shipments where at least one of:
-        - Ship Date
-        - Expected Delivery Date
-        - Transporter Base Cost
-        - Number of Kilometers
+        1- Ship Date
+        2- Expected Delivery Date
+        3- Driver
+        4- Truck Number
+        5- Route Number
         is missing.
         """
         query_filter = Q(ship_date__isnull=True) | Q(expected_delivery_date__isnull=True)
-        query_filter |= Q(transporter_base_cost__isnull=True) | Q(number_of_kilometers__isnull=True)
+        query_filter |= Q(driver__isnull=True) | Q(transporter_details__vehicle_number__isnull=True)
+        query_filter |= Q(custom_route_number__isnull=True)
         return ShipmentDetails.objects.filter(query_filter)
 
     @staticmethod
