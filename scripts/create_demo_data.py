@@ -130,7 +130,7 @@ def create_aircraft(type_):
     allowed_aircrafts = [
       {
         "name": "Airbus A400M",
-        "vehicle_capacity_volume": 270,
+        "vehicle_capacity_volume": 270.0,
         "vehicle_capacity_weight": 37000
       },
       {
@@ -287,13 +287,13 @@ def create_item_details(numbers_):
     return item_details
 
 
-def create_orders(number_):
+def create_orders(number_, customer=None):
     orders = []
 
     for _ in range(number_):
         rec_date = random_date(datetime.date(2022, 1, 1), datetime.date(2022, 9, 30))
         order_data = {
-            'customer': Customer.objects.order_by('?').first(),  # Random,
+            'customer': customer or Customer.objects.order_by('?').first(),  # Random,
             'order_received_date': None if random.randint(0, 2) == 0 else rec_date
         }
         ord = OrderDetails(**order_data)
@@ -301,15 +301,18 @@ def create_orders(number_):
         #ord.save()
 
     OrderDetails.objects.bulk_create(orders)
+
+    if not ItemDetails.objects.filter(order_line_item__isnull=True).count() < len(orders)*7:
+        # Add items if none available
+        items = create_item_details(len(orders)*10)
+        ItemDetails.objects.bulk_create(items)
+
     line_items = []
     for i, o in enumerate(orders):
-        if not ItemDetails.objects.filter(order_line_item__isnull=True).count() < 7:
-            # Add items if none available
-            items = create_item_details(10)
-            ItemDetails.objects.bulk_create(items)
-
-        for _ in range(random.randint(1, 7)):
-            item = ItemDetails.objects.filter(order_line_item__isnull=True).order_by('?').first()
+        # random 1 to 7 items for order
+        items = ItemDetails.objects.filter(order_line_item__isnull=True).order_by('?')\
+            .select_related('item').all()[:random.randint(1, 7)]
+        for item in items:
             order_line_items = {
                 'order_details': o, 'item_details': item,
                 'product': item.item, 'quantity': random.randint(1, 20)
@@ -358,20 +361,28 @@ def create_shipments(number_):
             'shipment_status': random.randint(0, 3)
         }
 
-        orders = random.randint(1, int(float(trahsporter_vehicle.vehicle_capacity_volume))+1)
+        try:
+            orders = random.randint(1, int(float(trahsporter_vehicle.vehicle_capacity_volume))+1)
+        except TypeError:
+            print(trahsporter_vehicle.__dict__)
+            orders = 2
+
         if orders > 20:
             orders = 20
-        if OrderDetails.objects.without_shipment_details().count() < orders:
-            create_orders(orders*10)
+
+        customer = Customer.objects.order_by('?').first()
+        if OrderDetails.objects.without_shipment_details().filter(customer__id=customer.id).count() < orders:
+            create_orders(orders*10, customer=customer)
         shipment = ShipmentDetails(**shipment_data)
         shipment.save()
         som = []
-        for _ in range(random.randint(0, orders)):
-            order = OrderDetails.objects.without_shipment_details().order_by('?').first()
+        orders = OrderDetails.objects.without_shipment_details()\
+                     .filter(customer__id=customer.id).order_by('?').all()[:random.randint(0, orders)]
+        for order in orders:
             mapping = ShipmentOrderMapping(shipment_details=shipment, order_details=order)
             som.append(mapping)
         ShipmentOrderMapping.objects.bulk_create(som)
-        if n%10 == 0:
+        if n % 10 == 0:
             print(f"Shipment progress {n}/{number_}.")
     return shipments
 
@@ -404,7 +415,7 @@ def build_database_info(n):
     ItemDetails.objects.bulk_create(id_)
     orders = create_orders(n)
     print('Orders added')
-    shipments = create_shipments(n)
+    shipments = create_shipments(int(n/2))
     print('Shipments added')
 
 
