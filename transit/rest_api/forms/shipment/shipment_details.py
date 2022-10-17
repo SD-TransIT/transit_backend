@@ -87,20 +87,6 @@ class ShipmentDetailsSerializer(serializers.ModelSerializer):
         orders_pks = validated_data.pop('orders', [])
         return OrderDetails.objects.filter(pk__in=orders_pks)
 
-    def validate(self, data): # noqa: WPS-122
-        """
-        Ensure orders are not updated directly from shipment endpoint.
-        """
-        self._orders_not_updatable(data)
-        return data
-
-    def _orders_not_updatable(self, shipment_data):
-        if self.instance and shipment_data.get('orders'):
-            raise serializers.ValidationError(
-                _("Shipment Orders have to be updated using shipment/<shipment_id>/shipment_order endpoint.")
-            )
-        return shipment_data
-
 
 class ShipmentDetailsFilter(django_filters.FilterSet):
 
