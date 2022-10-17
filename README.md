@@ -128,6 +128,12 @@ From main directory run
 ```
 to run `tox -e local_test` automatically each time before code is pushed to remote. 
 
+### Superset Setup 
+Superset is a part of docker-compose, it can be run using 
+`docker-compose up superset`. Superset will be then available under `localhost:8088`. 
+At the moment connection is not configured out of the box and has to be setup manually. 
+To connect it with dockerized TransIT database use host `172.18.0.1` and port `5440`.
+
 ### Troubleshooting
 #### ModuleNotFound exception after pulling changes from remote 
 This is most likely due to new requirements added on remote that are not installed locally. 
