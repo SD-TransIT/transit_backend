@@ -5,6 +5,8 @@ services:
     image: postgres
     volumes:
       - ./docker_data/db:/var/lib/postgresql/data
+    ports:
+      - "5440:5432"
     environment:
       - POSTGRES_DB=${DB_NAME:-TransIT}
       - POSTGRES_USER=${DB_USER:-postgres}
@@ -38,4 +40,21 @@ services:
       - FILE_STORAGE=${FILE_STORAGE}
     depends_on:
       db:
+        condition: service_started
+  superset:
+    ports:
+      - "8088:8088"
+    environment:
+      - DB_NAME=${SUPERSET_DB_NAME:-superset}
+      - DB_USER=${DB_USER:-postgres}
+      - DB_PASSWORD=${DB_PASSWORD:-postgres}
+      - DB_HOST=${DB_HOST:-db} # By default, it's pointing to db container
+      - DB_PORT=${DB_PORT:-5432}
+    build:
+      context: .
+      dockerfile: ./superset_setup/Dockerfile
+    volumes:
+      - ./superset_setup/superset_config.py:/app/pythonpath/superset_config_docker.py
+    depends_on:
+      web:
         condition: service_started
