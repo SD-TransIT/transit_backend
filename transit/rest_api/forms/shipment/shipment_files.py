@@ -1,6 +1,6 @@
 import django_filters
 
-from rest_framework import serializers, filters
+from rest_framework import serializers
 from rest_framework.parsers import MultiPartParser
 
 from transit.models.shipment import ShipmentDetailFiles
