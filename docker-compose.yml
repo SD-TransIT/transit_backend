@@ -56,5 +56,5 @@ services:
     volumes:
       - ./superset_setup/superset_config.py:/app/pythonpath/superset_config_docker.py
     depends_on:
-      web:
+      db:
         condition: service_started
