@@ -36,6 +36,7 @@ class CustomerWeekDaysFilter(django_filters.FilterSet):
 class CustomerWeekDaysViewSet(BaseModelFormViewSet):
     filterset_class = CustomerWeekDaysFilter
     queryset = CustomerWeekDays.objects.all().order_by('-id')
+    pagination_class = None
 
     def get_serializer_class(self):
         return CustomerWeekDaysSerializer
