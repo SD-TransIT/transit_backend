@@ -198,3 +198,11 @@ if "CORS_ORIGIN_WHITELIST" in os.environ:
     CORS_ORIGIN_WHITELIST = [host for host in cors_hosts if host != '']
 else:
     CORS_ALLOW_ALL_ORIGINS = True
+
+# environmental variable for Superset configuration
+SUPERSET_HOST = os.getenv('SUPERSET_HOST', 'http://localhost:8088/')
+SUPERSET_ADMIN = os.getenv('SUPERSET_ADMIN', 'admin')
+SUPERSET_ADMIN_PASS = os.getenv('SUPERSET_ADMIN_PASS', 'admin')
+SUPERSET_USERNAME_DASHBOARD = os.getenv('SUPERSET_USERNAME_DASHBOARD', 'apiUser')
+SUPERSET_FIRSTNAME_DASHBOARD = os.getenv('SUPERSET_FIRSTNAME_DASHBOARD', 'apiUser')
+SUPERSET_LASTNAME_DASHBOARD = os.getenv('SUPERSET_LASTNAME_DASHBOARD', 'apiUser')

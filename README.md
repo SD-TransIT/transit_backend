@@ -141,6 +141,20 @@ Superset is a part of docker-compose, it can be run using
 At the moment connection is not configured out of the box and has to be setup manually. 
 To connect it with dockerized TransIT database use host `172.18.0.1` and port `5440`.
 
+### Superset Embedded Dashboard Setup 
+On Superset UI you have to create new user with particular roles: [public, gamma]. This user
+will allow you to connect to dashboard through frontend part of TransIT app. 
+On backend side you have to set Environmental variable to have proper configuration with Superset 
+and have working embedded dashboard on frontend side:
+```shell
+SUPERSET_HOST # Domain where Superset is deployed
+SUPERSET_ADMIN # Username for admin in Superset
+SUPERSET_ADMIN_PASS # Password for admin user in Superset
+SUPERSET_USERNAME_DASHBOARD # Username of guest user in Superset
+SUPERSET_FIRSTNAME_DASHBOARD # First name of guest user in Superset
+SUPERSET_LASTNAME_DASHBOARD # Last name of guest user in Superset
+```
+
 ### Troubleshooting
 #### ModuleNotFound exception after pulling changes from remote 
 This is most likely due to new requirements added on remote that are not installed locally. 
