@@ -1,10 +1,11 @@
 version: "3.9"
 
 services:
-  db:
-    image: postgres
+  transit_db:
+    image: postgres:14
     volumes:
       - ./docker_data/db:/var/lib/postgresql/data
+    container_name: transit_db
     ports:
       - "5440:5432"
     environment:
@@ -39,7 +40,7 @@ services:
       - AWS_BUCKET=${AWS_BUCKET}
       - FILE_STORAGE=${FILE_STORAGE}
     depends_on:
-      db:
+      transit_db:
         condition: service_started
   superset:
     ports:
@@ -56,5 +57,11 @@ services:
     volumes:
       - ./superset_setup/superset_config.py:/app/pythonpath/superset_config_docker.py
     depends_on:
-      db:
+      transit_db:
         condition: service_started
+
+
+networks:
+  default:
+    external:
+      name: transit-network
