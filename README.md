@@ -57,6 +57,13 @@ MEDIA_ROOT # Sets MEDIA_ROOT in settings.py
 
 For more details regarding S3 file storage check [S3 File storage setup](#1.-S3-File-storage)
 #### 2. Build docker instance 
+TransIT backend application requires docker networks to run. To create them run: 
+```shell
+docker network create transit-network 
+docker network create superset-network 
+```
+`superset-network` is used for integration with superset dashboards embedded in frontend application. 
+
 Both database and application can be deployed in docker container
 by running 
 ```shell
