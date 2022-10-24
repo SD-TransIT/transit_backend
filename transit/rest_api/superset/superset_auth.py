@@ -1,5 +1,4 @@
 import json
-import os
 import requests
 
 from django.core.exceptions import ValidationError
