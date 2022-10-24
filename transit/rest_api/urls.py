@@ -12,6 +12,7 @@ from rest_framework_simplejwt.views import (
 from transit.rest_api.available_forms_meta import FormsInfoViewSet
 from transit.rest_api.forms_router import forms_router
 from transit.rest_api.users import UserViewSet
+from transit.rest_api.superset.superset_auth import superset_guest_token
 
 # Routers provide an easy way of automatically determining the URL conf.
 
@@ -28,4 +29,5 @@ urlpatterns = [
     path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path(r'api/reports/', include(('transit.rest_api.reports.urls', 'transit'), namespace='REPORTS')),
     path(r'api/', include((main_router.urls, 'transit'), namespace='API')),
+    path('api/api-superset/guest-token', superset_guest_token, name='guest-token'),
 ]
