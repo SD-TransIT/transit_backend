@@ -26,11 +26,11 @@ SUPERSET_FIRSTNAME_DASHBOARD = os.getenv('SUPERSET_FIRSTNAME_DASHBOARD', 'apiUse
 SUPERSET_LASTNAME_DASHBOARD = os.getenv('SUPERSET_LASTNAME_DASHBOARD', 'apiUser')
 
 
-@api_view(['POST'])
+@api_view(['GET'])
 @authentication_classes([authentication.JWTAuthentication])
 @permission_classes([permissions.IsAuthenticated])
 def superset_guest_token(request):
-    embedded_id = request.data.pop('embedded_id', None)
+    embedded_id = request.query_params.get('embedded_id', None)
     if embedded_id is None:
         raise ValidationError(_('Bad request. Embedded ID is required!'))
 
