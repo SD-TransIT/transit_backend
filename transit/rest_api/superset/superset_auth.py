@@ -4,7 +4,7 @@ import requests
 
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
-from django.views.decorators.http import require_POST, require_GET
+from django.views.decorators.http import require_GET
 
 from rest_framework import (
     permissions,
