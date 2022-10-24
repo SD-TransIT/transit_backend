@@ -4,6 +4,7 @@ import requests
 
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
+from django.views.decorators.http import require_POST, require_GET
 
 from rest_framework import (
     permissions,
@@ -26,7 +27,8 @@ SUPERSET_FIRSTNAME_DASHBOARD = os.getenv('SUPERSET_FIRSTNAME_DASHBOARD', 'apiUse
 SUPERSET_LASTNAME_DASHBOARD = os.getenv('SUPERSET_LASTNAME_DASHBOARD', 'apiUser')
 
 
-@api_view(['GET'])
+@require_GET
+@api_view(('GET',))
 @authentication_classes([authentication.JWTAuthentication])
 @permission_classes([permissions.IsAuthenticated])
 def superset_guest_token(request):
