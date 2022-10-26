@@ -1,6 +1,5 @@
 import django_filters
 from django.db import transaction
-from django.utils.translation import gettext_lazy as _
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import serializers, status
 from rest_framework.decorators import action
@@ -11,6 +10,7 @@ from transit.rest_api.abstract import BaseModelFormViewSet
 from transit.rest_api.forms.customer.customer_week_days_utils import CustomerWeekDaysSerializerWrapper, \
     CustomerWeekDaysSerializerOptionalCustomer
 from transit.rest_api.forms.fields import FormsDataFields
+from transit.services.customer_working_hours_service import CustomerWeekdaysService
 
 
 class CustomerSerializer(serializers.ModelSerializer):
@@ -30,6 +30,9 @@ class CustomerSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         return self._create_customer(validated_data)
 
+    def update(self, instance, validated_data):
+        return self._update_customer(instance, validated_data)
+
     @transaction.atomic
     def _create_customer(self, validated_data):
         week_days = validated_data.pop('week_days', [])
@@ -39,20 +42,15 @@ class CustomerSerializer(serializers.ModelSerializer):
             CustomerWeekDays(**item_dict).save()
         return customer  # noqa: R504
 
-    def validate(self, data): # noqa: WPS-122
-        """
-        Update of working hours directly through Customer is forbidden.
-        """
-        validated = super(CustomerSerializer, self).validate(data)
-        self._validate_update_payload(validated)
-        return validated
-
-    def _validate_update_payload(self, validated):
-        if self.instance and validated.get('line_items'):
-            raise serializers.ValidationError(
-                _("Customer week days have to be updated using /api/customer_week_days "
-                  "or /api/customer/{id}/replace_working_hours endpoints.")
-            )
+    @transaction.atomic
+    def _update_customer(self, instance, validated_data):
+        week_days = validated_data.pop('week_days', None)
+        obj = super(CustomerSerializer, self).update(instance, validated_data)
+        if week_days:
+            week_days = [CustomerWeekDays(**item_dict) for item_dict in week_days]
+            _service = CustomerWeekdaysService()
+            _service.replace_customer_weekdays(customer=instance, weekdays=week_days)
+        return obj  # noqa: R504
 
 
 class CustomerFilter(django_filters.FilterSet):
