@@ -19,7 +19,7 @@ from rest_framework_simplejwt import authentication
 
 from transit.settings import (
     SUPERSET_ADMIN,
-    SUPERSET_ADMIN_PASS,
+    SUPERSET_PASSWORD,
     SUPERSET_HOST,
     SUPERSET_FIRSTNAME_DASHBOARD,
     SUPERSET_LASTNAME_DASHBOARD,
@@ -74,7 +74,7 @@ def _get_superset_guest_token(auth_token_response, embedded_id):
 
 def _build_superset_access_token_payload():
     return {
-        "password": SUPERSET_ADMIN_PASS,
+        "password": SUPERSET_PASSWORD,
         "provider": "db",
         "refresh": True,
         "username": SUPERSET_ADMIN,
