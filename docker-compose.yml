@@ -26,7 +26,7 @@ services:
       - DB_NAME=${DB_NAME:-TransIT}
       - DB_USER=${DB_USER:-postgres}
       - DB_PASSWORD=${DB_PASSWORD:-postgres}
-      - DB_HOST=${DB_HOST:-db} # By default, it's pointing to db container
+      - DB_HOST=${DB_HOST:-transit_db} # By default, it's pointing to transit_db container
       - DB_PORT=${DB_PORT:-5432}
       - PORT=${PORT:-8000}
       - DJANGO_SERVER=${DJANGO_SERVER:-django_wsgi} # By default, use development server, actual server should use 'waitress'
