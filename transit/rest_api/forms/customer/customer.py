@@ -46,7 +46,7 @@ class CustomerSerializer(serializers.ModelSerializer):
     def _update_customer(self, instance, validated_data):
         week_days = validated_data.pop('week_days', None)
         obj = super(CustomerSerializer, self).update(instance, validated_data)
-        if week_days:
+        if week_days is not None:
             week_days = [CustomerWeekDays(**item_dict) for item_dict in week_days]
             _service = CustomerWeekdaysService()
             _service.replace_customer_weekdays(customer=instance, weekdays=week_days)
